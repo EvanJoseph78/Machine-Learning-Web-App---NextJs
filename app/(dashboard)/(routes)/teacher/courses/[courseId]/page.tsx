@@ -1,8 +1,10 @@
 "use client"
 
+import { IconBadge } from "@/components/icon-badge";
 import { Course } from "@/lib/types";
 import { useUser } from "@clerk/clerk-react";
 import axios from "axios";
+import { LayoutDashboard } from "lucide-react";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -37,7 +39,7 @@ const CourseIdPage = ({
   const totalFields = requiredFields.length;
   const completedFieds = requiredFields.filter(Boolean).length;
 
-  const completionText = `(${completedFieds} / ${totalFields})`
+  const completionText = `(${completedFieds}/${totalFields})`
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,25 +50,41 @@ const CourseIdPage = ({
       } catch (error) {
         console.error('Failed to fetch data:', error);
         setLoading(false); // Você pode querer atualizar o estado de erro aqui também
-
-        if (!course) {
-          return redirect("/");
-        }
       }
     };
 
     fetchData();
   }, [url]);
 
+  if (!loading && !course) {
+    if (!course || !user) {
+      return redirect("/");
+    }
+  }
+
   return (
-    <div>
+    <div className="p-6">
       {loading ? (
         <div>carregando...</div>
       ) : (
-        <div>
-          <div> CursoIdPage </div>
-          {course?.nome}
-          {user?.fullName}
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-y-2">
+            <h1 className="text-2xl font-semibold">Edição do Curso</h1>
+            <span className="text-sm text-dark-color">Preencha todos os campos {completionText}</span>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+              <div>
+                <div className="flex items-center gap-x-2">
+                  <IconBadge icon={LayoutDashboard} variant={"success"} />
+                  <h2 className="text-xl">
+                    Customizar o curso
+                  </h2>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
         </div>
       )}
 
