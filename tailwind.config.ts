@@ -18,7 +18,26 @@ const config = {
       },
     },
     extend: {
+
       colors: {
+        'dark-color': '#020817',
+        'azul-cobalto': '#08072e',
+        'vermelho-vinho': '#a51c30',
+
+        'azul': {
+          '50': '#f0f4ff',
+          '100': '#dfe8ff',
+          '200': '#b8d0ff',
+          '300': '#7aaaff',
+          '400': '#3480fc',
+          '500': '#095fee',
+          '600': '#0045cc',
+          '700': '#0036a5',
+          '800': '#043188',
+          '900': '#0a2b70',
+          '950': '#020817',
+        },
+
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

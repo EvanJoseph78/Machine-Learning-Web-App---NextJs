@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import { Inter as FontSans } from "next/font/google"
 
-const inter = Inter({ subsets: ["latin"] });
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 import { cn } from "@/lib/utils"
-import { ThemeProvider } from "@/components/providers/theme-provider";
+import { ToastProvider } from "@/components/providers/toaster-provider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
+  weight: ['300', '400', '700']
 })
 
 export const metadata: Metadata = {
@@ -30,14 +30,22 @@ export default function RootLayout({
       <ClerkProvider>
         <html lang="en" suppressHydrationWarning>
           <head />
-          <body>
+          <body
+            className={cn(
+              "min-h-screen bg-background font-sans antialiased",
+              fontSans.className
+            )}
+          >
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
               enableSystem
               disableTransitionOnChange
             >
-              {children}
+              <main>
+                <ToastProvider />
+                {children}
+              </main>
             </ThemeProvider>
           </body>
         </html>
