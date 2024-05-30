@@ -1,12 +1,14 @@
 "use client"
 
 import { IconBadge } from "@/components/icon-badge";
+import { Button } from "@/components/ui/button";
 import { Course } from "@/lib/types";
 import { useUser } from "@clerk/clerk-react";
 import axios from "axios";
 import { LayoutDashboard } from "lucide-react";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
+import { TitleForm } from "./_components/title-form";
 
 const CourseIdPage = ({
   params
@@ -37,9 +39,18 @@ const CourseIdPage = ({
   ];
 
   const totalFields = requiredFields.length;
-  const completedFieds = requiredFields.filter(Boolean).length;
 
-  const completionText = `(${completedFieds}/${totalFields})`
+  const isValidField = (field: any): boolean =>
+    field !== undefined &&
+    field !== null &&
+    (typeof field !== 'string' || field.trim() !== '') &&
+    (!Array.isArray(field) || field.length > 0);
+
+  const completedFields = requiredFields.filter(isValidField).length;
+  const completionText = `(${completedFields}/${totalFields})`;
+
+  // const completionText = `(${completedFieds}/${totalFields})`
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,6 +91,15 @@ const CourseIdPage = ({
                     Customizar o curso
                   </h2>
                 </div>
+                {/* <Button onClick={() => { console.log(requiredFields); }}>Btn</Button> */}
+                {/* {course?.nome} */}
+
+
+                <TitleForm
+                  courseId=""
+                  initialData={course}
+                ></TitleForm>
+
               </div>
             </div>
 
