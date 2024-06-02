@@ -9,6 +9,7 @@ import { LayoutDashboard } from "lucide-react";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { TitleForm } from "./_components/title-form";
+import { DescriptionForm } from "./_components/description-form";
 
 const CourseIdPage = ({
   params
@@ -79,14 +80,14 @@ const CourseIdPage = ({
         <div>carregando...</div>
       ) : (
         <div className="flex items-center justify-between">
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col gap-y-2 w-full">
             <h1 className="text-2xl font-semibold">Edição do Curso</h1>
             <span className="text-sm text-dark-color">Preencha todos os campos {completionText}</span>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
-              <div>
+              <div className="">
                 <div className="flex items-center gap-x-2">
-                  <IconBadge icon={LayoutDashboard} variant={"success"} />
+                  <IconBadge icon={LayoutDashboard} size={"sm"} variant={"success"} />
                   <h2 className="text-xl">
                     Customizar o curso
                   </h2>
@@ -94,11 +95,15 @@ const CourseIdPage = ({
                 {/* <Button onClick={() => { console.log(requiredFields); }}>Btn</Button> */}
                 {/* {course?.nome} */}
 
-
                 <TitleForm
-                  courseId=""
                   initialData={course}
+                  courseId={params.courseId}
                 ></TitleForm>
+
+                <DescriptionForm
+                  initialData={course}
+                  courseId={params.courseId}
+                ></DescriptionForm>
 
               </div>
             </div>
