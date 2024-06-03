@@ -58,7 +58,7 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
   };
 
   return (
-    <div className="mt-6 bg-slate-100 rounded-md p-4">
+    <div className="mt-6 rounded-xl p-4 border shadow-md">
       <div className="font-medium flex items-center justify-between">
         Capa do curso
         <Button variant={"ghost"} onClick={toggleEdit}>
