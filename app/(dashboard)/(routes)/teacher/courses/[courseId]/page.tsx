@@ -10,6 +10,7 @@ import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-form";
+import { ImageForm } from "./_components/image-form";
 
 const CourseIdPage = ({
   params
@@ -104,6 +105,11 @@ const CourseIdPage = ({
                   initialData={course}
                   courseId={params.courseId}
                 ></DescriptionForm>
+
+                <ImageForm
+                  initialData={course}
+                  courseId={params.courseId}
+                ></ImageForm>
 
               </div>
             </div>
