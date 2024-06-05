@@ -18,42 +18,30 @@ import { Button } from "@/components/ui/button";
 
 import { Course } from "@/lib/types";
 import { Pencil } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 
+// Interface que define as propriedades aceitas pelo componente TitleForm
 interface TitleFormProps {
-  initialData: Course | null;
-  courseId: string;
-};
+  initialData: Course | null;  // Dados iniciais do curso
+  courseId: string;  // ID do curso
+}
 
+// Esquema de validação para o formulário utilizando Zod
 const formSchema = z.object({
   nome: z.string().min(1, {
     message: "Nome do curso é obrigatório",
   }),
 });
 
+// Componente funcional que renderiza e gerencia o formulário de título do curso
 export const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
-  const [courseData, setCourseData] = useState<Course | null>(initialData);
-  const [isEditing, setIsEditing] = useState(false);
-  const toggleEdit = () => setIsEditing((current) => !current);
-  const router = useRouter();
+  const [courseData, setCourseData] = useState<Course | null>(initialData); // Estado que armazena os dados do curso
+  const [title, setTitle] = useState<string | undefined>(initialData?.nome); // Estado que armazena o título do curso
+  const [isEditing, setIsEditing] = useState(false); // Estado para controlar o modo de edição
+  const toggleEdit = () => setIsEditing((current) => !current); // Função para alternar entre os modos de edição e visualização
 
-  const fetchCourseData = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8080/api/courses/${courseId}`);
-      setCourseData(response.data);
-    } catch (error) {
-      console.error("Failed to fetch course data", error);
-    }
-  };
-
-  useEffect(() => {
-    if (!initialData) {
-      fetchCourseData();
-    }
-  }, [courseId]);
-
+  // Hook do React Hook Form para gerenciar o formulário e sua validação
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: { nome: courseData?.nome || "" },
@@ -61,15 +49,15 @@ export const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
 
   const { isSubmitting, isValid } = form.formState;
 
+  // Função chamada ao submeter o formulário
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`http://localhost:8080/api/courses/${courseId}`, values);
-      toast.success("Curso Atualizado");
-      fetchCourseData(); // Fetch the updated course data
-      router.refresh(); // Refresh the route
-      toggleEdit();
+      await axios.patch(`http://localhost:8080/api/courses/${courseId}`, values); // Faz a requisição PATCH para atualizar os dados do curso
+      toast.success("Curso Atualizado"); // Exibe uma mensagem de sucesso
+      setTitle(values.nome); // Atualiza o título no estado
+      toggleEdit(); // Sai do modo de edição
     } catch (error) {
-      toast.error("Algo deu errado!");
+      toast.error("Algo deu errado!"); // Exibe uma mensagem de erro em caso de falha
     }
   };
 
@@ -88,7 +76,7 @@ export const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
           )}
         </Button>
       </div>
-      {!isEditing && <p className="text-sm mt-2">{courseData?.nome}</p>}
+      {!isEditing && <p className="text-sm mt-2">{title}</p>}
       {isEditing && (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4 ">
@@ -119,4 +107,3 @@ export const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
     </div>
   );
 };
-

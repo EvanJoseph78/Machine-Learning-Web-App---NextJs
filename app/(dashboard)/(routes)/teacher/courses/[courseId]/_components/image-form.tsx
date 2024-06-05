@@ -7,53 +7,46 @@ import { Button } from "@/components/ui/button";
 
 import { Course } from "@/lib/types";
 import { ImageIcon, Pencil, PlusCircle } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FileUpload } from "@/components/file-upload";
 
+// Interface que define as propriedades aceitas pelo componente ImageForm
 interface ImageFormProps {
-  initialData: Course | null;
-  courseId: string;
+  initialData: Course | null;  // Dados iniciais do curso
+  courseId: string;  // ID do curso
 }
 
+// Esquema de validação para o formulário utilizando Zod
 const formSchema = z.object({
   linkcapa: z.string().min(1, {
     message: "Capa do curso é obrigatória",
   }),
 });
 
+// Componente funcional que renderiza e gerencia o formulário de imagem do curso
 export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
-  const [courseData, setCourseData] = useState<Course | null>(initialData);
+  // Estado que armazena o URL da imagem do curso
+  const [urlImage, setUrlImage] = useState<string | undefined>(initialData?.linkcapa);
+  // Estado para controlar o modo de edição
   const [isEditing, setIsEditing] = useState(false);
+  // Função para alternar entre os modos de edição e visualização
   const toggleEdit = () => setIsEditing((current) => !current);
   const router = useRouter();
 
-  const fetchCourseData = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8080/api/courses/${courseId}`);
-      setCourseData(response.data);
-    } catch (error) {
-      console.error("Failed to fetch course data", error);
-    }
-  };
-
-  useEffect(() => {
-    if (!initialData) {
-      fetchCourseData();
-    }
-  }, [courseId]);
-
+  // Função chamada ao submeter o formulário
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      // Faz a requisição PATCH para atualizar os dados do curso
       await axios.patch(`http://localhost:8080/api/courses/${courseId}`, values);
       toast.success("Curso Atualizado");
-      fetchCourseData(); // Fetch the updated course data
-      toggleEdit();
-      router.refresh(); // Refresh the route
+      setUrlImage(values.linkcapa);  // Atualiza o estado com o novo URL da imagem
+      toggleEdit();  // Sai do modo de edição
+      router.refresh(); // Recarrega a rota para refletir as mudanças
     } catch (error) {
-      toast.error("Algo deu errado!");
+      toast.error("Algo deu errado!");  // Exibe uma mensagem de erro em caso de falha
     }
   };
 
@@ -83,7 +76,7 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
       </div>
 
       {!isEditing && (
-        !initialData?.linkcapa ? (
+        !urlImage ? (
           <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
             <ImageIcon className="h-10 w-10 text-slate-500"></ImageIcon>
           </div>
@@ -93,7 +86,7 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
               alt="Upload"
               fill
               className="object-cover rounded-md "
-              src={courseData?.linkcapa || initialData?.linkcapa}
+              src={urlImage}
             ></Image>
           </div>
         )
@@ -113,9 +106,7 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
             Resolução recomendada: 16:9
           </div>
         </div>
-      )
-      }
-    </div >
+      )}
+    </div>
   );
 };
-

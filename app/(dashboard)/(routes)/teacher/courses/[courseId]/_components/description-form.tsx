@@ -14,63 +14,51 @@ import {
 } from "@/components/ui/form";
 
 import { Button } from "@/components/ui/button";
-
 import { Course } from "@/lib/types";
 import { Pencil } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 
+// Define as propriedades aceitas pelo componente DescriptionForm
 interface DescriptionFormProps {
-  initialData: Course | null;
-  courseId: string;
+  initialData: Course | null;  // Dados iniciais do curso, pode ser null
+  courseId: string;  // ID do curso
 }
 
+// Define o esquema de validação do formulário usando Zod
 const formSchema = z.object({
-  categoryId: z.string().min(1, {
+  descricao: z.string().min(1, {
     message: "Nome do curso é obrigatório",
   }),
 });
 
+// Define o componente funcional DescriptionForm
 export const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
-  const [courseData, setCourseData] = useState<Course | null>(initialData);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);  // Estado para controlar o modo de edição
+  const [description, setDescription] = useState<string | undefined>(initialData?.descricao);  // Estado para a descrição do curso
+
+  // Função para alternar entre os modos de edição e visualização
   const toggleEdit = () => setIsEditing((current) => !current);
-  const router = useRouter();
 
-  const fetchCourseData = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8080/api/courses/${courseId}`);
-      setCourseData(response.data);
-    } catch (error) {
-      console.error("Failed to fetch course data", error);
-    }
-  };
-
-  useEffect(() => {
-    if (!initialData) {
-      fetchCourseData();
-    }
-  }, [courseId]);
-
+  // Configuração do formulário usando react-hook-form e zodResolver para validação
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { categoryId: courseData?.descricao || "" },
+    defaultValues: { descricao: initialData?.descricao || "" },
   });
 
-  const { isSubmitting, isValid } = form.formState;
+  const { isSubmitting, isValid } = form.formState;  // Estado do formulário
 
+  // Função para manipular a submissão do formulário
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`http://localhost:8080/api/courses/${courseId}`, values);
-      toast.success("Curso Atualizado");
-      fetchCourseData(); // Fetch the updated course data
-      router.refresh(); // Refresh the route
-      toggleEdit();
+      await axios.patch(`http://localhost:8080/api/courses/${courseId}`, values);  // Envia a atualização para a API
+      toast.success("Curso Atualizado");  // Exibe uma notificação de sucesso
+      setDescription(values.descricao);  // Atualiza a descrição no estado local
+      toggleEdit();  // Alterna para o modo de visualização
     } catch (error) {
-      toast.error("Algo deu errado!");
+      toast.error("Algo deu errado!");  // Exibe uma notificação de erro
     }
   };
 
@@ -89,21 +77,21 @@ export const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps)
           )}
         </Button>
       </div>
-      {!isEditing &&
+      {!isEditing && (
         <p className={cn(
           "text-sm mt-2",
-          !initialData?.descricao && "text-slate-500 italic"
+          !description && "text-slate-500 italic"
         )}>
-          {courseData?.descricao || "Sem descrição"}
+          {description || "Sem descrição"}
         </p>
-      }
+      )}
 
       {isEditing && (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4 ">
             <FormField
               control={form.control}
-              name="categoryId"
+              name="descricao"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
@@ -128,4 +116,3 @@ export const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps)
     </div>
   );
 };
-

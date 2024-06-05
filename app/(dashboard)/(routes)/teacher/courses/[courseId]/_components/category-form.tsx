@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Course } from "@/lib/types";
 import { Pencil } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -89,7 +89,7 @@ export const CategoryForm = ({ initialData, courseId, options }: CategoryFormPro
           "text-sm mt-2",
           !initialData?._id && "text-slate-500 italic"
         )}>
-          {selectedOption?.label || "Sem descrição"}
+          {selectedOption?.label || "Sem categoria"}
         </p>
       )}
 

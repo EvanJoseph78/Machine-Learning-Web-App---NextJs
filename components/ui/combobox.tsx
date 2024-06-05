@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
 
@@ -19,82 +17,63 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-]
-
 interface ComboBoxProps {
   options: { label: string; value: string }[];
   value?: string;
   onChange: (value: string) => void;
 }
 
-export function Combobox({ options, onChange, value }: ComboBoxProps) {
-  const [open, setOpen] = React.useState(false)
+// Use React.forwardRef to forward the ref to the underlying component
+export const Combobox = React.forwardRef<HTMLButtonElement, ComboBoxProps>(
+  ({ options, onChange, value }: ComboBoxProps, ref) => {
+    const [open, setOpen] = React.useState(false)
 
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild >
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-full justify-between"
-        >
-          {value
-            ? options.find((framework) => framework.value === value)?.label
-            : "Selecione a categoria"}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
-        <Command>
-          <CommandInput placeholder="Pesquisar..." />
-          <CommandList>
-            <CommandEmpty>Nenhuma categoria encontrada</CommandEmpty>
-            <CommandGroup  >
-              {options?.map((option) => (
-                <CommandItem
-                  key={option.value}
-                  value={option.label}
-                  onSelect={() => {
-                    setOpen(false)
-                    onChange(option.value === value ? "" : option.value)
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === option.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {option.label}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover >
-  )
-}
+    return (
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild >
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className="w-full justify-between"
+            ref={ref} // Assign the ref to the button element
+          >
+            {value
+              ? options.find((framework) => framework.value === value)?.label
+              : "Selecione a categoria"}
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-full p-0">
+          <Command>
+            <CommandInput placeholder="Pesquisar..." />
+            <CommandList>
+              <CommandEmpty>Nenhuma categoria encontrada</CommandEmpty>
+              <CommandGroup  >
+                {options?.map((option) => (
+                  <CommandItem
+                    key={option.value}
+                    value={option.label}
+                    onSelect={() => {
+                      setOpen(false)
+                      onChange(option.value === value ? "" : option.value)
+                    }}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === option.value ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {option.label}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover >
+    )
+  }
+);
 
