@@ -44,13 +44,12 @@ const frameworks = [
 
 interface ComboBoxProps {
   options: { label: string; value: string }[];
-  // value?: string;
+  value?: string;
   onChange: (value: string) => void;
 }
 
-export function Combobox({ options, onChange }: ComboBoxProps) {
+export function Combobox({ options, onChange, value }: ComboBoxProps) {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -67,18 +66,17 @@ export function Combobox({ options, onChange }: ComboBoxProps) {
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-full p-0">
         <Command>
           <CommandInput placeholder="Pesquisar..." />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
-            <CommandGroup>
+            <CommandEmpty>Nenhuma categoria encontrada</CommandEmpty>
+            <CommandGroup  >
               {options?.map((option) => (
                 <CommandItem
                   key={option.value}
-                  value={option.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
+                  value={option.label}
+                  onSelect={() => {
                     setOpen(false)
                     onChange(option.value === value ? "" : option.value)
                   }}

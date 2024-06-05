@@ -133,11 +133,6 @@ const CourseIdPage = ({
                   }
                 />
 
-                <ImageForm
-                  initialData={course}
-                  courseId={params.courseId}
-                />
-
               </div>
             </div>
 
