@@ -2,7 +2,7 @@
 
 import { IconBadge } from "@/components/icon-badge";
 import { Button } from "@/components/ui/button";
-import { Course } from "@/lib/types";
+import { Category, Course } from "@/lib/types";
 import { useUser } from "@clerk/clerk-react";
 import axios from "axios";
 import { LayoutDashboard } from "lucide-react";
@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-form";
 import { ImageForm } from "./_components/image-form";
+import { CategoryForm } from "./_components/category-form";
 
 const CourseIdPage = ({
   params
@@ -18,10 +19,11 @@ const CourseIdPage = ({
   params: { courseId: string }
 }) => {
 
-  const url = `http://localhost:8080/api/courses/${params.courseId}`;
+  // const url = `http://localhost:8080/api/courses/${params.courseId}`;
 
   const [loading, setLoading] = useState(true);
   const [course, setCourse] = useState<Course | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const { user } = useUser();
 
@@ -53,21 +55,32 @@ const CourseIdPage = ({
 
   // const completionText = `(${completedFieds}/${totalFields})`
 
+  const fetchCourse = async (courseId: string) => {
+    const response = await axios.get(`http://localhost:8080/api/courses/${courseId}`);
+    return response.data;
+  };
+
+  const fetchCategories = async () => {
+    const response = await axios.get('http://localhost:8080/api/categories');
+    return response.data;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(url);
-        setCourse(response.data);
-        setLoading(false);
+        const courseData = await fetchCourse(params.courseId);
+        const categoriesData = await fetchCategories();
+        setCourse(courseData);
+        setCategories(categoriesData);
       } catch (error) {
         console.error('Failed to fetch data:', error);
-        setLoading(false); // Você pode querer atualizar o estado de erro aqui também
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, [url]);
+  }, [params.courseId]);
 
   if (!loading && !course) {
     if (!course || !user) {
@@ -93,8 +106,6 @@ const CourseIdPage = ({
                     Customizar o curso
                   </h2>
                 </div>
-                {/* <Button onClick={() => { console.log(requiredFields); }}>Btn</Button> */}
-                {/* {course?.nome} */}
 
                 <TitleForm
                   initialData={course}
@@ -109,7 +120,23 @@ const CourseIdPage = ({
                 <ImageForm
                   initialData={course}
                   courseId={params.courseId}
-                ></ImageForm>
+                />
+
+                <CategoryForm
+                  initialData={course}
+                  courseId={params.courseId}
+                  options={
+                    categories.map((category) => ({
+                      label: category.name,
+                      value: category._id,
+                    }))
+                  }
+                />
+
+                <ImageForm
+                  initialData={course}
+                  courseId={params.courseId}
+                />
 
               </div>
             </div>

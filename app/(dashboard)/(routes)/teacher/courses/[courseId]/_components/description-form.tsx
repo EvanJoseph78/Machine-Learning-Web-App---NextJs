@@ -29,7 +29,7 @@ interface DescriptionFormProps {
 }
 
 const formSchema = z.object({
-  descricao: z.string().min(1, {
+  categoryId: z.string().min(1, {
     message: "Nome do curso é obrigatório",
   }),
 });
@@ -57,7 +57,7 @@ export const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { descricao: courseData?.descricao || "" },
+    defaultValues: { categoryId: courseData?.descricao || "" },
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -103,7 +103,7 @@ export const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps)
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4 ">
             <FormField
               control={form.control}
-              name="descricao"
+              name="categoryId"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>

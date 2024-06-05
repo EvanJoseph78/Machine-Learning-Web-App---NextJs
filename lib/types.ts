@@ -46,6 +46,7 @@ export interface Course {
   disciplina?: string;
   nivel?: string;
   certificado?: boolean;
+  categoryId?: string;
   topicos?: string[];
   professores?: Teacher[];
   linkcapa?: string;
@@ -54,4 +55,10 @@ export interface Course {
   createdAt?: string;
   updatedAt?: string;
   __v: number;
+}
+
+export interface Category {
+  _id: string;
+  name: string;
+  courses: string[]
 }
