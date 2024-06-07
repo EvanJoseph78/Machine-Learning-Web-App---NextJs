@@ -1,7 +1,7 @@
 "use client"
 
 import { IconBadge } from "@/components/icon-badge";
-import { Category, Course, Course1 } from "@/lib/types";
+import { Category, Course } from "@/lib/types";
 import { useUser } from "@clerk/clerk-react";
 import axios from "axios";
 import { File, LayoutDashboard, ListChecks } from "lucide-react";
@@ -11,7 +11,6 @@ import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-form";
 import { ImageForm } from "./_components/image-form";
 import { CategoryForm } from "./_components/category-form";
-import { AttachmentForm } from "./_components/attachment-form";
 
 const CourseIdPage = ({
   params
