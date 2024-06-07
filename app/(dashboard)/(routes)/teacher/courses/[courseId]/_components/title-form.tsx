@@ -29,7 +29,7 @@ interface TitleFormProps {
 
 // Esquema de validação para o formulário utilizando Zod
 const formSchema = z.object({
-  nome: z.string().min(1, {
+  courseTitle: z.string().min(1, {
     message: "Nome do curso é obrigatório",
   }),
 });
@@ -37,14 +37,14 @@ const formSchema = z.object({
 // Componente funcional que renderiza e gerencia o formulário de título do curso
 export const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
   const [courseData, setCourseData] = useState<Course | null>(initialData); // Estado que armazena os dados do curso
-  const [title, setTitle] = useState<string | undefined>(initialData?.nome); // Estado que armazena o título do curso
+  const [title, setTitle] = useState<string | undefined>(initialData?.courseTitle); // Estado que armazena o título do curso
   const [isEditing, setIsEditing] = useState(false); // Estado para controlar o modo de edição
   const toggleEdit = () => setIsEditing((current) => !current); // Função para alternar entre os modos de edição e visualização
 
   // Hook do React Hook Form para gerenciar o formulário e sua validação
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { nome: courseData?.nome || "" },
+    defaultValues: { courseTitle: courseData?.courseTitle || "" },
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -52,9 +52,10 @@ export const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
   // Função chamada ao submeter o formulário
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`http://localhost:8080/api/courses/${courseId}`, values); // Faz a requisição PATCH para atualizar os dados do curso
+      // await axios.patch(`http://localhost:8080/api/courses/${courseId}`, values); // Faz a requisição PATCH para atualizar os dados do curso
+      await axios.patch(`/api/courses/${courseId}`, values); // Faz a requisição PATCH para atualizar os dados do curso
       toast.success("Curso Atualizado"); // Exibe uma mensagem de sucesso
-      setTitle(values.nome); // Atualiza o título no estado
+      setTitle(values.courseTitle); // Atualiza o título no estado
       toggleEdit(); // Sai do modo de edição
     } catch (error) {
       toast.error("Algo deu errado!"); // Exibe uma mensagem de erro em caso de falha
@@ -82,7 +83,7 @@ export const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4 ">
             <FormField
               control={form.control}
-              name="nome"
+              name="courseTitle"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>

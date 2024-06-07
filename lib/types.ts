@@ -37,7 +37,7 @@ export interface Question {
   _id: string;
 }
 
-export interface Course {
+export interface Course1 {
   _id: string;
   nome: string;
   introducao?: string;
@@ -57,8 +57,33 @@ export interface Course {
   __v: number;
 }
 
+export interface Course {
+  id: string;
+  userId?: string
+  courseTitle?: string;
+  introduction?: string
+  duration?: number
+  subject?: string
+  level?: string;
+  certificate?: boolean;
+  description?: string;
+  imageUrl?: string
+  categoryId?: string
+  tags?: string
+  subscribedUsers?: string[];
+  createdAt: string;
+  updatedAt: string;
+  tagsId: string
+}
+
 export interface Category {
-  _id: string;
+  id: string;
   name: string;
   courses: string[]
+}
+
+export interface Attachment {
+  _id: string;
+  name: string;
+  url: string;
 }

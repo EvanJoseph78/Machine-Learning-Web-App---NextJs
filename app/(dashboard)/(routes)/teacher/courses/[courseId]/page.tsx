@@ -1,25 +1,23 @@
 "use client"
 
 import { IconBadge } from "@/components/icon-badge";
-import { Button } from "@/components/ui/button";
-import { Category, Course } from "@/lib/types";
+import { Category, Course, Course1 } from "@/lib/types";
 import { useUser } from "@clerk/clerk-react";
 import axios from "axios";
-import { LayoutDashboard } from "lucide-react";
+import { File, LayoutDashboard, ListChecks } from "lucide-react";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-form";
 import { ImageForm } from "./_components/image-form";
 import { CategoryForm } from "./_components/category-form";
+import { AttachmentForm } from "./_components/attachment-form";
 
 const CourseIdPage = ({
   params
 }: {
   params: { courseId: string }
 }) => {
-
-  // const url = `http://localhost:8080/api/courses/${params.courseId}`;
 
   const [loading, setLoading] = useState(true);
   const [course, setCourse] = useState<Course | null>(null);
@@ -28,18 +26,15 @@ const CourseIdPage = ({
   const { user } = useUser();
 
   const requiredFields = [
-    course?.nome,
-    course?.introducao,
-    course?.descricao,
-    course?.duracao,
-    course?.disciplina,
-    course?.nivel,
-    course?.topicos,
-    course?.certificado,
-    course?.professores,
-    course?.linkcapa,
-    course?.modulos,
-    course?.questoes
+    course?.courseTitle,
+    course?.introduction,
+    course?.description,
+    course?.duration,
+    course?.subject,
+    course?.level,
+    course?.tags,
+    course?.certificate,
+    course?.imageUrl,
   ];
 
   const totalFields = requiredFields.length;
@@ -56,12 +51,15 @@ const CourseIdPage = ({
   // const completionText = `(${completedFieds}/${totalFields})`
 
   const fetchCourse = async (courseId: string) => {
-    const response = await axios.get(`http://localhost:8080/api/courses/${courseId}`);
+    // const response = await axios.get(`http://localhost:8080/api/courses/${courseId}`);
+    // console.log(courseId);
+    const response = await axios.get(`/api/courses/${courseId}`);
+
     return response.data;
   };
 
   const fetchCategories = async () => {
-    const response = await axios.get('http://localhost:8080/api/categories');
+    const response = await axios.get('/api/categories/');
     return response.data;
   };
 
@@ -73,7 +71,7 @@ const CourseIdPage = ({
         setCourse(courseData);
         setCategories(categoriesData);
       } catch (error) {
-        console.error('Failed to fetch data:', error);
+        console.error('Falha ao carrgar dados:', error);
       } finally {
         setLoading(false);
       }
@@ -83,6 +81,8 @@ const CourseIdPage = ({
   }, [params.courseId]);
 
   if (!loading && !course) {
+    console.log(!loading);
+    console.log(!course);
     if (!course || !user) {
       return redirect("/");
     }
@@ -128,12 +128,45 @@ const CourseIdPage = ({
                   options={
                     categories.map((category) => ({
                       label: category.name,
-                      value: category._id,
+                      value: category.id,
                     }))
                   }
                 />
 
               </div>
+
+              <div className="space-y-6">
+                <div className="flex items-center gap-x-2">
+                  <IconBadge icon={ListChecks} size={"sm"}
+                  ></IconBadge>
+
+                  <h2 className="text-xl">
+                    Módulos do curso
+                  </h2>
+                </div>
+
+                <div>
+                  TODO: Aulas
+                </div>
+
+                <div className="">
+
+                  <div className="flex items-center gap-x-2 ">
+                    <IconBadge icon={File} size={"sm"}></IconBadge>
+                    <h2 className="text-xl">
+                      Resourses e attachments
+                    </h2>
+                  </div>
+
+                  {/* <AttachmentForm */}
+                  {/*   initialData={course} */}
+                  {/*   courseId={params.courseId} */}
+                  {/* /> */}
+
+                </div>
+
+              </div>
+
             </div>
 
           </div>

@@ -13,12 +13,10 @@ import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 
 const formSchema = z.object({
-  nome: z.string().min(1, {
+  courseTitle: z.string().min(1, {
     message: "O título é necessário"
   }),
 });
-
-const baseUri = "localhost:8080/";
 
 const CreatePage = () => {
 
@@ -26,16 +24,15 @@ const CreatePage = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      nome: ""
+      courseTitle: ""
     },
   });
 
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
     try {
-      const response = await axios.post("http://localhost:8080/api/courses", values);
+      const response = await axios.post("/api/courses", values);
       router.push(`/teacher/courses/${response.data.id}`);
       toast.success("Curso criado com sucesso!");
     } catch {
@@ -49,7 +46,7 @@ const CreatePage = () => {
       <div>
         <h1 className="text-2xl">Nome do curso</h1>
 
-        <p>Qual o nome do curso? Você pode alterar depois.</p>
+        <p>Qual o courseTitle do curso? Você pode alterar depois.</p>
 
         <Form {...form}>
           <form
@@ -58,7 +55,7 @@ const CreatePage = () => {
           >
             <FormField
               control={form.control}
-              name="nome"
+              name="courseTitle"
               render={({ field }) => (
                 <FormItem >
                   <FormLabel>

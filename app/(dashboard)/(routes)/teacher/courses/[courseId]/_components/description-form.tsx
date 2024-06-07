@@ -29,7 +29,7 @@ interface DescriptionFormProps {
 
 // Define o esquema de validação do formulário usando Zod
 const formSchema = z.object({
-  descricao: z.string().min(1, {
+  description: z.string().min(1, {
     message: "Nome do curso é obrigatório",
   }),
 });
@@ -37,7 +37,7 @@ const formSchema = z.object({
 // Define o componente funcional DescriptionForm
 export const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   const [isEditing, setIsEditing] = useState(false);  // Estado para controlar o modo de edição
-  const [description, setDescription] = useState<string | undefined>(initialData?.descricao);  // Estado para a descrição do curso
+  const [description, setDescription] = useState<string | undefined>(initialData?.description);  // Estado para a descrição do curso
 
   // Função para alternar entre os modos de edição e visualização
   const toggleEdit = () => setIsEditing((current) => !current);
@@ -45,7 +45,7 @@ export const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps)
   // Configuração do formulário usando react-hook-form e zodResolver para validação
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { descricao: initialData?.descricao || "" },
+    defaultValues: { description: initialData?.description || "" },
   });
 
   const { isSubmitting, isValid } = form.formState;  // Estado do formulário
@@ -53,9 +53,10 @@ export const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps)
   // Função para manipular a submissão do formulário
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`http://localhost:8080/api/courses/${courseId}`, values);  // Envia a atualização para a API
+      // await axios.patch(`http://localhost:8080/api/courses/${courseId}`, values);  // Envia a atualização para a API
+      await axios.patch(`/api/courses/${courseId}`, values);  // Envia a atualização para a API
       toast.success("Curso Atualizado");  // Exibe uma notificação de sucesso
-      setDescription(values.descricao);  // Atualiza a descrição no estado local
+      setDescription(values.description);  // Atualiza a descrição no estado local
       toggleEdit();  // Alterna para o modo de visualização
     } catch (error) {
       toast.error("Algo deu errado!");  // Exibe uma notificação de erro
@@ -91,7 +92,7 @@ export const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps)
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4 ">
             <FormField
               control={form.control}
-              name="descricao"
+              name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>

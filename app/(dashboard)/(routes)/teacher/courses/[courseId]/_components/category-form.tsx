@@ -57,7 +57,7 @@ export const CategoryForm = ({ initialData, courseId, options }: CategoryFormPro
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       // Enviar uma solicitação PATCH para atualizar a categoria do curso
-      await axios.patch(`http://localhost:8080/api/courses/${courseId}`, values);
+      await axios.patch(`/api/courses/${courseId}`, values);
       // Exibir uma mensagem de sucesso ao usuário
       toast.success("Curso Atualizado");
       // Atualizar a opção selecionada com base nos valores do formulário
@@ -87,7 +87,7 @@ export const CategoryForm = ({ initialData, courseId, options }: CategoryFormPro
         // Renderização da categoria visualizada
         <p className={cn(
           "text-sm mt-2",
-          !initialData?._id && "text-slate-500 italic"
+          !initialData?.id && "text-slate-500 italic"
         )}>
           {selectedOption?.label || "Sem categoria"}
         </p>

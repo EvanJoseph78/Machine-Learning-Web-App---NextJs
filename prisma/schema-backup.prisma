@@ -1,0 +1,125 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Course {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String?
+  title        String
+  introduction String?
+  duration     Int?
+  subject      String?
+  level        String?   @default("Básico")
+  certificate  Boolean?  @default(false)
+  description  String?
+  imageUrl     String?
+  categoryId   String?   @db.ObjectId
+  category     Category? @relation(fields: [categoryId], references: [id])
+
+  attachments Attachment[]
+  tags        Tag[]
+  instructors Instructors[]
+  modules     Module[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+}
+
+model Category {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  name    String   @unique
+  courses Course[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tag {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String  @unique
+  Course   Course? @relation(fields: [courseId], references: [id])
+  courseId String? @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Instructors {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  name       String  @unique
+  formation1 String?
+  formation2 String?
+  imageUrl   String?
+  courseId   String? @db.ObjectId
+  Course     Course? @relation(fields: [courseId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Module {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  videoUrl    String?
+  courseId    String? @db.ObjectId
+  Course      Course? @relation(fields: [courseId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
+}
+
+model Class {
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  urlClass       String         @default("")
+  urlCover       String?        @default("")
+  extraMaterials String?        @default("")
+  userProgress   UserProgress[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserProgress {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String
+  isCompleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Class     Class?   @relation(fields: [classId], references: [id])
+  classId   String?  @db.ObjectId
+
+  @@unique([userId])
+  @@unique([userId, classId])
+}
+
+model Attachment {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  url      String
+  courseId String @db.ObjectId
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
+}
