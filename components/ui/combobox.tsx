@@ -24,7 +24,7 @@ interface ComboBoxProps {
 }
 
 // Use React.forwardRef to forward the ref to the underlying component
-export const Combobox = React.forwardRef<HTMLButtonElement, ComboBoxProps>(
+const Combobox = React.forwardRef<HTMLButtonElement, ComboBoxProps>(
   ({ options, onChange, value }: ComboBoxProps, ref) => {
     const [open, setOpen] = React.useState(false)
 
@@ -76,4 +76,9 @@ export const Combobox = React.forwardRef<HTMLButtonElement, ComboBoxProps>(
     )
   }
 );
+
+// Adicionando a propriedade displayName
+Combobox.displayName = "Combobox"
+
+export default Combobox;
 
