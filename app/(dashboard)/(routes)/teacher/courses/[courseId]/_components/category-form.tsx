@@ -16,7 +16,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Combobox } from "@/components/ui/combobox";
+import Combobox from "@/components/ui/combobox";
 
 // Definição do esquema de validação para o formulário
 const formSchema = z.object({

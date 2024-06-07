@@ -22,7 +22,7 @@ interface AttachmetFormProps {
 
 // Esquema de validação para o formulário utilizando Zod
 const formSchema = z.object({
-  linkcapa: z.string().min(1, {
+  urlImage: z.string().min(1, {
     message: "Capa do curso é obrigatória",
   }),
 });
@@ -30,7 +30,7 @@ const formSchema = z.object({
 // Componente funcional que renderiza e gerencia o formulário de imagem do curso
 export const AttachmentForm = ({ initialData, courseId }: AttachmetFormProps) => {
   // Estado que armazena o URL da imagem do curso
-  const [urlImage, setUrlImage] = useState<string | undefined>(initialData?.linkcapa);
+  const [urlImage, setUrlImage] = useState<string | undefined>(initialData?.imageUrl);
   // Estado para controlar o modo de edição
   const [isEditing, setIsEditing] = useState(false);
   // Função para alternar entre os modos de edição e visualização
@@ -43,7 +43,7 @@ export const AttachmentForm = ({ initialData, courseId }: AttachmetFormProps) =>
       // Faz a requisição PATCH para atualizar os dados do curso
       await axios.patch(`http://localhost:8080/api/courses/${courseId}`, values);
       toast.success("Curso Atualizado");
-      setUrlImage(values.linkcapa);  // Atualiza o estado com o novo URL da imagem
+      setUrlImage(values.urlImage);  // Atualiza o estado com o novo URL da imagem
       toggleEdit();  // Sai do modo de edição
       router.refresh(); // Recarrega a rota para refletir as mudanças
     } catch (error) {
@@ -93,7 +93,7 @@ export const AttachmentForm = ({ initialData, courseId }: AttachmetFormProps) =>
             endpoint="courseImage"
             onChange={(url) => {
               if (url) {
-                onSubmit({ linkcapa: url })
+                onSubmit({ urlImage: url })
               }
             }}
           />

@@ -37,26 +37,6 @@ export interface Question {
   _id: string;
 }
 
-export interface Course1 {
-  _id: string;
-  nome: string;
-  introducao?: string;
-  descricao?: string;
-  duracao?: number;
-  disciplina?: string;
-  nivel?: string;
-  certificado?: boolean;
-  categoryId?: string;
-  topicos?: string[];
-  professores?: Teacher[];
-  linkcapa?: string;
-  modulos?: Module[];
-  questoes?: Question[];
-  createdAt?: string;
-  updatedAt?: string;
-  __v: number;
-}
-
 export interface Course {
   id: string;
   userId?: string
