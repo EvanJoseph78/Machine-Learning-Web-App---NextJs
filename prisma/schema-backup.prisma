@@ -28,14 +28,14 @@ model Courses {
   tags            String?
   subscribedUsers String[]
   instructors     Instructors[]
-  modules         Modules[]
+  classes         Classes[]
+  questions       Questions[]
 
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  Category  Category?   @relation(fields: [categoryId], references: [id])
-  Tags      Tags?       @relation(fields: [tagsId], references: [id])
-  tagsId    String?     @db.ObjectId
-  Questions Questions[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Category  Category? @relation(fields: [categoryId], references: [id])
+  Tags      Tags?     @relation(fields: [tagsId], references: [id])
+  tagsId    String?   @db.ObjectId
 
   @@index([categoryId])
 }
@@ -71,19 +71,6 @@ model Instructors {
   updatedAt DateTime @updatedAt
 }
 
-model Modules {
-  id           String    @id @default(auto()) @map("_id") @db.ObjectId
-  moduleTitle  String?
-  moduleNumber Int?
-  classes      Classes[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  Courses   Courses? @relation(fields: [coursesId], references: [id])
-  coursesId String?  @db.ObjectId
-}
-
 model Classes {
   id           String  @id @default(auto()) @map("_id") @db.ObjectId
   classTitle   String?
@@ -93,11 +80,11 @@ model Classes {
   attachment   String?
   videoUrl     String?
 
+  Course   Courses? @relation(fields: [courseId], references: [id])
+  courseId String?  @db.ObjectId
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  Modules   Modules? @relation(fields: [modulesId], references: [id])
-  modulesId String?  @db.ObjectId
 }
 
 model Questions {

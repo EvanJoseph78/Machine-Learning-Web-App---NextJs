@@ -29,13 +29,14 @@ model Courses {
   subscribedUsers String[]
   instructors     Instructors[]
   modules         Modules[]
+  questions       Questions[]
 
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  Category  Category?   @relation(fields: [categoryId], references: [id])
-  Tags      Tags?       @relation(fields: [tagsId], references: [id])
-  tagsId    String?     @db.ObjectId
-  Questions Questions[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Category Category? @relation(fields: [categoryId], references: [id])
+  Tags     Tags?     @relation(fields: [tagsId], references: [id])
+  tagsId   String?   @db.ObjectId
 
   @@index([categoryId])
 }
@@ -85,13 +86,11 @@ model Modules {
 }
 
 model Classes {
-  id           String  @id @default(auto()) @map("_id") @db.ObjectId
-  classTitle   String?
-  classNumber  Int?
-  moduleTitle  String?
-  moduleNumber Int?
-  attachment   String?
-  videoUrl     String?
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  classTitle  String?
+  classNumber Int?
+  attachment  String?
+  videoUrl    String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

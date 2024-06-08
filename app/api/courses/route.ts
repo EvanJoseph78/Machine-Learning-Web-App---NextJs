@@ -32,3 +32,14 @@ export async function POST(
   }
 }
 
+export async function GET() {
+  try {
+    const course = await db.courses.findMany();
+
+    return NextResponse.json(course);
+  } catch (error) {
+    console.error("[COURSES]", error);
+    return new NextResponse("Internal Error", { status: 500 });
+  }
+}
+

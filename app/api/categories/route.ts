@@ -62,7 +62,6 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   try {
     const categories = await db.category.findMany()
-    console.log(categories);
 
     return NextResponse.json(categories, { status: 201 });
   } catch (error) {

@@ -4,13 +4,15 @@ import { IconBadge } from "@/components/icon-badge";
 import { Category, Course } from "@/lib/types";
 import { useUser } from "@clerk/clerk-react";
 import axios from "axios";
-import { File, LayoutDashboard, ListChecks } from "lucide-react";
+import { Book, File, LayoutDashboard, ListChecks } from "lucide-react";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-form";
 import { ImageForm } from "./_components/image-form";
 import { CategoryForm } from "./_components/category-form";
+import { ClassesForm } from "./_components/classes-form";
+import { ModuleForm } from "./_components/module-form";
 
 const CourseIdPage = ({
   params
@@ -95,6 +97,7 @@ const CourseIdPage = ({
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-y-2 w-full">
             <h1 className="text-2xl font-semibold">Edição do Curso</h1>
+            {/* TODO: consertar a renderização de completionText */}
             <span className="text-sm text-dark-color">Preencha todos os campos {completionText}</span>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
@@ -142,11 +145,28 @@ const CourseIdPage = ({
                   <h2 className="text-xl">
                     Módulos do curso
                   </h2>
+
                 </div>
 
-                <div>
-                  TODO: Aulas
+                <ModuleForm
+                  initialData={course}
+                  courseId={params.courseId}
+                />
+
+                <div className="flex items-center gap-x-2">
+                  <IconBadge icon={Book} size={"sm"}
+                  ></IconBadge>
+
+                  <h2 className="text-xl">
+                    Aulas do curso
+                  </h2>
+
                 </div>
+
+                <ClassesForm
+                  initialData={course}
+                  courseId={params.courseId}
+                ></ClassesForm>
 
                 <div className="">
 
