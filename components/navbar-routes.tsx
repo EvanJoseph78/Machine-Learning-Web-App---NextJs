@@ -46,16 +46,13 @@ export const NavbarRoutes = () => {
   }, [userInfo])
 
   return (
-    <div className="w-full flex justify-between">
-      <div>
+    <div className="w-full flex justify-between gap-2">
+      <div className="flex gap-2">
         <Link href={"/courses"}>
           <Button size={"sm"}>
             Cursos
           </Button>
         </Link>
-      </div>
-
-      <div className="flex gap-2">
 
         {isAdmin && (
           <div className="flex gap-x-2 ml-auto">
@@ -76,15 +73,31 @@ export const NavbarRoutes = () => {
           </div>
         )}
 
+      </div>
+
+      <div className="flex gap-2">
+
         {/* se não houver usuário logado mostra ícone para logar */}
         {!isLoged ? (
-          <Popover>
+          <Popover >
             <PopoverTrigger>
-              <UserRound size={40} />
+              <UserRound size={30} />
             </PopoverTrigger>
-            <PopoverContent className="w-40">
-              <p className="hover:text-vermelho-vinho transition duration-300 ease-in-out cursor-pointer " onClick={() => { router.push("/sign-in") }}>Login</p>
-              <p className="hover:text-vermelho-vinho transition duration-300 ease-in-out cursor-pointer " onClick={() => { router.push("/sign-up") }}>Criar Conta</p>
+            <PopoverContent className="w-40 bg-white border p-2 rounded-md">
+              <p
+                className="hover:text-vermelho-vinho transition duration-300 ease-in-out cursor-pointer "
+                onClick={() => { router.push("/sign-in") }}
+              >
+                Login
+              </p>
+
+              <p
+                className="hover:text-vermelho-vinho transition duration-300 ease-in-out cursor-pointer "
+                onClick={() => { router.push("/sign-up") }}
+              >
+                Criar Conta
+              </p>
+
             </PopoverContent>
           </Popover>
         ) : (

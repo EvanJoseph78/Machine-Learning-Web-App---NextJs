@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Courses } from "@prisma/client";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { CourseItem } from "./_components/course-item";
 
 const CoursesList = () => {
 
@@ -39,18 +40,18 @@ const CoursesList = () => {
 
           <TabsContent value="todos" className="border p-2 rounded-xl">
 
-            {/* <div className="flex justify-center flex-wrap content-center items-center gap-2"> */}
-            {/*   {courses.map((course) => ( */}
-            {/*     <CourseCard key={course._id} courseId={course._id} courseName={course.nome} discipine={course.disciplina} linkCover={course.linkcapa} topics={course.topicos} /> */}
-            {/*   ))} */}
-            {/* </div> */}
-
-            <div className="flex justify-center flex-wrap content-center items-center gap-2 flex-col">
+            <div className="flex justify-center flex-wrap content-center items-center gap-2">
               {coursesList.map((course) => (
-                <div key={course.id}>{course.courseTitle}</div>
+                <CourseItem
+                  courseName={course.courseTitle}
+                  discipine={course.subject}
+                  linkCover={course.imageUrl}
+                  tags={course.tags}
+                  courseId={course.id}
+                ></CourseItem>
+
               ))}
             </div>
-
 
           </TabsContent>
 
