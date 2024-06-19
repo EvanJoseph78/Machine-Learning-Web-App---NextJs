@@ -4,12 +4,12 @@ import Link from "next/link";
 
 const CoursePage = () => {
   return (
-    <div className="p-6">
-      <Link href={"/teacher/create"}>
-        <Button >
-          Novo Curso
-        </Button>
-      </Link>
+    <div className="px-4">
+      {/* <Link href={"/teacher/create"}> */}
+      {/*   <Button > */}
+      {/*     Novo Curso */}
+      {/*   </Button> */}
+      {/* </Link> */}
       <CoursesList editPage={true}></CoursesList>
     </div>
   );

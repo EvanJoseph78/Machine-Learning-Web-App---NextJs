@@ -5,7 +5,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-full dark:bg-dark-color">
 
-      <div className="h-[80px] fixed inset-y-0 w-full z-50">
+      <div className="h-[80px] fixed inset-y-0 w-full z-50 bg-gray-50 dark:bg-dark-color ">
         <Navbar />
       </div>
 
@@ -13,7 +13,8 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       {/*   <SideBar /> */}
       {/* </div> */}
 
-      <main className="pt-[80px] h-full items-center content-center justify-center px-4 sm:px-8 md:px-16 xl:px-32 2xl:px-48">
+      {/* <main className="pt-[80px] h-full items-center content-center justify-center px-4 sm:px-8 md:px-16 xl:px-32 2xl:px-48"> */}
+      <main className="pt-[80px] h-full ">
         {children}
       </main>
     </div>

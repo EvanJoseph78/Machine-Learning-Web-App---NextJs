@@ -2,8 +2,9 @@
 import { useRouter } from "next/navigation";
 
 import Image from "next/image";
-import { Pencil } from "lucide-react";
+import { BookOpen, Pencil } from "lucide-react";
 import { Button } from "./ui/button";
+import { IconBadge } from "./icon-badge";
 
 interface CourseItemProps {
   courseName: string,
@@ -14,9 +15,10 @@ interface CourseItemProps {
   courseDescription: string | null,
   courseLevel: string | null
   editPage: boolean,
+  category: string | null,
 }
 
-export const CourseItem = ({ courseName, discipine, linkCover, tags, courseId, courseLevel, editPage }: CourseItemProps) => {
+export const CourseItem = ({ courseName, discipine, linkCover, tags, courseId, courseLevel, editPage, category }: CourseItemProps) => {
 
   const router = useRouter();
 
@@ -25,8 +27,8 @@ export const CourseItem = ({ courseName, discipine, linkCover, tags, courseId, c
   }
 
   return (
-    <div className="flex flex-col w-[360px]  border rounded-xl overflow-hidden" >
-      <div className="bg-dark-color dark:bg-dark-color border min-h-[200px] flex items-center cursor-pointer" onClick={() => onRedirect(courseId)}>
+    <div className="flex flex-col w-[300px] min-h-[380px] rounded-xl overflow-hidden border p-2 relative" >
+      <div className="bg-dark-color dark:bg-dark-color border min-h-[160px] flex items-center cursor-pointer rounded-xl overflow-hidden" onClick={() => onRedirect(courseId)}>
 
         {linkCover ? (
           <Image
@@ -48,11 +50,15 @@ export const CourseItem = ({ courseName, discipine, linkCover, tags, courseId, c
       </div>
 
       <div className="px-2 py-4 flex flex-col w-full gap-1">
-        <h3 className="font-bold text-xl hover:text-vermelho-vinho transition
+        <h3 className="font-bold text-md hover:text-vermelho-vinho transition
     duration-300 ease-in-out cursor-pointer" onClick={() => onRedirect(courseId)}>{courseName}</h3>
-        <h4 className="text-gray-800 text-xs">{discipine}</h4>
+        <h4 className="text-gray-800 text-xs">{category}</h4>
 
-        <p className="text-md">Nível: {courseLevel}</p>
+        <p className="text-xs text-gray-500">Nível: {courseLevel}</p>
+        <div className="flex items-center gap-1">
+          <IconBadge icon={BookOpen} size={"sm"}></IconBadge>
+          <p className="text-xs">32 Aulas</p>
+        </div>
 
         <div className="flex flex-wrap mt-4 gap-1">
           {tags.map((tag, index) => (
@@ -63,9 +69,10 @@ export const CourseItem = ({ courseName, discipine, linkCover, tags, courseId, c
       </div>
 
       {editPage && (
-        <div className=" p-2 flex justify-end">
+        <div className="absolute p-2 -right-2 bottom-0">
           {/* <Pencil /> */}
           <Button
+            size={"sm"}
             onClick={() => {
               router.push(`/teacher/courses/${courseId}`)
             }}

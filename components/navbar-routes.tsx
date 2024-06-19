@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 
 import { HomeIcon, Search, UserRound } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@radix-ui/react-popover";
+import { ModeToggle } from "./mode-toggle";
 
 
 export const NavbarRoutes = () => {
@@ -76,6 +77,8 @@ export const NavbarRoutes = () => {
       </div>
 
       <div className="flex gap-2">
+
+        <ModeToggle></ModeToggle>
 
         {/* se não houver usuário logado mostra ícone para logar */}
         {!isLoged ? (

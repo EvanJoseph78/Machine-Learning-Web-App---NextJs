@@ -5,6 +5,8 @@ import { Courses } from "@prisma/client";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { CourseItem } from "./course-item";
+import Link from "next/link";
+import { Button } from "./ui/button";
 
 interface CourseListProps {
   editPage: boolean
@@ -30,8 +32,17 @@ export const CoursesList = ({ editPage = false }: CourseListProps) => {
   }, [])
 
   return (
-    <div className="w-full h-full px-4 pt-16" >
-      <h1 className="text-3xl font-bold">Cursos de Desenvolvimento</h1>
+    <div className="w-full h-full px-2 sm:px-6 pt-16" >
+      <h1 className="text-3xl font-bold">Cursos</h1>
+
+      {editPage && (
+        <Link href={"/teacher/create"}>
+          <Button >
+            Novo Curso
+          </Button>
+        </Link>
+      )}
+
       <p className="text-xl font-bold text-gray-700 mt-8">Cursos disponíveis: 2</p>
 
       <div className="mt-4 h-full">
@@ -41,9 +52,9 @@ export const CoursesList = ({ editPage = false }: CourseListProps) => {
             <TabsTrigger value="novos">Novos</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="todos" className="border p-2 rounded-xl">
+          <TabsContent value="todos" className="sm:border sm:p-2 rounded-xl">
 
-            <div className="flex justify-center flex-wrap content-center items-center gap-2 h-full">
+            <div className="flex justify-center flex-wrap content-center items-center gap-2 min-h-[360px] ">
               {coursesList.map((course) => (
                 <CourseItem
                   courseName={course.courseTitle}
@@ -54,8 +65,8 @@ export const CoursesList = ({ editPage = false }: CourseListProps) => {
                   courseDescription={course.description}
                   courseLevel={course.level}
                   editPage={editPage}
+                  category={course.subject}
                 ></CourseItem>
-
               ))}
             </div>
 
