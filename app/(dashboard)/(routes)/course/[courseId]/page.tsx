@@ -1,9 +1,10 @@
 "use client"
 
-import { Courses } from "@prisma/client";
+import { Courses, Instructors } from "@prisma/client";
 import { CourseCard } from "./_components/course-card";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { InstructorCard } from "./_components/instructores-card";
 
 const CoursePage = (
   {
@@ -14,11 +15,14 @@ const CoursePage = (
 ) => {
 
   const [course, setCourse] = useState<Courses>();
+  const [instructors, setInstructors] = useState<Instructors[]>();
 
   const fetchCourses = async () => {
     // const response = await axios.get('/api/courses/');
     const response = await axios.get(`/api/courses/${params.courseId}`);
+    console.log(response.data);
     setCourse(response.data);
+    setInstructors(response.data.instructors)
     return response.data;
   };
 
@@ -43,15 +47,32 @@ const CoursePage = (
             linkCover={course.imageUrl}
             topics={course.tags}
             workload={course.duration}
-            courseSubject={course.categoryId}
+            courseSubject={course.subject}
             difficulty={course.level}
-            certificate={false}
+            certificate={course.certificate}
           ></CourseCard>
         )}
 
       </main>
 
-      <div className="w-full bg-dark-color text-white h-60">Professores</div>
+      <div className="w-full bg-dark-color text-white min-h-96 py-8">
+
+        <h1 className="text-5xl text-center">Instrutores</h1>
+
+        <div className="flex mt-8 gap-32 flex-wrap justify-center">
+          {instructors?.map((instructor) => (
+            <InstructorCard
+              instructorName={instructor.name}
+              formation1={instructor.formation1}
+              formation2={instructor.formation2}
+              profilePictureUrl={instructor.profileUrl}
+              key={instructor.id} />
+          ))}
+        </div>
+
+      </div>
+
+      <div className="bg-black h-60">Footer</div>
     </div>
   );
 };

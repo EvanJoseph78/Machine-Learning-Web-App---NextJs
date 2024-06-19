@@ -60,6 +60,7 @@ model Category {
 
 model Instructors {
   id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  name String
   formation1 String?
   formation2 String?
   profileUrl String?

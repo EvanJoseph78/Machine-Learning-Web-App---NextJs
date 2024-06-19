@@ -51,6 +51,9 @@ export async function GET(
       where: {
         id: courseId,
       },
+      include: {
+        instructors: true
+      }
     });
 
     // Verificar se o curso foi encontrado
