@@ -1,7 +1,7 @@
 "use client"
 
 import { IconBadge } from "@/components/icon-badge";
-import { Category, Course } from "@/lib/types";
+import { Category, Course, ListClasses } from "@/lib/types";
 import { useUser } from "@clerk/clerk-react";
 import axios from "axios";
 import { Book, File, LayoutDashboard, ListChecks } from "lucide-react";
@@ -13,6 +13,7 @@ import { ImageForm } from "./_components/image-form";
 import { CategoryForm } from "./_components/category-form";
 import { ClassesForm } from "./_components/classes-form";
 import { ModuleForm } from "./_components/module-form";
+import { Modules } from "@prisma/client";
 
 const CourseIdPage = ({
   params
@@ -23,6 +24,9 @@ const CourseIdPage = ({
   const [loading, setLoading] = useState(true);
   const [course, setCourse] = useState<Course | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
+
+  const [courseModules, setCourseModules] = useState<Modules[]>([]);
+  const [listClasses, setListClasses] = useState<ListClasses[]>([]);
 
   const { user } = useUser();
 
@@ -49,14 +53,20 @@ const CourseIdPage = ({
   const completedFields = requiredFields.filter(isValidField).length;
   const completionText = `(${completedFields}/${totalFields})`;
 
-  // const completionText = `(${completedFieds}/${totalFields})`
-
   const fetchCourse = async (courseId: string) => {
-    // const response = await axios.get(`http://localhost:8080/api/courses/${courseId}`);
-    // console.log(courseId);
     const response = await axios.get(`/api/courses/${courseId}`);
-
     return response.data;
+  };
+
+  const fetchCourseModules = async () => {
+    try {
+      const response = await axios.get(`/api/courses/${params.courseId}/modules/`);
+      // console.log(response.data);
+      setCourseModules(response.data.modules);
+      setListClasses(response.data.modules);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const fetchCategories = async () => {
@@ -69,6 +79,7 @@ const CourseIdPage = ({
       try {
         const courseData = await fetchCourse(params.courseId);
         const categoriesData = await fetchCategories();
+        fetchCourseModules();
         setCourse(courseData);
         setCategories(categoriesData);
       } catch (error) {
@@ -82,8 +93,6 @@ const CourseIdPage = ({
   }, [params.courseId]);
 
   if (!loading && !course) {
-    console.log(!loading);
-    console.log(!course);
     if (!course || !user) {
       return redirect("/");
     }
@@ -149,7 +158,8 @@ const CourseIdPage = ({
                 </div>
 
                 <ModuleForm
-                  initialData={course}
+                  initialData={courseModules}
+                  initialData2={listClasses}
                   courseId={params.courseId}
                 />
 

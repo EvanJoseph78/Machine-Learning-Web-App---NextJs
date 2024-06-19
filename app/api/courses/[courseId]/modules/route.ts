@@ -102,6 +102,9 @@ export async function GET(
     const modules = await db.modules.findMany({
       where: {
         coursesId: courseId
+      },
+      include: {
+        classes: true
       }
     });
 
@@ -113,3 +116,5 @@ export async function GET(
     return new NextResponse("Internal Server Error", { status: 500 })
   }
 }
+
+// Fazer a rota do tipo path

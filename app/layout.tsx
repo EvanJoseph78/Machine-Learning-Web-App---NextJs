@@ -42,7 +42,7 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <main>
+              <main className="h-full">
                 <ToastProvider />
                 {children}
               </main>

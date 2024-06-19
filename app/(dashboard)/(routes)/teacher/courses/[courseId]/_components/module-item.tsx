@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Pencil, X } from "lucide-react"
+import { Pencil, Plus, X } from "lucide-react"
 
 import {
   Accordion,
@@ -7,25 +7,20 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { Classes, Modules } from "@prisma/client"
+import { useEffect, useState } from "react"
+import { Buda } from "next/font/google"
+import { ListClasses } from "@/lib/types"
+import { appendMutableCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies"
+
+import { Input } from "@/components/ui/input";
 
 interface ModuleItemProps {
-  moduleName: string
+  classesList: Modules[] | null
+  classesList2: ListClasses[] | null
 }
 
-// export const ModuleItem = ({ moduleName }: ModuleItemProps) => {
-//   return (
-//     <div className="py-1 rounded-md px-2 items-center border">
-//       <div className="flex w-full justify-between  ">
-//         <p className="text-md">{moduleName}</p>
-//         <div className="flex items-center gap-2">
-//           <Button variant={"default"} size={"xs"}><Pencil /></Button>
-//           <Button variant={"destructive"} size={"xs"}><X /></Button>
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
-//
+
 const classes = [
   {
     id: "1",
@@ -69,22 +64,42 @@ const classes = [
   },
 ];
 
-export const ModuleItem = ({ moduleName }: ModuleItemProps) => {
+export const ModuleItem = ({ classesList, classesList2 }: ModuleItemProps) => {
+
   return (
-    <div>
-      <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-1">
-          <AccordionTrigger>{moduleName}</AccordionTrigger>
 
-          {classes.map((item) => (
-            <AccordionContent key={item.id}>
-              {item.classTitle}
+    <div className="">
+      {classesList2?.map((moduleItem) => (
+        <Accordion type="single" collapsible className="" key={moduleItem.id}>
+
+          <AccordionItem value="item-1" className="">
+
+            <AccordionTrigger>{moduleItem.moduleTitle}</AccordionTrigger>
+
+            {moduleItem.classes.map((classItem) => (
+              <AccordionContent className="">
+                <div className="flex justify-between items-center space-y-1 ml-2">
+                  <p>{classItem.classTitle}</p>
+                  <Button className="h-8">editar</Button>
+                </div>
+              </AccordionContent>
+            ))}
+
+            <AccordionContent className="ml-2 flex gap-2 justify-between">
+              <div className="flex h-full w-full items-center py-1 justify-between gap-2">
+                <Input
+                  // disabled={isSubmitting}
+                  placeholder="Adicionar Aula"
+                />
+                <Button className="h-full">Adicionar</Button>
+              </div>
             </AccordionContent>
-          ))}
 
+          </AccordionItem>
+        </Accordion>
+      ))}
 
-        </AccordionItem>
-      </Accordion>
     </div>
   )
 }
+
