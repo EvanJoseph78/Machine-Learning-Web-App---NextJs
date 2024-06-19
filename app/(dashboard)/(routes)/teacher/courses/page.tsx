@@ -1,3 +1,4 @@
+import { CoursesList } from "@/components/course-list";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -9,6 +10,7 @@ const CoursePage = () => {
           Novo Curso
         </Button>
       </Link>
+      <CoursesList editPage={true}></CoursesList>
     </div>
   );
 };

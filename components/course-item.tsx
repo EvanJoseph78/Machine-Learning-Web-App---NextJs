@@ -1,6 +1,9 @@
+
 import { useRouter } from "next/navigation";
 
 import Image from "next/image";
+import { Pencil } from "lucide-react";
+import { Button } from "./ui/button";
 
 interface CourseItemProps {
   courseName: string,
@@ -10,9 +13,10 @@ interface CourseItemProps {
   courseId: string,
   courseDescription: string | null,
   courseLevel: string | null
+  editPage: boolean,
 }
 
-export const CourseItem = ({ courseName, discipine, linkCover, tags, courseId, courseDescription, courseLevel }: CourseItemProps) => {
+export const CourseItem = ({ courseName, discipine, linkCover, tags, courseId, courseLevel, editPage }: CourseItemProps) => {
 
   const router = useRouter();
 
@@ -21,8 +25,8 @@ export const CourseItem = ({ courseName, discipine, linkCover, tags, courseId, c
   }
 
   return (
-    <div className="flex flex-col w-[360px] cursor-pointer border rounded-xl overflow-hidden" onClick={() => onRedirect(courseId)}>
-      <div className="bg-dark-color dark:bg-dark-color border min-h-[200px] flex items-center">
+    <div className="flex flex-col w-[360px]  border rounded-xl overflow-hidden" >
+      <div className="bg-dark-color dark:bg-dark-color border min-h-[200px] flex items-center cursor-pointer" onClick={() => onRedirect(courseId)}>
 
         {linkCover ? (
           <Image
@@ -44,7 +48,8 @@ export const CourseItem = ({ courseName, discipine, linkCover, tags, courseId, c
       </div>
 
       <div className="px-2 py-4 flex flex-col w-full gap-1">
-        <h3 className="font-bold text-xl">{courseName}</h3>
+        <h3 className="font-bold text-xl hover:text-vermelho-vinho transition
+    duration-300 ease-in-out cursor-pointer" onClick={() => onRedirect(courseId)}>{courseName}</h3>
         <h4 className="text-gray-800 text-xs">{discipine}</h4>
 
         <p className="text-md">Nível: {courseLevel}</p>
@@ -56,6 +61,17 @@ export const CourseItem = ({ courseName, discipine, linkCover, tags, courseId, c
         </div>
 
       </div>
+
+      {editPage && (
+        <div className=" p-2 flex justify-end">
+          {/* <Pencil /> */}
+          <Button
+            onClick={() => {
+              router.push(`/teacher/courses/${courseId}`)
+            }}
+          >Editar</Button>
+        </div>
+      )}
 
     </div >
 

@@ -25,7 +25,7 @@ model Courses {
   description     String?
   imageUrl        String?
   categoryId      String?       @db.ObjectId
-  tags            String?
+  tags            String[]
   subscribedUsers String[]
   instructors     Instructors[]
   modules         Modules[]
