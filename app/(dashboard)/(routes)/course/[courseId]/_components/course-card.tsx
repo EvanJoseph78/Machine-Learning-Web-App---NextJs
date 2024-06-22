@@ -17,12 +17,6 @@ interface CourseCardProps {
 
 export const CourseCard = ({ courseName, discipine, linkCover, topics, courseId, workload, courseSubject, difficulty, certificate }: CourseCardProps) => {
 
-  // const router = useRouter();
-
-  // const onRedirect = (courseId: string) => {
-  //   router.push(`/course/${courseId}`)
-  // }
-
   return (
 
     <div className="rounded-xl overflow-hidden border md:w-[500px] w-full">

@@ -60,7 +60,7 @@ model Category {
 
 model Instructors {
   id         String  @id @default(auto()) @map("_id") @db.ObjectId
-  name String
+  name       String
   formation1 String?
   formation2 String?
   profileUrl String?
@@ -124,7 +124,8 @@ model Options {
 }
 
 model Users {
-  id                String              @id @map("_id") @db.ObjectId
+  id                String              @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String
   fullname          String
   subscribedCourses SubscribedCourses[]
 

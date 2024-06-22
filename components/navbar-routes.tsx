@@ -17,21 +17,15 @@ import { ModeToggle } from "./mode-toggle";
 export const NavbarRoutes = () => {
 
   const router = useRouter();
-
   const adminUserId = "user_2h66pveKdZAu3AjnVfyLEuCQBSn";
-
   const pathname = usePathname();
-
   const isTeacherPage = pathname?.startsWith("/teacher");
   const isPlayerPage = pathname?.includes("/chapter");
-
   const userInfo = useUser();
-
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoged, setIsLoged] = useState(false);
 
   useEffect(() => {
-    console.log(userInfo.user?.id);
 
     if (userInfo.user) {
       setIsLoged(true);

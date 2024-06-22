@@ -19,7 +19,6 @@ export const CoursesList = ({ editPage = false }: CourseListProps) => {
   const fetchCourses = async () => {
     const response = await axios.get('/api/courses/');
     setCoursesList(response.data);
-    console.log(response.data);
     return response.data;
   };
 
@@ -57,6 +56,7 @@ export const CoursesList = ({ editPage = false }: CourseListProps) => {
             <div className="flex justify-center flex-wrap content-center items-center gap-2 min-h-[360px] ">
               {coursesList.map((course) => (
                 <CourseItem
+                  key={course.id}
                   courseName={course.courseTitle}
                   discipine={course.subject}
                   linkCover={course.imageUrl}
