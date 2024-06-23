@@ -71,7 +71,7 @@ export async function GET(
 
     const existingUser = await db.users.findUnique({
       where: {
-        userId: userId
+        id: userId // FIX
       },
       include: {
         subscribedCourses: true
