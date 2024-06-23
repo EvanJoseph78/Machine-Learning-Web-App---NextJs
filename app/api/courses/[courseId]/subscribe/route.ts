@@ -86,7 +86,7 @@ export async function GET(
       return new NextResponse("true", { status: 200 });
     }
 
-    return new NextResponse("false", { status: 200 });
+    return new NextResponse("false", { status: 404 });
   } catch (error) {
     console.error("[COURSES]", error);
     return new NextResponse("Internal Error", { status: 500 });

@@ -46,11 +46,13 @@ const CoursePage = (
     try {
       const response = await axios.get(`/api/courses/${params.courseId}/subscribe`);
 
-      if (response.data === "true") {
+      if (response.status == 200) {
         setIsUserSubscribed(true);
+      } else {
+        setIsUserSubscribed(false);
       }
+      console.log(response.status);
 
-      console.log(response.data);
 
     } catch (error) {
       console.error('erro', error);
@@ -66,13 +68,12 @@ const CoursePage = (
         userId: user.user?.id,
       })
       if (response.data === "usuário não cadastrado") {
-        console.log(response.data);
         await handleRegister();
         await handleSubscribeCourse();  // Tente novamente após o registro
       } else {
         console.log('Inscrição bem-sucedida:', response.data);
 
-        toast.success("Curso criado com sucesso!");
+        toast.success("Inscrito no curso com sucesso!");
         setIsUserSubscribed(true);
       }
     } catch (error) {
