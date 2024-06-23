@@ -8,8 +8,6 @@ import { ChevronRight, Search } from "lucide-react";
 
 export const SideBar = () => {
 
-  const { listClasses } = useListClasses();
-
   return (
     <div className="h-full justify-between border-r flex flex-col overflow-y-auto shadow-sm pt-6 bg- dark:bg-dark-color px-4">
       <div className="p-x6 h-full space-y-6">
@@ -49,16 +47,13 @@ export const SideBar = () => {
               </div>
 
               <ListClasses></ListClasses>
+
             </TabsContent>
             <TabsContent value="anotations">Mariano</TabsContent>
           </Tabs>
 
         </div>
       </div>
-
-      {listClasses.map((module) => (
-        <div key={module.id}>{module.moduleTitle}</div>
-      ))}
 
       <div className="w-full p-6 flex justify-end">
         <ModeToggle />

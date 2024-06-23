@@ -13,8 +13,13 @@ import { HomeIcon, Search, UserRound } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@radix-ui/react-popover";
 import { ModeToggle } from "./mode-toggle";
 
+interface NavbarRoutesProps {
+  isclassroom?: boolean,
+  courseId?: string,
+  courseName?: string
+}
 
-export const NavbarRoutes = () => {
+export const NavbarRoutes = ({ isclassroom = false, courseId, courseName = "none" }: NavbarRoutesProps) => {
 
   const router = useRouter();
   const adminUserId = "user_2h66pveKdZAu3AjnVfyLEuCQBSn";
@@ -48,6 +53,10 @@ export const NavbarRoutes = () => {
             Cursos
           </Button>
         </Link>
+
+        {isclassroom && (
+          <div>{courseName}</div>
+        )}
 
         {isAdmin && (
           <div className="flex gap-x-2 ml-auto">

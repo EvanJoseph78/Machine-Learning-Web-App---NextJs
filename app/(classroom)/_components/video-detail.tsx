@@ -3,6 +3,7 @@ import { IconBadge } from "@/components/icon-badge";
 import VideoPlayer from "./video-player"
 import { useEffect, useState } from "react";
 import { EllipsisVertical, File } from "lucide-react";
+import { useClassItem } from "@/components/providers/class-provider";
 
 interface VideoDeailsProps {
   courseName: string,
@@ -41,16 +42,18 @@ export const VideoDetail = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const { currentClassTitle, currentUrlClassVideo } = useClassItem();
+
   return (
-    <div>
+    <div className="overflow-hidden">
       <VideoPlayer
-        videoId={videoId}
+        videoId={currentUrlClassVideo}
         height={videoDimensions.height} width={videoDimensions.width}
       ></VideoPlayer>
 
       <div className="mt-4 space-y-4 border rounded-md p-2">
         <div className="flex items-center justify-between">
-          <p className="text-xl">1 - Aula 1</p>
+          <p className="text-xl">{currentClassTitle}</p>
           <EllipsisVertical></EllipsisVertical>
         </div>
         <div className=" flex gap-2 items-center invisible">

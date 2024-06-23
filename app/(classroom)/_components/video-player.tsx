@@ -26,7 +26,12 @@ const VideoPlayer = ({ videoId, height, width }: VideoPlayerProps) => {
   };
 
   return (
-    <YouTube videoId={videoId} opts={opts} onReady={handleVideoReady} className='md:rounded-md overflow-hidden' />
+    <YouTube
+      videoId={videoId}
+      opts={opts}
+      onReady={handleVideoReady}
+      className='md:rounded-md overflow-hidden'
+    />
   );
 };
 

@@ -1,34 +1,40 @@
+import { useListClasses } from "@/components/providers/classes-list-provider";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { ClassItem } from "./class-item";
+
 
 export function ListClasses() {
+
+  const { listClasses } = useListClasses();
+
   return (
-    <Accordion type="single" collapsible className="w-full">
-      <AccordionItem value="item-1">
-        <AccordionTrigger>Is it accessible?</AccordionTrigger>
-        <AccordionContent>
-          Yes. It adheres to the WAI-ARIA design pattern.
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="item-2">
-        <AccordionTrigger>Is it styled?</AccordionTrigger>
-        <AccordionContent>
-          Yes. It comes with default styles that matches the other
-          components&apos; aesthetic.
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="item-3">
-        <AccordionTrigger>Is it animated?</AccordionTrigger>
-        <AccordionContent>
-          Yes. It&apos;s animated by default, but you can disable it if you
-          prefer.
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+    <div>
+      <Accordion type="single" collapsible className="w-full">
+        {listClasses.map((module) => (
+          <AccordionItem value={module.id}>
+            <AccordionTrigger >
+              <div className="text-justify mr-4">
+                {module.moduleTitle}
+              </div>
+            </AccordionTrigger>
+            {module.classes.map((classItem) => (
+              <AccordionContent>
+                <ClassItem
+                  classId={classItem.id}
+                  classTitle={classItem.classTitle}
+                  videoUrl={classItem.videoUrl}
+                ></ClassItem>
+              </AccordionContent>
+            ))}
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </div>
   )
 }
 

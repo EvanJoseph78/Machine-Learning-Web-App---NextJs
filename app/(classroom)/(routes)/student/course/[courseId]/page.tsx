@@ -1,13 +1,10 @@
 "use client"
 
 import { Main } from "@/app/(classroom)/_components/main";
+import { Navbar } from "@/app/(classroom)/_components/navbar";
 import { SideBar } from "@/app/(classroom)/_components/sidebar";
 import { ListClassesContext } from "@/components/providers/classes-list-provider";
 import useCourseData from "@/hooks/useCourse";
-import { ListClasses } from "@/lib/types";
-import { Courses } from "@prisma/client";
-import axios from "axios";
-import { useEffect, useState } from "react";
 
 const ClassRoom = (
   { params }: {
@@ -19,9 +16,13 @@ const ClassRoom = (
 
   return (
     <ListClassesContext.Provider value={{ listClasses, setListClasses }}>
-      <div className="h-full">
+      <div className="h-full flex flex-col content-center xl:flex-row">
 
-        <div className="h-full">
+        <div className="h-full xl:w-4/5 ">
+
+          <div className="">
+            <Navbar></Navbar>
+          </div>
 
           {isLoading ? (
             <div>carregando...</div>
@@ -31,11 +32,7 @@ const ClassRoom = (
 
         </div>
 
-        <div className="hidden xl:flex w-1/3 flex-col md:fixed right-0 inset-y-0 z-50">
-          <SideBar />
-        </div>
-
-        <div className="flex md:hidden flex-col">
+        <div className="xl:w-2/5">
           <SideBar />
         </div>
 
