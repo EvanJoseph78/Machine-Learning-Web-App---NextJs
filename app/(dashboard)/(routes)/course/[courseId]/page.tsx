@@ -46,9 +46,11 @@ const CoursePage = (
     try {
       const response = await axios.get(`/api/courses/${params.courseId}/subscribe`);
 
-      if (response.data) {
+      if (response.data === "true") {
         setIsUserSubscribed(true);
       }
+
+      console.log(response.data);
 
     } catch (error) {
       console.error('erro', error);

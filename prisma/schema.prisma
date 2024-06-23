@@ -125,7 +125,7 @@ model Options {
 
 model Users {
   id                String              @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String
+  userId            String              @unique
   fullname          String
   subscribedCourses SubscribedCourses[]
 
