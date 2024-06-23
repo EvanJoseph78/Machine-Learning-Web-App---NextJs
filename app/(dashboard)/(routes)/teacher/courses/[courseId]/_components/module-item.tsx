@@ -77,7 +77,7 @@ export const ModuleItem = ({ classesList, classesList2 }: ModuleItemProps) => {
             <AccordionTrigger>{moduleItem.moduleTitle}</AccordionTrigger>
 
             {moduleItem.classes.map((classItem) => (
-              <AccordionContent className="">
+              <AccordionContent className="" key={classItem.id}>
                 <div className="flex justify-between items-center space-y-1 ml-2">
                   <p>{classItem.classTitle}</p>
                   <Button className="h-8">editar</Button>

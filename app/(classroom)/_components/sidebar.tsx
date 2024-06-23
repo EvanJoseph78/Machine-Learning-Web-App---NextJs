@@ -1,12 +1,15 @@
 
 import { ModeToggle } from "@/components/mode-toggle";
-import { useListClasses } from "@/components/providers/classes-list-provider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ListClasses } from "./list-classes";
 import { Input } from "@/components/ui/input";
 import { ChevronRight, Search } from "lucide-react";
 
-export const SideBar = () => {
+interface SideBarProps {
+  courseId: string
+}
+
+export const SideBar = ({ courseId }: SideBarProps) => {
 
   return (
     <div className="h-full justify-between border-r flex flex-col overflow-y-auto shadow-sm pt-6 bg- dark:bg-dark-color px-4">
@@ -46,7 +49,7 @@ export const SideBar = () => {
                 <Search />
               </div>
 
-              <ListClasses></ListClasses>
+              <ListClasses courseId={courseId}></ListClasses>
 
             </TabsContent>
             <TabsContent value="anotations">Mariano</TabsContent>
