@@ -1,8 +1,8 @@
 "use client"
 
-import { Main } from "@/app/(classroom)/_components/main";
-import { Navbar } from "@/app/(classroom)/_components/navbar";
 import { SideBar } from "@/app/(classroom)/_components/sidebar";
+import { VideoDetail } from "@/app/(classroom)/_components/video-detail";
+import { NavbarRoutes } from "@/components/navbar-routes";
 import useCourseData from "@/hooks/useCourse";
 
 const ClassRoom = (
@@ -19,13 +19,18 @@ const ClassRoom = (
       <div className="h-full xl:w-4/5 ">
 
         <div className="">
-          <Navbar></Navbar>
+          <div className="p-4 border-b h-full flex items-center shadow-sm">
+            <NavbarRoutes isclassroom courseName={course?.courseTitle} courseId={params.courseId}></NavbarRoutes>
+          </div>
+
         </div>
 
         {isLoading ? (
           <div>carregando...</div>
         ) : (
-          <Main course={course!}></Main>
+          <div className="p-4 flex flex-col justify-center content-center items-center ">
+            <VideoDetail width={1000} ></VideoDetail>
+          </div>
         )}
 
       </div>

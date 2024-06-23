@@ -4,9 +4,11 @@ import { createContext, useContext, useState, ReactNode } from "react";
 interface ClassContextType {
   currentIdClass: string;
   currentClassTitle: string;
+  currentClassNumber: string;
   currentUrlClassVideo: string;
   setCurrentIdClass: (id: string) => void;
   setCurrentClassTitle: (title: string) => void;
+  setCurrentClassNumber: (number: string) => void;
   setCurrentUrlClassVideo: (url: string) => void;
 }
 
@@ -30,14 +32,17 @@ interface ClassItemProviderProps {
 export const ClassItemProvider = ({ children }: ClassItemProviderProps) => {
   const [currentIdClass, setCurrentIdClass] = useState<string>("");
   const [currentClassTitle, setCurrentClassTitle] = useState<string>("");
+  const [currentClassNumber, setCurrentClassNumber] = useState<string>("");
   const [currentUrlClassVideo, setCurrentUrlClassVideo] = useState<string>("dQw4w9WgXcQ");
 
   const value = {
     currentIdClass,
     currentClassTitle,
+    currentClassNumber,
     currentUrlClassVideo,
     setCurrentIdClass,
     setCurrentClassTitle,
+    setCurrentClassNumber,
     setCurrentUrlClassVideo,
   };
 

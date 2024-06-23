@@ -58,9 +58,6 @@ export const SideBar = ({ courseId }: SideBarProps) => {
         </div>
       </div>
 
-      <div className="w-full p-6 flex justify-end">
-        <ModeToggle />
-      </div>
     </div>
   );
 };

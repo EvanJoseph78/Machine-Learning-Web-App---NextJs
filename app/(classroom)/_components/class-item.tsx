@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 interface ClassItemProps {
   classId: string | null,
   classTitle: string | null,
-  classNumber?: number,
+  classNumber?: number | null,
   videoUrl?: string | null,
   pdfLink?: string,
   slideLink?: string,
@@ -39,7 +39,7 @@ export const ClassItem = ({ pdfLink = "", slideLink = "", classTitle, classNumbe
     hasSlide = true;
   };
 
-  const { currentIdClass, setCurrentIdClass, currentClassTitle, setCurrentClassTitle, setCurrentUrlClassVideo } = useClassItem();
+  const { currentIdClass, setCurrentIdClass, setCurrentClassTitle, setCurrentClassNumber, setCurrentUrlClassVideo } = useClassItem();
 
   const [isSelected, setIsSelected] = useState<boolean>(currentIdClass === classId);
 
@@ -55,6 +55,7 @@ export const ClassItem = ({ pdfLink = "", slideLink = "", classTitle, classNumbe
   const handleChangeClass = () => {
     setCurrentClassTitle(classTitle!);
     setCurrentIdClass(classId!);
+    setCurrentClassNumber(classNumber!.toString());
     const videoId = extractIdVideo(videoUrl!); //extrai o id do video
     setCurrentUrlClassVideo(videoId);
   }
@@ -75,7 +76,7 @@ export const ClassItem = ({ pdfLink = "", slideLink = "", classTitle, classNumbe
 
       <div className="w-full h-10 flex items-center" onClick={handleChangeClass}>
 
-        <p className="">{classTitle}</p>
+        <p className="">{classNumber} - {classTitle}</p>
       </div>
 
       <div className="">

@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 export async function PATCH(
   req: Request,
@@ -68,7 +68,6 @@ export async function PATCH(
     }
 
     return NextResponse.json({ createdModules }, { status: 201 });
-    // return NextResponse.json("ok", { status: 200 });
   } catch (error) {
     console.error('[MODULES_CREATION_ERROR]', error);
     return new NextResponse("Internal Server Error", { status: 500 });

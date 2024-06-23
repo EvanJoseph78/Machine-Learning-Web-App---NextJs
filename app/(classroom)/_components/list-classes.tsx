@@ -24,13 +24,14 @@ export function ListClasses({ courseId }: listClassesProps) {
           <AccordionItem value={module.id} key={module.id}>
             <AccordionTrigger >
               <div className="text-justify mr-4">
-                {module.moduleTitle}
+                {module.moduleNumber} - {module.moduleTitle}
               </div>
             </AccordionTrigger>
             {module.classes.map((classItem) => (
               <AccordionContent key={classItem.id}>
                 <ClassItem
                   classId={classItem.id}
+                  classNumber={classItem.classNumber}
                   classTitle={classItem.classTitle}
                   videoUrl={classItem.videoUrl}
                 ></ClassItem>
