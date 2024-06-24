@@ -138,6 +138,7 @@ model SubscribedCourses {
   courseId         String
   finishedAt       String             @default("")
   completedClasses CompletedClasses[]
+  currentIdClass   String             @default("")
 
   Users   Users?  @relation(fields: [usersId], references: [id])
   usersId String? @db.ObjectId

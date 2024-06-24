@@ -25,6 +25,10 @@ const VideoPlayer = ({ videoId, height, width }: VideoPlayerProps) => {
     setIsLoading(false);
   };
 
+  const test = () => {
+    console.log("evan");
+  }
+
   return (
     <YouTube
       videoId={videoId}

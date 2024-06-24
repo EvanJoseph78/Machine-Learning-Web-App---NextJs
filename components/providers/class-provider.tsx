@@ -3,10 +3,12 @@ import { createContext, useContext, useState, ReactNode } from "react";
 // Define the interface for the context type
 interface ClassContextType {
   currentIdClass: string;
+  currentModuleId: string;
   currentClassTitle: string;
   currentClassNumber: string;
   currentUrlClassVideo: string;
   setCurrentIdClass: (id: string) => void;
+  setCurrentModuleId: (id: string) => void;
   setCurrentClassTitle: (title: string) => void;
   setCurrentClassNumber: (number: string) => void;
   setCurrentUrlClassVideo: (url: string) => void;
@@ -31,16 +33,19 @@ interface ClassItemProviderProps {
 
 export const ClassItemProvider = ({ children }: ClassItemProviderProps) => {
   const [currentIdClass, setCurrentIdClass] = useState<string>("");
+  const [currentModuleId, setCurrentModuleId] = useState<string>("");
   const [currentClassTitle, setCurrentClassTitle] = useState<string>("");
   const [currentClassNumber, setCurrentClassNumber] = useState<string>("");
   const [currentUrlClassVideo, setCurrentUrlClassVideo] = useState<string>("dQw4w9WgXcQ");
 
   const value = {
     currentIdClass,
+    currentModuleId,
     currentClassTitle,
     currentClassNumber,
     currentUrlClassVideo,
     setCurrentIdClass,
+    setCurrentModuleId,
     setCurrentClassTitle,
     setCurrentClassNumber,
     setCurrentUrlClassVideo,

@@ -16,6 +16,7 @@ import { Checkbox } from "@radix-ui/react-checkbox";
 import { useClassItem } from "@/components/providers/class-provider";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 interface ClassItemProps {
   classId: string | null,
@@ -24,10 +25,21 @@ interface ClassItemProps {
   videoUrl?: string | null,
   pdfLink?: string,
   slideLink?: string,
-  onClick?: () => void
+  onClick?: () => void,
+  courseId: string,
+  moduleId: string
 }
 
-export const ClassItem = ({ pdfLink = "", slideLink = "", classTitle, classNumber, onClick, videoUrl, classId }: ClassItemProps) => {
+export const ClassItem = ({
+  pdfLink = "",
+  slideLink = "",
+  classTitle,
+  classNumber,
+  videoUrl,
+  classId,
+  courseId,
+  moduleId
+}: ClassItemProps) => {
   let hasSlide = false;
   let hasPdf = false;
 
@@ -39,9 +51,14 @@ export const ClassItem = ({ pdfLink = "", slideLink = "", classTitle, classNumbe
     hasSlide = true;
   };
 
-  const { currentIdClass, setCurrentIdClass, setCurrentClassTitle, setCurrentClassNumber, setCurrentUrlClassVideo } = useClassItem();
+  const { currentIdClass, setCurrentModuleId, setCurrentIdClass, setCurrentClassTitle, setCurrentClassNumber, setCurrentUrlClassVideo } = useClassItem();
 
   const [isSelected, setIsSelected] = useState<boolean>(currentIdClass === classId);
+
+  // const fetchLastClassId = async () => {
+  //   const response = await axios.post(`/api/courses/${courseId}/class/current-class`);
+  //   console.log(response.data);
+  // };
 
   const extractIdVideo = (linkAula: string): string => {
     const match = linkAula.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&\n?]+)/);
@@ -55,11 +72,13 @@ export const ClassItem = ({ pdfLink = "", slideLink = "", classTitle, classNumbe
   const handleChangeClass = () => {
     setCurrentClassTitle(classTitle!);
     setCurrentIdClass(classId!);
+    setCurrentModuleId(moduleId!);
     setCurrentClassNumber(classNumber!.toString());
     const videoId = extractIdVideo(videoUrl!); //extrai o id do video
     setCurrentUrlClassVideo(videoId);
   }
   useEffect(() => {
+    // fetchLastClassId();
     setIsSelected(classId === currentIdClass);
   }, [currentIdClass])
 
@@ -83,7 +102,7 @@ export const ClassItem = ({ pdfLink = "", slideLink = "", classTitle, classNumbe
         {hasPdf ? (
           <HoverCard>
             <HoverCardTrigger>
-              <Button variant="ghost"> <FileText size={16} /> </Button>
+              {/* <Button variant="ghost"> <FileText size={16} /> </Button> */}
             </HoverCardTrigger>
             <HoverCardContent className="w-32 text-center">
               PDF da Aula.
@@ -94,7 +113,7 @@ export const ClassItem = ({ pdfLink = "", slideLink = "", classTitle, classNumbe
         {hasSlide ? (
           <HoverCard>
             <HoverCardTrigger>
-              <Button variant="ghost"> <Monitor size={16} /> </Button>
+              {/* <Button variant="ghost"> <Monitor size={16} /> </Button> */}
             </HoverCardTrigger>
             <HoverCardContent className="w-32 text-center">
               Slide da Aula
@@ -106,7 +125,7 @@ export const ClassItem = ({ pdfLink = "", slideLink = "", classTitle, classNumbe
           <PopoverTrigger>
             <HoverCard>
               <HoverCardTrigger>
-                <Button variant="ghost"> <EllipsisVertical size={16} /> </Button>
+                {/* <Button variant="ghost"> <EllipsisVertical size={16} /> </Button> */}
               </HoverCardTrigger>
               <HoverCardContent className="w-32 text-center">
                 Mais opções
@@ -119,7 +138,6 @@ export const ClassItem = ({ pdfLink = "", slideLink = "", classTitle, classNumbe
           </PopoverContent>
         </Popover>
       </div>
-
     </div >
   );
 };
