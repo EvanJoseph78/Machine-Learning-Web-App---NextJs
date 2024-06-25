@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import React, { useState, useEffect } from 'react';
 import Footer from '../_components/footer';
 import { AuthorsList } from '../_components/authors-list';
+import Link from 'next/link';
 
 const Home = () => {
   // Estado para armazenar os autores do projeto
@@ -31,8 +32,13 @@ const Home = () => {
           Acesse cursos gratuitos sobre tecnologia criados por alunos para alunos.
         </p>
         <div className='space-x-2'>
-          <Button>Iniciar</Button>
-          <Button variant={"ghost"} className='border'>Login</Button>
+          <Link href={"/courses"}>
+            <Button>Iniciar</Button>
+          </Link>
+
+          <Link href={"/sign-up"}>
+            <Button variant={"ghost"} className='border'>Login</Button>
+          </Link>
         </div>
       </header>
 

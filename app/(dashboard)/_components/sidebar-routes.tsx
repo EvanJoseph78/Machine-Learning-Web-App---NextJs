@@ -9,13 +9,13 @@ import { usePathname } from "next/navigation";
 const guestRoutes = [
   {
     icon: Layout,
-    label: "Dashboard",
+    label: "Home",
     href: "/"
   },
   {
     icon: Compass,
-    label: "Browse",
-    href: "/search"
+    label: "Cursos",
+    href: "/courses"
   },
 ];
 
