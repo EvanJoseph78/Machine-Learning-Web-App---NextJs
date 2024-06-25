@@ -104,8 +104,8 @@ const CoursePage = (
   return (
     <div className="w-full">
 
-      <main className="h-full mt-16 px-4 sm:px-8 md:px-16 xl:px-32 2xl:px-48 py-8 flex justify-between flex-col md:flex-row">
-        <div className="md:w-2/3 px-4 space-y-4">
+      <main className="h-full mt-16 px-4 sm:px-8 md:px-16 xl:px-32 2xl:px-48 py-8 flex justify-between flex-col md:flex-row space-y-4">
+        <div className="md:w-2/3 md:px-4 space-y-4">
           <h1 className="text-5xl text-bold">{course?.courseTitle}</h1>
           <p>{course?.introduction}</p>
 

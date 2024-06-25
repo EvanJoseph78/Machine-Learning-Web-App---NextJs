@@ -2,14 +2,18 @@
 // import { Skeleton } from '@/components/ui/skeleton';
 import { useState } from 'react';
 import YouTube from 'react-youtube';
+import { SideBar } from './sidebar';
+import { useClassItem } from '@/components/providers/class-provider';
+import { EllipsisVertical, File } from 'lucide-react';
 
 interface VideoPlayerProps {
   videoId: string,
   height?: number,
-  width?: number
+  width?: number,
+  courseId: string,
 }
 
-const VideoPlayer = ({ videoId, height, width }: VideoPlayerProps) => {
+const VideoPlayer = ({ videoId, height, width, courseId }: VideoPlayerProps) => {
 
   const opts = {
     height: height,
@@ -25,17 +29,14 @@ const VideoPlayer = ({ videoId, height, width }: VideoPlayerProps) => {
     setIsLoading(false);
   };
 
-  const test = () => {
-    console.log("evan");
-  }
-
   return (
-    <YouTube
-      videoId={videoId}
-      opts={opts}
-      onReady={handleVideoReady}
-      className='md:rounded-md overflow-hidden'
-    />
+    <div className='flex justify-center rounded-md'>
+      <YouTube
+        videoId={videoId}
+        opts={opts}
+        onReady={handleVideoReady}
+      />
+    </div>
   );
 };
 

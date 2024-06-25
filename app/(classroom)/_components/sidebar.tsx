@@ -12,7 +12,7 @@ interface SideBarProps {
 export const SideBar = ({ courseId }: SideBarProps) => {
 
   return (
-    <div className="h-full justify-between border-r flex flex-col overflow-y-auto shadow-sm pt-6 bg- dark:bg-dark-color px-4">
+    <div className="h-full justify-between border-r flex flex-col overflow-y-auto shadow-sm pt-6 dark:bg-dark-color px-4">
       <div className="p-x6 h-full space-y-6">
 
         <div className="flex flex-col w-full h-full">

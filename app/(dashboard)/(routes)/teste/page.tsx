@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useEffect } from "react";
+import YouTube from "react-youtube";
 
 const Test = () => {
   const classes = [
@@ -61,21 +62,56 @@ const Test = () => {
   }, {});
 
   return (
-    <div className="px-8">
-      <Accordion type="single" collapsible className="w-full">
-        {Object.keys(groupedClasses).map((moduleTitle) => (
-          <AccordionItem key={moduleTitle} value={`module-${moduleTitle}`}>
-            <AccordionTrigger>{moduleTitle}</AccordionTrigger>
-            <AccordionContent>
-              {groupedClasses[moduleTitle].map((classItem: any) => (
-                <div key={classItem.id}>
-                  <p>{classItem.classNumber} - {classItem.classTitle}</p>
-                </div>
-              ))}
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+    <div className="h-screen overflow-y-scroll">
+      <div className="">box1</div>
+      <div className="w-60 h-60 bg-cyan-600 sticky top-0">
+
+        <div className="rounded-md">
+          <YouTube
+            videoId={"aoVH4Yelums"}
+          />
+        </div>
+
+      </div>
+      <div className="">box3</div>
+      <div className="">box3</div>
+      <div className="">box3</div>
+      <div className="">box3</div>
+      <div className="">box3</div>
+      <div className="">box3</div>
+      <div className="">box3</div>
+      <div className="">box3</div>
+
+      <div className="">box3</div>
+      <div className="">box3</div>
+      <div className="">box3</div>
+      <div className="">box3</div>
+
+      <div className="">box3</div>
+      <div className="">box3</div>
+      <div className="">box3</div>
+      <div className="">box3</div>
+
+      <div className="">box3</div>
+      <div className="">box3</div>
+      <div className="">box3</div>
+      <div className="">box3</div>
+
+      <div className="">box1</div>
+      <div className="">box2</div>
+      <div className="">box3</div>
+      <div className="">box3</div>
+      <div className="">box3</div>
+
+      <div className="">box1</div>
+      <div className="">box2</div>
+      <div className="">box3</div>
+      <div className="">box3</div>
+      <div className="">box3</div>
+
+      <div className="">box1</div>
+      <div className="">box2</div>
+      <div className="">box3</div>
     </div>
   );
 };
