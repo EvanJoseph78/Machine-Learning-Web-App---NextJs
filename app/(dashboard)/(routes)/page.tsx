@@ -2,24 +2,24 @@
 
 import { Button } from '@/components/ui/button';
 import React, { useState, useEffect } from 'react';
-import { AuthorsList } from '../_components/authors-list';
 import Footer from '../_components/footer';
+import { AuthorsList } from '../_components/authors-list';
 
 const Home = () => {
   // Estado para armazenar os autores do projeto
-  const [authors, setAuthors] = useState([]);
+  // const [authors, setAuthors] = useState([]);
 
   // Função para buscar os autores do projeto (pode ser de uma API ou arquivo JSON)
-  useEffect(() => {
-    // Simulando uma chamada de API para buscar os autores
-    const fetchAuthors = async () => {
-      const response = await fetch('/api/authors'); // Ajuste o caminho conforme necessário
-      const data = await response.json();
-      setAuthors(data);
-    };
-
-    fetchAuthors();
-  }, []);
+  // useEffect(() => {
+  //   // Simulando uma chamada de API para buscar os autores
+  //   const fetchAuthors = async () => {
+  //     const response = await fetch('/api/authors'); // Ajuste o caminho conforme necessário
+  //     const data = await response.json();
+  //     setAuthors(data);
+  //   };
+  //
+  //   fetchAuthors();
+  // }, []);
 
   return (
     <div className='flex justify-center items-center flex-col gap-8 w-screen'>
