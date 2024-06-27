@@ -60,7 +60,7 @@ const Home = () => {
         <AuthorsList></AuthorsList>
       </div>
 
-      <Footer></Footer>
+      {/* <Footer></Footer> */}
 
     </div>
   );

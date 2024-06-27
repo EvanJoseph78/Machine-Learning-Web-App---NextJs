@@ -51,7 +51,7 @@ const ClassRoom = (
 
         <div className="py-2">
           {isLoading ? (
-            <div className="w-full bg-vermelho-vinho p-4 flex flex-col justify-center content-center items-center">
+            <div className="w-full p-4 flex flex-col justify-center content-center items-center">
               <AspectRatio ratio={16 / 9}>
                 carregando...
               </AspectRatio>
@@ -70,14 +70,16 @@ const ClassRoom = (
                 </AspectRatio>
               </div>
 
-              <div className="mt-4 space-y-4 border rounded-md p-2 w-full">
-                <div className="flex items-center justify-between">
-                  <p className="text-xl">{currentClassNumber} - {currentClassTitle}</p>
-                  <EllipsisVertical />
-                </div>
-                <div className="flex gap-2 items-center invisible">
-                  <File />
-                  <p className="text-xs">PDF aula</p>
+              <div className="space-y-4 w-full px-2 py-4">
+                <div className="border px-2 py-1 rounded-md">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xl">{currentClassNumber} - {currentClassTitle}</p>
+                    <EllipsisVertical />
+                  </div>
+                  <div className="hidden gap-2 items-center ">
+                    <File />
+                    <p className="text-xs">PDF aula</p>
+                  </div>
                 </div>
               </div>
 

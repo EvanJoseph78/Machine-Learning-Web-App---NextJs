@@ -114,7 +114,9 @@ model Questions {
 }
 
 model Options {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  text      String
+  isCorrect Boolean
 
   Questions   Questions? @relation(fields: [questionsId], references: [id])
   questionsId String?    @db.ObjectId

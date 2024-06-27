@@ -17,6 +17,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           {children}
         </main>
       </div>
+
     </ClassItemProvider>
   );
 

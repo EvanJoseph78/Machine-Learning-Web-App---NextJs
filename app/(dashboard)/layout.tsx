@@ -1,3 +1,4 @@
+import Footer from "./_components/footer";
 import { Navbar } from "./_components/navbar";
 import { SideBar } from "./_components/sidebar";
 
@@ -14,9 +15,11 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       {/* </div> */}
 
       {/* <main className="pt-[80px] h-full items-center content-center justify-center px-4 sm:px-8 md:px-16 xl:px-32 2xl:px-48"> */}
-      <main className="pt-[80px] h-full ">
+      <main className="pt-[80px] h-full space-y-8">
         {children}
+        <Footer></Footer>
       </main>
+
     </div>
   );
 };

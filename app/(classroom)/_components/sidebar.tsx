@@ -1,9 +1,27 @@
 
 import { ModeToggle } from "@/components/mode-toggle";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ListClasses } from "./list-classes";
-import { Input } from "@/components/ui/input";
 import { ChevronRight, Search } from "lucide-react";
+
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
+
+import { QuestionsList } from "./questions-list";
 
 interface SideBarProps {
   courseId: string
@@ -12,53 +30,63 @@ interface SideBarProps {
 export const SideBar = ({ courseId }: SideBarProps) => {
 
   return (
-    <div className="h-full justify-between border-r flex flex-col overflow-y-auto shadow-sm pt-6 dark:bg-dark-color px-4">
-      <div className="p-x6 h-full space-y-6">
-
-        <div className="flex flex-col w-full h-full">
-          <Tabs defaultValue="default" className="w-full">
-            <TabsList className="w-full">
-              <TabsTrigger value="default" className="w-1/2">Video Aulas</TabsTrigger>
-              <TabsTrigger value="anotations" className="w-1/2">Questionario</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="default" className="flex flex-col gap-4 py-8">
-
-              <div className="flex justify-between py-2">
-                <div className="">
-                  <p className="text-xs uppercase font-bold">Conteúdo</p>
-                  <p className="text-md">Machine Learning</p>
-                </div>
-                <div className="text-blue-700 flex text-xs"> Ver tudo <ChevronRight size="16" /></div>
+    <Tabs defaultValue="account" className="w-full md:h-screen py-6 px-2 overflow-auto">
+      <TabsList className="grid w-full grid-cols-2">
+        <TabsTrigger value="account">Video Aulas</TabsTrigger>
+        <TabsTrigger value="password">Questionário</TabsTrigger>
+      </TabsList>
+      <TabsContent value="account" className="">
+        <Card className="space-y-4">
+          <CardHeader>
+            <div className="flex justify-between py-2">
+              <div className="">
+                <p className="text-xs uppercase font-bold">Conteúdo</p>
+                <p className="text-md">Machine Learning</p>
               </div>
+              <div className="text-blue-700 flex text-xs"> Ver tudo <ChevronRight size="16" /></div>
+            </div>
 
-              <div className="flex justify-between py-2">
-                <div className="">
-                  <p className="text-xs uppercase font-bold">Tags</p>
-                  <p className="text-md">Machine Learning</p>
-                </div>
-                <div className="text-blue-700 flex text-xs"> Ver tudo <ChevronRight size="16" /></div>
+            <div className="flex justify-between py-2">
+              <div className="">
+                <p className="text-xs uppercase font-bold">Tags</p>
+                <p className="text-md">Machine Learning</p>
               </div>
+              <div className="text-blue-700 flex text-xs"> Ver tudo <ChevronRight size="16" /></div>
+            </div>
 
+            <div className="flex border rounded-xl items-center p-2 gap-2">
+              <Input
+                placeholder="pesquisa por aula"
+                className="border-none focus:border-blue-500"
+              />
+              <Search />
+            </div>
 
-              <div className="flex border rounded-xl items-center p-2 gap-2">
-                <Input
-                  placeholder="pesquisa por aula"
-                  className="border-none focus:border-blue-500"
-                />
-                <Search />
-              </div>
+          </CardHeader>
 
-              <ListClasses courseId={courseId}></ListClasses>
-
-            </TabsContent>
-            <TabsContent value="anotations">Mariano</TabsContent>
-          </Tabs>
-
-        </div>
-      </div>
-
-    </div>
+          <CardContent className="space-y-2">
+            <ListClasses courseId={courseId}></ListClasses>
+          </CardContent>
+          <CardFooter>
+            {/* <Button>Save changes</Button> */}
+          </CardFooter>
+        </Card>
+      </TabsContent>
+      <TabsContent value="password">
+        <Card>
+          <CardHeader>
+            <CardTitle>Questionário</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            Você pode realizar o questinário quantas três vezes em um dia. Para obter o certificado do curso
+            é necessário acertar 70% das questões.
+          </CardContent>
+          <CardFooter>
+            <QuestionsList courseId={courseId}></QuestionsList>
+          </CardFooter>
+        </Card>
+      </TabsContent>
+    </Tabs>
   );
 };
 

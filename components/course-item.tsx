@@ -27,7 +27,7 @@ export const CourseItem = ({ courseName, discipine, linkCover, tags, courseId, c
   }
 
   return (
-    <div className="flex flex-col w-[300px] min-h-[380px] rounded-xl overflow-hidden border p-2 relative" >
+    <div className="flex flex-col  sm:w-[300px] min-h-[400px] rounded-xl overflow-hidden border p-2 relative" >
       <div className="bg-dark-color dark:bg-dark-color border min-h-[160px] flex items-center cursor-pointer rounded-xl overflow-hidden" onClick={() => onRedirect(courseId)}>
 
         {linkCover ? (
@@ -57,6 +57,7 @@ export const CourseItem = ({ courseName, discipine, linkCover, tags, courseId, c
         <p className="text-xs text-gray-500">Nível: {courseLevel}</p>
         <div className="flex items-center gap-1">
           <IconBadge icon={BookOpen} size={"sm"}></IconBadge>
+          {/* TODO:  arrumar a quantidade de aulas*/}
           <p className="text-xs">32 Aulas</p>
         </div>
 

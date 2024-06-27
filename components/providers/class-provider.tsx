@@ -36,7 +36,7 @@ export const ClassItemProvider = ({ children }: ClassItemProviderProps) => {
   const [currentModuleId, setCurrentModuleId] = useState<string>("");
   const [currentClassTitle, setCurrentClassTitle] = useState<string>("");
   const [currentClassNumber, setCurrentClassNumber] = useState<string>("");
-  const [currentUrlClassVideo, setCurrentUrlClassVideo] = useState<string>("dQw4w9WgXcQ");
+  const [currentUrlClassVideo, setCurrentUrlClassVideo] = useState<string>("ts8i-6AtDfc");
 
   const value = {
     currentIdClass,

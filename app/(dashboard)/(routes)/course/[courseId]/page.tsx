@@ -104,10 +104,10 @@ const CoursePage = (
   return (
     <div className="w-full">
 
-      <main className="h-full mt-16 px-4 sm:px-8 md:px-16 xl:px-32 2xl:px-48 py-8 flex justify-between flex-col md:flex-row space-y-4">
+      <main className="min-h-screen mt-16 px-4 sm:px-8 md:px-16 xl:px-32 2xl:px-48 py-8 flex justify-between flex-col md:flex-row space-y-4">
         <div className="md:w-2/3 md:px-4 space-y-4">
           <h1 className="text-5xl text-bold">{course?.courseTitle}</h1>
-          <p>{course?.introduction}</p>
+          <p className="pt-8 border-t">{course?.introduction}</p>
 
           {isLoading && (
             <Button disabled>Carregando...</Button>
@@ -125,6 +125,9 @@ const CoursePage = (
             <Button onClick={() => { router.push("/sign-in") }}>Entrar</Button>
           )}
 
+          <div className="border-t pt-8">
+            {course?.description}
+          </div>
 
         </div>
 
@@ -161,7 +164,6 @@ const CoursePage = (
 
       </div>
 
-      <div className="bg-black h-60">Footer</div>
     </div>
   );
 };
