@@ -12,25 +12,25 @@ const CircularProgressBar = ({ percentage }: CircularProgressBarProps) => {
     setProgress(percentage);
   }, [percentage]);
 
-  const radius = 50;
+  const radius = 70;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   return (
     <div className="circular-progress-bar">
-      <svg className="circular-progress" width="120" height="120">
+      <svg className="circular-progress" width="160" height="160">
         <circle
           className="circular-progress-bg"
-          cx="60"
-          cy="60"
+          cx="80"
+          cy="80"
           r={radius}
           strokeWidth="10"
           fill="none"
         />
         <circle
           className="circular-progress-fg"
-          cx="60"
-          cy="60"
+          cx="80"
+          cy="80"
           r={radius}
           strokeWidth="10"
           fill="none"
@@ -54,7 +54,7 @@ const CircularProgressBar = ({ percentage }: CircularProgressBarProps) => {
         }
         .circular-progress-fg {
           stroke: #00aaff;
-          transition: stroke-dashoffset 0.35s;
+          transition: stroke-dashoffset 1s;
           transform: rotate(-90deg);
           transform-origin: 50% 50%;
         }
@@ -69,4 +69,3 @@ const CircularProgressBar = ({ percentage }: CircularProgressBarProps) => {
 };
 
 export default CircularProgressBar;
-

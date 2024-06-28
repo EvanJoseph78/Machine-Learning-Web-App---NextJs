@@ -81,6 +81,10 @@ export function QuestionsList({ courseId }: QuestionsListProps) {
     toast.success("Questionário finalizado!")
   }
 
+  const handleGetCertificate = () => {
+    toast.success("obtendo certificado...")
+  }
+
   const [percentage, setPercentage] = useState(10);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Math.min(100, Math.max(0, Number(e.target.value)));
@@ -114,11 +118,12 @@ export function QuestionsList({ courseId }: QuestionsListProps) {
           )}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>Fechar</AlertDialogCancel>
 
-          {isLastQuestion ? (
-
+          {isLastQuestion && !isFinished ? (
             <Button onClick={() => handleFinishQuestions()} disabled={!isDisabled}>Finalizar</Button>
+          ) : isFinished ? (
+            <Button onClick={() => handleGetCertificate()} disabled={!isDisabled}>Obter certificado</Button>
           ) : (
             <Button onClick={() => handleQuestionChange()} disabled={!isDisabled}>Próxima</Button>
           )}
