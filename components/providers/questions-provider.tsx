@@ -1,40 +1,68 @@
-import { Questions } from "@prisma/client"
+import { ListQuestions } from "@/lib/types";
 import { createContext, useContext, useState, ReactNode } from "react";
 
-// cria a interface para tipar o contexto.
+// Cria a interface para tipar o contexto.
 interface QuestionContextType {
-  questionsList: Questions[];
-  setQuestionsList: (questionsList: Questions[]) => void;
+  questionsList: ListQuestions[]; //lista de questões do curso
+  setQuestionsList: (questionsList: ListQuestions[]) => void; // define a lista de questões do curso
+  currentQuestionNumber: number; //número da quetão atual - posição no array - necessário ir para a próxima questão
+  setCurrentQuestionNumber: (currentQuestion: number) => void; // define o número da questão
+  isDisabled: boolean; // variável para desabilitar o botão de resposta depois de o usuário marcar uma alternativa
+  setIsDisabled: (isDisabled: boolean) => void; // define isDisabled
+  amountCorrect: number; // guarda a quantidade de questões acertadas pelo usuário
+  setAmountCorrect: (amountCorrect: number) => void; // define amountCorrect
+  isFinished: boolean; // variável pra verificar se o usuário terminou o questionário
+  setIsFinished: (isFinished: boolean) => void; // define isFinished
+  percentageCorrect: number;
+  setPercentageCorrect: (percentageCorrect: number) => void;
 }
 
-// cria o contexto com valores padrão
+// Cria o contexto com valores padrão
 const questionItemContext = createContext<QuestionContextType | undefined>(undefined);
 
-// hook customizado para usar o questionItemContext
+// Hook customizado para usar o questionItemContext
 export const useQuestionItem = () => {
   const context = useContext(questionItemContext);
   if (!context) {
-    throw new Error('useClassItem deve ser usado dentro de um ClassItemProvider');
+    throw new Error('useQuestionItem deve ser usado dentro de um QuestionItemProvider');
   }
   return context;
 };
 
-// Provider component for the classItemContext
+// Provider component para o questionItemContext
 interface QuestionItemProviderProps {
   children: ReactNode;
 }
 
-export const ClassItemProvider = ({ children }: QuestionItemProviderProps) => {
+export const QuestionItemProvider = ({ children }: QuestionItemProviderProps) => {
 
-  const [questionsList, setQuestionsList] = useState<Questions[]>([]);
+  const [questionsList, setQuestionsList] = useState<ListQuestions[]>([]);
+  const [currentQuestionNumber, setCurrentQuestionNumber] = useState<number>(0);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [amountCorrect, setAmountCorrect] = useState<number>(0);
+  const [isFinished, setIsFinished] = useState<boolean>(false);
+  const [percentageCorrect, setPercentageCorrect] = useState<number>(0);
 
+  // expõe para todos os components inscritos os valores
   const value = {
     questionsList,
-    setQuestionsList
+    setQuestionsList,
+    currentQuestionNumber,
+    setCurrentQuestionNumber,
+    isDisabled,
+    setIsDisabled,
+    amountCorrect,
+    setAmountCorrect,
+    isFinished,
+    setIsFinished,
+    percentageCorrect,
+    setPercentageCorrect
   };
 
   return (
-    <questionItemContext.Provider value={value}></questionItemContext.Provider>
+    // expõe para todos os components inscritos os valores
+    <questionItemContext.Provider value={value}>
+      {children}
+    </questionItemContext.Provider>
   );
 };
-

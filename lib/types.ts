@@ -1,4 +1,4 @@
-import { Classes, Modules } from "@prisma/client";
+import { Classes, Modules, Options, Questions } from "@prisma/client";
 
 // types.ts
 export interface Teacher {
@@ -29,12 +29,6 @@ export interface Module {
 export interface Option {
   texto: string;
   correta: boolean;
-  _id: string;
-}
-
-export interface Question {
-  enunciado: string;
-  opcoes: Option[];
   _id: string;
 }
 
@@ -78,3 +72,7 @@ export interface Attachment {
 export type ListClasses = Modules & {
   classes: Classes[]
 };
+
+export type ListQuestions = Questions & {
+  options: Options[]
+}
