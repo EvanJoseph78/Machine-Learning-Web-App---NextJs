@@ -48,8 +48,10 @@ export function QuestionsList({ courseId }: QuestionsListProps) {
     try {
       const response = await axios.get(`/api/courses/${courseId}/questions`);
       setQuestionsList(response.data);
+      if (!response) {
+        setIsLoading(false);
+      }
       console.log(response.data);
-      setIsLoading(false);
     } catch (error) {
       console.log("error");
     }
