@@ -48,10 +48,7 @@ export function QuestionsList({ courseId }: QuestionsListProps) {
     try {
       const response = await axios.get(`/api/courses/${courseId}/questions`);
       setQuestionsList(response.data);
-      if (!response) {
-        setIsLoading(false);
-      }
-      console.log(response.data);
+      setIsLoading(false);
     } catch (error) {
       console.log("error");
     }
@@ -104,13 +101,12 @@ export function QuestionsList({ courseId }: QuestionsListProps) {
 
           {isLoading ? (
             <div>Carregando...</div>
+          ) : questionsList.length === 0 ? (
+            <div>Sem questões ainda</div> // Conteúdo a ser exibido quando a lista de questões estiver vazia
           ) : isFinished ? (
-            <div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', padding: '50px' }}>
-                <CircularProgressBar percentage={percentageCorrect} />
-                <h1>Finalizado</h1>
-              </div>
-
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', padding: '50px' }}>
+              <CircularProgressBar percentage={percentageCorrect} />
+              <h1>Finalizado</h1>
             </div>
           ) : (
             <QuestionCard
@@ -118,6 +114,7 @@ export function QuestionsList({ courseId }: QuestionsListProps) {
               options={questionsList[currentQuestionNumber].options}
             />
           )}
+
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Fechar</AlertDialogCancel>
