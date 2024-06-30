@@ -28,7 +28,7 @@ export async function POST(
     // Verifica se o curso já está inscrito pelo usuário
     const isCourseSubscribed = existingUser.subscribedCourses.some(course => course.courseId === courseId);
     if (isCourseSubscribed) {
-      return new NextResponse("Usuário já está inscrito neste curso", { status: 409 });
+      return new NextResponse("Usuário já está inscrito neste curso", { status: 200 });
     }
 
     const newSubscribedUser = await db.subscribedCourses.create({
@@ -55,7 +55,7 @@ export async function POST(
   }
 }
 
-// Função para lidar com a solicitação GET para obter um curso específico
+// Verifica se o usuário está inscrito no curso
 export async function GET(
   _: Request,
   { params }: { params: { courseId: string } }
@@ -86,7 +86,7 @@ export async function GET(
       return new NextResponse("true", { status: 200 });
     }
 
-    return new NextResponse("false", { status: 404 });
+    return new NextResponse("false", { status: 200 });
   } catch (error) {
     console.error("[COURSES]", error);
     return new NextResponse("Internal Error", { status: 500 });

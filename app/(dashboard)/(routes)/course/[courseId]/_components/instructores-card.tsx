@@ -1,3 +1,4 @@
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface InstructorCardProps {
   instructorName: string,
@@ -28,3 +29,20 @@ export const InstructorCard = ({ instructorName, formation1, formation2, profile
     </div>
   );
 };
+
+export function SkeletonInstructorCard() {
+  return (
+    <div className="flex flex-col justify-start w-[320px] items-center gap-1">
+      <div className="rounded-full overflow-hidden w-40 h-40">
+        <Skeleton className="h-full w-full" />
+      </div>
+
+      <Skeleton className="h-4 w-60" />
+
+      <div className="flex flex-col items-center">
+        <Skeleton className="h-4 w-40" />
+      </div>
+
+    </div>
+  )
+}

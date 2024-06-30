@@ -1,137 +1,165 @@
 "use client"
 
+// Importações necessárias
 import { Courses, Instructors } from "@prisma/client";
-import { CourseCard } from "./_components/course-card";
+import { CourseCard, SkeletonCourseCard } from "./_components/course-card";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { InstructorCard } from "./_components/instructores-card";
+import { InstructorCard, SkeletonInstructorCard } from "./_components/instructores-card";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { fetchCourse, fetchIsUserSubscribed, fetchRegisterUser, fetchSubscribeCourse } from "@/services/api";
+import { Spinner } from "@/components/spinner";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const CoursePage = (
-  {
-    params
-  }: {
-    params: { courseId: string }
-  }
-) => {
+// Interface das propriedades do componente
+interface CourseIdProps {
+  params: {
+    courseId: string;
+  };
+}
 
-  const [course, setCourse] = useState<Courses>();
-  const [instructors, setInstructors] = useState<Instructors[]>();
-  const user = useUser();
-  const [isUserSubscribed, setIsUserSubscribed] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+// Componente principal
+const CoursePage: React.FC<CourseIdProps> = ({ params }) => {
 
-  // salva o usuário no banco de dados
-  const handleRegister = async () => {
-    if (user) {
-      try {
-        const response = await axios.post('/api/register', {
-          userId: user.user?.id,
-          fullName: user.user?.fullName
-        })
+  const user = useUser(); // Hook para obter o usuário autenticado
+  const [course, setCourse] = useState<Courses>(); // Estado para armazenar os dados do curso
+  const [isLoading, setIsLoading] = useState<boolean>(true); // Estado para gerenciar o carregamento
+  const [instructors, setInstructors] = useState<Instructors[]>(); // Estado para armazenar os instrutores do curso
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState<boolean>(false); // Estado para verificar se o usuário está autenticado
+  const [isUserSubscribedInCourse, setIsUserSubscribedInCourse] = useState<boolean>(false); // Estado para verificar se o usuário está inscrito no curso
+  const router = useRouter(); // Hook para navegação
 
-      } catch (error) {
-        console.error('Erro ao registrar usuário:', error);
-      }
-    } else {
-      console.log('Usuário não está definido.');
+  // Função para buscar os dados do curso
+  const getCourse = async () => {
+    setIsLoading(true);
+    try {
+      const data = await fetchCourse(params.courseId);
+      setCourse(data);
+      setInstructors(data.instructors)
+    } catch (error) {
+      console.error('Erro ao buscar o curso:', error);
     }
   };
 
-  // verifica se o usuário tá inscrito no curso
-  const isUserSubscribedInCourse = async () => {
-    try {
-      const response = await axios.get(`/api/courses/${params.courseId}/subscribe`);
-
-      if (response.status == 200) {
-        setIsUserSubscribed(true);
-      } else {
-        setIsUserSubscribed(false);
+  // Função para registrar o usuário no banco de dados
+  const handleUserAuth = async () => {
+    setIsLoading(true);
+    if (user && user.user && user.user.fullName) { // Verifica se há um usuário autenticado
+      const userId = user.user.id;
+      const fullName = user.user.fullName;
+      try {
+        await fetchRegisterUser(userId, fullName);
+        setIsUserAuthenticated(true);
+      } catch (err) {
+        console.error("Erro interno ao registrar usuário:", err);
+        setIsUserAuthenticated(false);
       }
-      console.log(response.status);
 
-
-    } catch (error) {
-      console.error('erro', error);
-    } finally {
       setIsLoading(false);
-    }
-  }
 
-  // Inscreve o usuário no curso
+    } else {
+      console.log("Usuário não autenticado ou dados de usuário não encontrados.");
+      setIsUserAuthenticated(false);
+    }
+  };
+
+  // Função para inscrever o usuário no curso
   const handleSubscribeCourse = async () => {
-    try {
-      const response = await axios.post(`/api/courses/${params.courseId}/subscribe`, {
-        userId: user.user?.id,
-      })
-      if (response.data === "usuário não cadastrado") {
-        await handleRegister();
-        await handleSubscribeCourse();  // Tente novamente após o registro
-      } else {
-        console.log('Inscrição bem-sucedida:', response.data);
-
-        toast.success("Inscrito no curso com sucesso!");
-        setIsUserSubscribed(true);
+    setIsLoading(true);
+    toast.success("Inscrevendo-se")
+    if (user.user) { // Verifica se há um usuário autenticado
+      const userId = user.user.id;
+      try {
+        await fetchSubscribeCourse(params.courseId, userId);
+        setIsUserSubscribedInCourse(true);
+      } catch (err) {
+        console.error("Erro ao inscrever no curso:", err);
       }
-    } catch (error) {
-      console.error('Erro ao inscrever-se no curso');
+    } else {
+      console.log("Usuário não autenticado ou dados de usuário não encontrados.");
     }
+    setIsLoading(false);
+    toast.success("Inscrição realizada com sucesso");
+  };
+
+  // Função para verificar se o usuário está inscrito no curso
+  const handleIsUserSubscribed = () => {
+    fetchIsUserSubscribed(params.courseId).then((data) => {
+      if (data) {
+        setIsUserSubscribedInCourse(true);
+      } else {
+        setIsUserSubscribedInCourse(false);
+      };
+    }).catch((err) => {
+      console.log(err);
+    });
+    setIsLoading(true);
+
   }
 
+  // Função para redirecionar o usuário para a página do curso
   const handleRedirect = () => {
+    toast.success("Iniciando...")
     router.push(`/student/course/${params.courseId}`);
   }
 
-  // busca o curso pelo id
-  const fetchCourses = async () => {
-    // const response = await axios.get('/api/courses/');
-    const response = await axios.get(`/api/courses/${params.courseId}`);
-    setCourse(response.data);
-    setInstructors(response.data.instructors)
-    return response.data;
-  };
-
+  // Hook useEffect para buscar os dados do curso e registrar o usuário
   useEffect(() => {
-    fetchCourses();
-    isUserSubscribedInCourse();
-  }, [])
+    getCourse(); // Chama a função para buscar os dados do curso
+    handleUserAuth(); // Chama a função para registrar o usuário
+    handleIsUserSubscribed(); // Chama a função para verificar a inscrição do usuário
+  }, [params.courseId, user.isSignedIn]);
 
-  const router = useRouter();
-
+  // Renderização do componente
   return (
     <div className="w-full">
-
       <main className="min-h-screen mt-16 px-4 sm:px-8 md:px-16 xl:px-32 2xl:px-48 py-8 flex justify-between flex-col md:flex-row space-y-4">
         <div className="md:w-2/3 md:px-4 space-y-4">
-          <h1 className="text-5xl text-bold">{course?.courseTitle}</h1>
-          <p className="pt-8 border-t">{course?.introduction}</p>
 
-          {isLoading && (
-            <Button disabled>Carregando...</Button>
+          {isLoading ? (
+            <div className="space-y-2 mt-4">
+              <Skeleton className="w-full h-24 text-5xl text-bold pb-4"></Skeleton>
+              <div className="border-t border-gray-200 my-4"></div>
+              <Skeleton className="w-full h-32 text-5xl text-bold pb-4"></Skeleton>
+            </div>
+          ) : (
+            <div>
+              <h1 className="text-5xl text-bold mt-4">{course?.courseTitle}</h1>
+              <div className="border-t border-gray-200 my-4"></div>
+              <p className="">{course?.introduction}</p>
+            </div>
           )}
 
-          {user.isSignedIn && !isUserSubscribed && !isLoading && (
-            <Button onClick={handleSubscribeCourse}>Inscrever-se</Button>
+          <div className="border-t border-gray-200 my-4"></div>
+          {isLoading ? (
+            <Button className="w-32">
+              <Spinner /> {/* Componente de carregamento */}
+            </Button>
+          ) : (
+            !isUserAuthenticated ? (
+              <Button className="w-32" onClick={() => { router.push("/sign-in") }}>Login</Button> // Botão de login
+            ) : (
+              !isUserSubscribedInCourse ? (
+                <Button className="w-32" onClick={() => { handleSubscribeCourse() }}>Inscrever-se</Button> // Botão de inscrição
+              ) : (
+                <Button className="w-32" onClick={handleRedirect}>Iniciar</Button> // Botão para iniciar o curso
+              )
+            )
           )}
 
-          {user.isSignedIn && isUserSubscribed && !isLoading && (
-            <Button onClick={handleRedirect}>Iniciar</Button>
+          {isLoading ? (
+            <Skeleton className="w-full h-60"></Skeleton>
+          ) : (
+            <div className="border-t pt-8">
+              {course?.description}
+            </div>
           )}
-
-          {!user.isSignedIn && !isLoading && (
-            <Button onClick={() => { router.push("/sign-in") }}>Entrar</Button>
-          )}
-
-          <div className="border-t pt-8">
-            {course?.description}
-          </div>
 
         </div>
 
-        {course && (
+        {course ? (
           <CourseCard
             courseId={course?.id}
             courseName={course.courseTitle}
@@ -142,31 +170,36 @@ const CoursePage = (
             courseSubject={course.subject}
             difficulty={course.level}
             certificate={course.certificate}
-          ></CourseCard>
+          />
+        ) : (
+          <SkeletonCourseCard />
         )}
-
       </main>
 
-      <div className="w-full bg-dark-color text-white min-h-96 py-8 border-y ">
-
+      <div className="w-full bg-dark-color text-white min-h-96 py-8 border-y">
         <h1 className="text-5xl text-center">Instrutores</h1>
-
         <div className="flex mt-8 gap-32 flex-wrap justify-center">
-          {instructors?.map((instructor) => (
-            <InstructorCard
-              instructorName={instructor.name}
-              formation1={instructor.formation1}
-              formation2={instructor.formation2}
-              profilePictureUrl={instructor.profileUrl}
-              key={instructor.id} />
-          ))}
+          {instructors ? (
+            instructors.map((instructor) => (
+              <InstructorCard
+                instructorName={instructor.name}
+                formation1={instructor.formation1}
+                formation2={instructor.formation2}
+                profilePictureUrl={instructor.profileUrl}
+                key={instructor.id}
+              />
+            ))
+          ) : (
+            <div className="flex mt-8 gap-32 flex-wrap justify-center">
+              <SkeletonInstructorCard />
+              <SkeletonInstructorCard />
+              <SkeletonInstructorCard />
+            </div>
+          )}
         </div>
-
       </div>
-
     </div>
   );
 };
 
 export default CoursePage;
-

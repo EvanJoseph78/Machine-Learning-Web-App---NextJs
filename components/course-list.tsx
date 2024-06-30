@@ -8,6 +8,8 @@ import { CourseItem } from "./course-item";
 import Link from "next/link";
 import { Button } from "./ui/button";
 
+import { fetchCourses } from "@/services/api";
+
 interface CourseListProps {
   editPage: boolean
 }
@@ -16,19 +18,15 @@ export const CoursesList = ({ editPage = false }: CourseListProps) => {
 
   const [coursesList, setCoursesList] = useState<Courses[]>([]);
 
-  const fetchCourses = async () => {
-    const response = await axios.get('/api/courses/');
-    setCoursesList(response.data);
-    return response.data;
-  };
-
   useEffect(() => {
-    try {
-      fetchCourses();
-    } catch (error) {
-      console.log(error);
-    }
-  }, [])
+    fetchCourses()
+      .then((data) => {
+        setCoursesList(data);
+      })
+      .catch((error) => {
+        console.error('Erro ao buscar cursos:', error);
+      });
+  }, []);
 
   return (
     <div className="w-full h-full px-2 sm:px-6 pt-16" >
