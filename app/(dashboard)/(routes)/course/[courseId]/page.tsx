@@ -149,10 +149,12 @@ const CoursePage: React.FC<CourseIdProps> = ({ params }) => {
             )
           )}
 
+          <div className="border-t border-gray-200 my-4"></div>
+
           {isLoading ? (
             <Skeleton className="w-full h-60"></Skeleton>
           ) : (
-            <div className="border-t pt-8">
+            <div className="pt-8">
               {course?.description}
             </div>
           )}

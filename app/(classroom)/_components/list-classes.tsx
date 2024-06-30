@@ -16,7 +16,7 @@ interface listClassesProps {
 
 export function ListClasses({ courseId }: listClassesProps) {
 
-  const { course, listClasses, setListClasses, isLoading, error } = useCourseData(courseId);
+  const { listClasses } = useCourseData(courseId);
 
   const { currentModuleId, setCurrentModuleId } = useClassItem();
 

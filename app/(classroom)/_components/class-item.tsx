@@ -11,12 +11,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@radix-ui/react-checkbox";
 import { useClassItem } from "@/components/providers/class-provider";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import toast from "react-hot-toast";
+import { fetchSaveLastClass } from "@/services/api";
 
 interface ClassItemProps {
   classId: string | null,
@@ -37,8 +37,8 @@ export const ClassItem = ({
   classNumber,
   videoUrl,
   classId,
-  courseId,
-  moduleId
+  moduleId,
+  courseId
 }: ClassItemProps) => {
   let hasSlide = false;
   let hasPdf = false;
@@ -51,34 +51,35 @@ export const ClassItem = ({
     hasSlide = true;
   };
 
-  const { currentIdClass, setCurrentModuleId, setCurrentIdClass, setCurrentClassTitle, setCurrentClassNumber, setCurrentUrlClassVideo } = useClassItem();
+  const {
+    currentIdClass,
+    setCurrentModuleId,
+    setCurrentIdClass,
+    setCurrentClassTitle,
+    setCurrentClassNumber,
+    setCurrentUrlClassVideo
+  } = useClassItem();
 
   const [isSelected, setIsSelected] = useState<boolean>(currentIdClass === classId);
-
-  // const fetchLastClassId = async () => {
-  //   const response = await axios.post(`/api/courses/${courseId}/class/current-class`);
-  //   console.log(response.data);
-  // };
-
-  const extractIdVideo = (linkAula: string): string => {
-    const match = linkAula.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&\n?]+)/);
-    if (match && match[1]) {
-      return match[1];
-    } else {
-      return "ts8i-6AtDfc"; // never gonna let you down
-    };
-  };
 
   const handleChangeClass = () => {
     setCurrentClassTitle(classTitle!);
     setCurrentIdClass(classId!);
     setCurrentModuleId(moduleId!);
     setCurrentClassNumber(classNumber!.toString());
-    const videoId = extractIdVideo(videoUrl!); //extrai o id do video
-    setCurrentUrlClassVideo(videoId);
+    setCurrentUrlClassVideo(videoUrl!);
+    handleSaveLastClass();
   }
+
+  const handleSaveLastClass = () => {
+    if (classId && moduleId) {
+      fetchSaveLastClass(courseId, moduleId, classId).then((data) => {
+        console.log(moduleId);
+      }).catch((err) => { console.log(err.message); });
+    }
+  }
+
   useEffect(() => {
-    // fetchLastClassId();
     setIsSelected(classId === currentIdClass);
   }, [currentIdClass])
 

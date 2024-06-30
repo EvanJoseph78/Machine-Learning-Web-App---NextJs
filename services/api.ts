@@ -65,3 +65,26 @@ export const fetchIsUserSubscribed = async (courseId: string): Promise<any> => {
   const response = await axios.get(`/api/courses/${courseId}/subscribe`);
   return response.data;
 };
+
+/**
+ * Saves the lat class for a user in a specific course from the database.
+ * 
+ * @param {string} courseId - The ID of the course.
+ * @returns {Promise<any>} A promise that resolves to the last saved class data.
+ */
+export const fetchSaveLastClass = async (courseId: string, moduleId: string, classId: string): Promise<any> => {
+  const response = await axios.patch(`/api/user/course/${courseId}`, { moduleId, classId });
+  return response.data;
+};
+
+/**
+ * Gets the lat class for a user in a specific course from the database.
+ * 
+ * @param {string} courseId - The ID of the course.
+ * @returns {Promise<any>} A promise that resolves to the last saved class data.
+ */
+export const fetchGetLastClass = async (courseId: string): Promise<any> => {
+  const response = await axios.get(`/api/user/course/${courseId}`);
+  return response.data;
+};
+

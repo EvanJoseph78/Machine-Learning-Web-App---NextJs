@@ -7,7 +7,10 @@ import { useClassItem } from "@/components/providers/class-provider";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import useCourseData from "@/hooks/useCourse";
 import { useEffect, useState } from "react";
-import { EllipsisVertical, File } from 'lucide-react';
+import { EllipsisVertical, File, Play } from 'lucide-react';
+import { Skeleton } from "@/components/ui/skeleton";
+import toast from "react-hot-toast";
+import { fetchGetLastClass } from "@/services/api";
 
 const ClassRoom = (
   { params }: {
@@ -18,6 +21,7 @@ const ClassRoom = (
   const [videoDimensions, setVideoDimensions] = useState<{ width: number; height: number }>({ width: 1000, height: 562 });
 
   const { currentClassTitle, currentClassNumber } = useClassItem();
+  const { listClasses } = useCourseData(params.courseId);
 
   useEffect(() => {
     const handleResize = () => {
@@ -31,12 +35,43 @@ const ClassRoom = (
 
     handleResize();
     window.addEventListener("resize", handleResize);
+    handleLastClass();
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const { course, isLoading } = useCourseData(params.courseId);
 
-  const { currentUrlClassVideo } = useClassItem();
+  const {
+    currentUrlClassVideo,
+    setCurrentIdClass,
+    setCurrentClassTitle,
+    setCurrentUrlClassVideo,
+    setCurrentClassNumber,
+    setCurrentModuleId
+  } = useClassItem();
+
+  const handlePlayButton = () => {
+    if (listClasses && listClasses.length > 0 && listClasses[0].classes.length > 0) {
+      const { id, videoUrl, classTitle, classNumber, modulesId } = listClasses[0].classes[0];
+      setCurrentIdClass(id);
+      setCurrentUrlClassVideo(videoUrl!);
+      setCurrentClassTitle(classTitle!);
+      setCurrentClassNumber(String(classNumber));
+      setCurrentModuleId(modulesId!);
+      console.log(videoUrl!);
+    }
+  }
+
+  const handleLastClass = () => {
+    fetchGetLastClass(params.courseId).then((data) => {
+      setCurrentIdClass(data.class.id);
+      setCurrentUrlClassVideo(data.class.videoUrl);
+      setCurrentClassTitle(data.class.classTitle);
+      setCurrentClassNumber(data.class.classNumber);
+      setCurrentModuleId(data.lastModuleId);
+      console.log(data);
+    }).catch((err) => { console.log(err); });
+  }
 
   return (
     <div className="h-full flex flex-col content-center xl:flex-row">
@@ -53,7 +88,7 @@ const ClassRoom = (
           {isLoading ? (
             <div className="w-full p-4 flex flex-col justify-center content-center items-center">
               <AspectRatio ratio={16 / 9}>
-                carregando...
+                <Skeleton className="w-full h-full"></Skeleton>
               </AspectRatio>
             </div>
 
@@ -61,35 +96,55 @@ const ClassRoom = (
             <div className="w-full flex flex-col justify-center content-center items-center">
               <div className="w-full sticky top-0 md:relative dark:bg-dark-color ">
                 <AspectRatio ratio={16 / 9} >
-                  <VideoPlayer
-                    videoId={currentUrlClassVideo}
-                    height={videoDimensions.height}
-                    width={videoDimensions.width}
-                    courseId={params.courseId}
-                  />
+                  {currentUrlClassVideo == "" ? (
+                    <AspectRatio ratio={16 / 9} className="flex items-center justify-center content-center">
+                      <div
+                        // onClick={handlePlayButton}
+                        onClick={handleLastClass}
+                        className="border rounded-full p-4 shadow-sm cursor-pointer"
+                      >
+                        <Play className="h-12 w-12 hover:h-16 hover:w-16 transition duration-300 ease-in-out"></Play>
+                      </div>
+                    </AspectRatio>
+                  ) : (
+                    <VideoPlayer
+                      videoId={currentUrlClassVideo}
+                      height={videoDimensions.height}
+                      width={videoDimensions.width}
+                      courseId={params.courseId}
+                    />
+                  )}
                 </AspectRatio>
               </div>
-
-              <div className="space-y-4 w-full px-2 py-4">
-                <div className="border px-2 py-1 rounded-md">
-                  <div className="flex items-center justify-between">
-                    <p className="text-xl">{currentClassNumber} - {currentClassTitle}</p>
-                    <EllipsisVertical />
-                  </div>
-                  <div className="hidden gap-2 items-center ">
-                    <File />
-                    <p className="text-xs">PDF aula</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="w-full xl:hidden block xl:w-2/5">
-                <SideBar courseId={params.courseId} />
-              </div>
-
             </div>
           )}
+
+          <div className="space-y-4 w-full px-2 py-4 xl:px-4">
+            <div className="border px-2 py-1 rounded-md">
+              <div className="flex items-center justify-between">
+                {isLoading ? (
+                  <div className="flex gap-2">
+                    <Skeleton className="w-8 h-6"></Skeleton>
+                    <Skeleton className="w-96 h-6"></Skeleton>
+                  </div>
+                ) : (
+                  <p className="text-xl">{currentClassNumber} - {currentClassTitle}</p>
+                )}
+                <EllipsisVertical />
+              </div>
+              <div className="hidden gap-2 items-center ">
+                <File />
+                <p className="text-xs">PDF aula</p>
+              </div>
+            </div>
+
+          </div>
         </div>
+
+        <div className="w-full xl:hidden block xl:w-2/5">
+          <SideBar courseId={params.courseId} />
+        </div>
+
       </div>
 
       <div className="hidden xl:block xl:w-2/5">

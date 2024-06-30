@@ -1,5 +1,14 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 
+const extractIdVideo = (linkAula: string): string => {
+  const match = linkAula.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&\n?]+)/);
+  if (match && match[1]) {
+    return match[1];
+  } else {
+    return "ts8i-6AtDfc"; // never gonna let you down
+  };
+};
+
 // Define the interface for the context type
 interface ClassContextType {
   currentIdClass: string;
@@ -35,8 +44,9 @@ export const ClassItemProvider = ({ children }: ClassItemProviderProps) => {
   const [currentIdClass, setCurrentIdClass] = useState<string>("");
   const [currentModuleId, setCurrentModuleId] = useState<string>("");
   const [currentClassTitle, setCurrentClassTitle] = useState<string>("");
-  const [currentClassNumber, setCurrentClassNumber] = useState<string>("");
-  const [currentUrlClassVideo, setCurrentUrlClassVideo] = useState<string>("ts8i-6AtDfc");
+  const [currentClassNumber, setCurrentClassNumber] = useState<string>("0");
+  // const [currentUrlClassVideo, setCurrentUrlClassVideo] = useState<string>("ts8i-6AtDfc");
+  const [currentUrlClassVideo, setCurrentUrlClassVideo] = useState<string>("");
 
   const value = {
     currentIdClass,
@@ -48,7 +58,8 @@ export const ClassItemProvider = ({ children }: ClassItemProviderProps) => {
     setCurrentModuleId,
     setCurrentClassTitle,
     setCurrentClassNumber,
-    setCurrentUrlClassVideo,
+    // setCurrentUrlClassVideo,
+    setCurrentUrlClassVideo: (url: string) => setCurrentUrlClassVideo(extractIdVideo(url)),
   };
 
   return (
