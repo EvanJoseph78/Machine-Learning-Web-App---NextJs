@@ -99,7 +99,7 @@ const ClassRoom = (
                   {currentUrlClassVideo == "" ? (
                     <AspectRatio ratio={16 / 9} className="flex items-center justify-center content-center">
                       <div
-                        // onClick={handlePlayButton}
+                        // TODO: arrumar caso a primeira aula seja vazia
                         onClick={handleLastClass}
                         className="border rounded-full p-4 shadow-sm cursor-pointer"
                       >

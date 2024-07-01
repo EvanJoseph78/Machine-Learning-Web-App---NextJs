@@ -2,13 +2,13 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Courses } from "@prisma/client";
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { CourseItem } from "./course-item";
+import { CourseItem, SkeletonCourseItem } from "./course-item";
 import Link from "next/link";
 import { Button } from "./ui/button";
 
 import { fetchCourses } from "@/services/api";
+import { Skeleton } from "./ui/skeleton";
 
 interface CourseListProps {
   editPage: boolean
@@ -17,11 +17,13 @@ interface CourseListProps {
 export const CoursesList = ({ editPage = false }: CourseListProps) => {
 
   const [coursesList, setCoursesList] = useState<Courses[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     fetchCourses()
       .then((data) => {
         setCoursesList(data);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error('Erro ao buscar cursos:', error);
@@ -50,23 +52,35 @@ export const CoursesList = ({ editPage = false }: CourseListProps) => {
           </TabsList>
 
           <TabsContent value="todos" className="sm:border sm:p-2 rounded-xl">
-
-            <div className="flex justify-center flex-wrap content-center items-center gap-2 min-h-[360px] ">
-              {coursesList.map((course) => (
-                <CourseItem
-                  key={course.id}
-                  courseName={course.courseTitle}
-                  discipine={course.subject}
-                  linkCover={course.imageUrl}
-                  tags={course.tags}
-                  courseId={course.id}
-                  courseDescription={course.description}
-                  courseLevel={course.level}
-                  editPage={editPage}
-                  category={course.subject}
-                ></CourseItem>
-              ))}
-            </div>
+            {isLoading ? (
+              <div className="w-full flex justify-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 justify-center min-h-[300px]">
+                  <SkeletonCourseItem></SkeletonCourseItem>
+                  <SkeletonCourseItem></SkeletonCourseItem>
+                  <SkeletonCourseItem></SkeletonCourseItem>
+                  <SkeletonCourseItem></SkeletonCourseItem>
+                </div>
+              </div>
+            ) : (
+              <div className="w-full flex justify-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 justify-center min-h-[300px]">
+                  {coursesList.map((course) => (
+                    <CourseItem
+                      key={course.id}
+                      courseName={course.courseTitle}
+                      discipine={course.subject}
+                      linkCover={course.imageUrl}
+                      tags={course.tags}
+                      courseId={course.id}
+                      courseDescription={course.description}
+                      courseLevel={course.level}
+                      editPage={editPage}
+                      category={course.subject}
+                    ></CourseItem>
+                  ))}
+                </div>
+              </div>
+            )}
 
 
           </TabsContent>

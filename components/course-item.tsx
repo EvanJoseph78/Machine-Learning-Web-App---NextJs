@@ -5,6 +5,7 @@ import Image from "next/image";
 import { BookOpen, Pencil } from "lucide-react";
 import { Button } from "./ui/button";
 import { IconBadge } from "./icon-badge";
+import { Skeleton } from "./ui/skeleton";
 
 interface CourseItemProps {
   courseName: string,
@@ -85,3 +86,37 @@ export const CourseItem = ({ courseName, discipine, linkCover, tags, courseId, c
 
   );
 };
+
+export const SkeletonCourseItem = () => {
+  return (
+    <div className="flex flex-col  sm:w-[300px] min-h-[400px] rounded-xl overflow-hidden border p-2 relative" >
+      <div className="bg-dark-color dark:bg-dark-color border min-h-[160px] flex items-center cursor-pointer rounded-xl overflow-hidden" >
+        <Skeleton className="w-[360px] h-[160px]" />
+      </div>
+
+
+      <div className="px-2 py-4 flex flex-col w-full gap-1">
+        <Skeleton className="w-full h-8" />
+        <Skeleton className="w-12 h-4" />
+
+        <div className="text-xs text-gray-500 flex gap-2">
+          Nível:
+          <Skeleton className="w-8 h-4" />
+        </div>
+        <div className="flex items-center gap-1 gap-2">
+          <IconBadge icon={BookOpen} size={"sm"}></IconBadge>
+          {/* TODO:  arrumar a quantidade de aulas*/}
+          <Skeleton className="w-8 h-4" />
+        </div>
+
+        <div className="flex flex-wrap mt-4 gap-1">
+          <Skeleton className="bg-vermelho-vinho text-white rounded-xl text-xs min-w-12 px-2 py-1 content-center items-center justify-center h-4" />
+          <Skeleton className="bg-vermelho-vinho text-white rounded-xl text-xs min-w-8 px-2 py-1 content-center items-center justify-center h-4" />
+          <Skeleton className="bg-vermelho-vinho text-white rounded-xl text-xs min-w-10 px-2 py-1 content-center items-center justify-center h-4" />
+        </div>
+
+      </div>
+
+    </div >
+  )
+}
