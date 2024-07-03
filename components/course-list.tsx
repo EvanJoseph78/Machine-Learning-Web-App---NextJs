@@ -8,7 +8,6 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 
 import { fetchCourses } from "@/services/api";
-import { Skeleton } from "./ui/skeleton";
 
 interface CourseListProps {
   editPage: boolean
@@ -42,7 +41,7 @@ export const CoursesList = ({ editPage = false }: CourseListProps) => {
         </Link>
       )}
 
-      <p className="text-xl font-bold text-gray-700 mt-8">Cursos disponíveis: 2</p>
+      <p className="text-xl font-bold text-gray-700 mt-8">Cursos disponíveis: {coursesList.length}</p>
 
       <div className="mt-4 h-full">
         <Tabs defaultValue="todos" className="w-full h-full">

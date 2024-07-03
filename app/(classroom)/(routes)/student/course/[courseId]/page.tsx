@@ -50,7 +50,8 @@ const ClassRoom = (
     setCurrentModuleId
   } = useClassItem();
 
-  const handlePlayButton = () => {
+  const handleLastClass = () => {
+    // Atualiza o estado com base em listClasses, se disponível
     if (listClasses && listClasses.length > 0 && listClasses[0].classes.length > 0) {
       const { id, videoUrl, classTitle, classNumber, modulesId } = listClasses[0].classes[0];
       setCurrentIdClass(id);
@@ -60,9 +61,7 @@ const ClassRoom = (
       setCurrentModuleId(modulesId!);
       console.log(videoUrl!);
     }
-  }
-
-  const handleLastClass = () => {
+    // Atualiza o estado com base na resposta da API
     fetchGetLastClass(params.courseId).then((data) => {
       setCurrentIdClass(data.class.id);
       setCurrentUrlClassVideo(data.class.videoUrl);
@@ -70,7 +69,9 @@ const ClassRoom = (
       setCurrentClassNumber(data.class.classNumber);
       setCurrentModuleId(data.lastModuleId);
       console.log(data);
-    }).catch((err) => { console.log(err); });
+    }).catch((err) => {
+      console.error('Erro ao buscar a última aula:', err);
+    });
   }
 
   return (

@@ -1,11 +1,27 @@
 // components/CircularProgressBar.tsx
+import { cva, VariantProps } from 'class-variance-authority';
 import React, { useEffect, useState } from 'react';
 
-interface CircularProgressBarProps {
+const buttonVariants = cva(
+  "transition-colors duration-300 ease-in-out",
+  {
+    variants: {
+      variant: {
+        wrong: "text-red-500",
+        correct: "text-green-500",
+      },
+    },
+    defaultVariants: {
+      variant: "correct",
+    },
+  }
+);
+
+interface CircularProgressBarProps extends VariantProps<typeof buttonVariants> {
   percentage: number;
 }
 
-const CircularProgressBar = ({ percentage }: CircularProgressBarProps) => {
+const CircularProgressBar: React.FC<CircularProgressBarProps> = ({ percentage, variant }) => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -28,7 +44,7 @@ const CircularProgressBar = ({ percentage }: CircularProgressBarProps) => {
           fill="none"
         />
         <circle
-          className="circular-progress-fg"
+          className={`circular-progress-fg ${buttonVariants({ variant })}`}
           cx="80"
           cy="80"
           r={radius}
@@ -38,7 +54,7 @@ const CircularProgressBar = ({ percentage }: CircularProgressBarProps) => {
           strokeDashoffset={strokeDashoffset}
         />
       </svg>
-      <div className="percentage-text">{progress}%</div>
+      <div className={`percentage-text ${buttonVariants({ variant })}`}>{progress}%</div>
       <style jsx>{`
         .circular-progress-bar {
           display: flex;
@@ -53,7 +69,7 @@ const CircularProgressBar = ({ percentage }: CircularProgressBarProps) => {
           stroke: #e6e6e6;
         }
         .circular-progress-fg {
-          stroke: #00aaff;
+          stroke: currentColor;
           transition: stroke-dashoffset 1s;
           transform: rotate(-90deg);
           transform-origin: 50% 50%;

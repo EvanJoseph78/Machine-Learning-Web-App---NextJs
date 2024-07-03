@@ -37,7 +37,9 @@ export function QuestionsList({ courseId }: QuestionsListProps) {
     setIsDisabled,
     isFinished,
     setIsFinished,
-    percentageCorrect
+    percentageCorrect,
+    setPercentageCorrect,
+    setAmountCorrect,
   } = useQuestionItem();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -81,8 +83,19 @@ export function QuestionsList({ courseId }: QuestionsListProps) {
   }
 
   const handleGetCertificate = () => {
-    toast.success("obtendo certificado...")
+    toast.success(String(percentageCorrect));
   }
+
+  const handleRedoQuestions = () => {
+    setCurrentQuestionNumber(0);
+    setAmountCorrect(0);
+    setPercentageCorrect(0);
+    setIsLastQuestion(false);
+    setIsFinished(false);
+    setIsDisabled(false);
+    toast.success("refazer");
+  }
+  // FIX: após responder o questionário, se não finalizado, restaurar o estado da resposta
 
   const [percentage, setPercentage] = useState(10);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,13 +113,23 @@ export function QuestionsList({ courseId }: QuestionsListProps) {
           <ProgressBar></ProgressBar>
 
           {isLoading ? (
-            <div>Carregando...</div>
+            <div>Carregando...</div> // Conteúdo a ser exibido enquanto está carregando
           ) : questionsList.length === 0 ? (
             <div>Sem questões ainda</div> // Conteúdo a ser exibido quando a lista de questões estiver vazia
           ) : isFinished ? (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', padding: '50px' }}>
-              <CircularProgressBar percentage={percentageCorrect} />
-              <h1>Finalizado</h1>
+              {percentageCorrect >= 70 ? (
+                <div className="flex justify-center content-center items-center flex-col">
+                  <CircularProgressBar percentage={percentageCorrect} variant={"correct"} />
+                  <h1>Finalizado!</h1>
+                </div>
+              ) : (
+                <div className="flex justify-center content-center items-center flex-col">
+                  <CircularProgressBar percentage={percentageCorrect} variant={"wrong"} />
+                  <h1>Não finalizado!</h1>
+                  <p className="text-xs">Tente novamente mais tarde!</p>
+                </div>
+              )}
             </div>
           ) : (
             <QuestionCard
@@ -117,12 +140,24 @@ export function QuestionsList({ courseId }: QuestionsListProps) {
 
         </AlertDialogHeader>
         <AlertDialogFooter>
+
           <AlertDialogCancel>Fechar</AlertDialogCancel>
 
           {isLastQuestion && !isFinished ? (
             <Button onClick={() => handleFinishQuestions()} disabled={!isDisabled}>Finalizar</Button>
           ) : isFinished ? (
-            <Button onClick={() => handleGetCertificate()} disabled={!isDisabled}>Obter certificado</Button>
+            <div>
+              {percentageCorrect >= 70 ? (
+                <div className="space-x-2">
+                  <Button onClick={() => handleRedoQuestions()} disabled={!isDisabled}>Reiniciar Questionário</Button>
+                  <Button onClick={() => handleGetCertificate()} disabled={!isDisabled}>Obter certificado</Button>
+                </div>
+              ) : (
+                <div>
+                  <Button onClick={() => handleRedoQuestions()} disabled={!isDisabled}>Reiniciar Questionário</Button>
+                </div>
+              )}
+            </div>
           ) : (
             <Button onClick={() => handleQuestionChange()} disabled={!isDisabled}>Próxima</Button>
           )}
