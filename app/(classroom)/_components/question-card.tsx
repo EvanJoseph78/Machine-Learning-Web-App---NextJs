@@ -48,6 +48,7 @@ export const QuestionCard = ({ questionText, options }: QuestionCardProps) => {
           </div>
         ))}
       </div>
+
     </Card>
   );
 };
