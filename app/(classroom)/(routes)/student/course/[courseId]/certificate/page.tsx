@@ -5,14 +5,16 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 
+// Configuração necessária para pdfmake
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const CertificateGenerator = () => {
-  const [imageDataUrl, setImageDataUrl] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [imageDataUrl, setImageDataUrl] = useState(''); // Estado para armazenar o data URL da imagem
+  const [isLoading, setIsLoading] = useState(true); // Estado para controlar o estado de carregamento
 
+  // Função para carregar uma imagem como data URL
   const loadImageAsDataUrl = (url: string) => {
-    return new Promise((resolve, reject) => {
+    return new Promise<string>((resolve, reject) => {
       const img = new Image();
       img.crossOrigin = 'Anonymous';
       img.onload = () => {
@@ -33,34 +35,33 @@ const CertificateGenerator = () => {
   };
 
   useEffect(() => {
-    const imageUrl = '/c.png'; // Caminho para sua imagem
+    const imageUrl = '/c.png'; // Caminho para sua imagem de fundo
     loadImageAsDataUrl(imageUrl)
       .then((dataUrl) => {
-        const imageUrlString = dataUrl as string; // Ou use String(dataUrl) se necessário
-        setImageDataUrl(imageUrlString);
-        setIsLoading(false);
+        setImageDataUrl(dataUrl); // Define o data URL da imagem no estado
+        setIsLoading(false); // Indica que a imagem foi carregada e o componente não está mais em estado de carregamento
       })
       .catch((error) => {
         console.error('Failed to load image:', error);
-        setIsLoading(false);
+        setIsLoading(false); // Em caso de erro, também paramos o estado de carregamento
       });
-  }, []);
+  }, []); // O array vazio assegura que este efeito só seja executado uma vez, quando o componente é montado
 
+  // Função para gerar o PDF quando o botão é clicado
   const generatePDF = () => {
     if (!imageDataUrl) {
       alert('Imagem de fundo ainda não carregada!');
       return;
     }
 
-    const pageWidth = 1123;
-    const pageHeight = 794;
+    const pageWidth = 1123; // Largura da página do certificado em pixels
+    const pageHeight = 794; // Altura da página do certificado em pixels
 
     const docDefinition = {
-      content: [
-      ],
+      content: [], // Conteúdo do certificado, como texto, pode ser adicionado aqui
       background: [
         {
-          image: imageDataUrl,
+          image: imageDataUrl, // Imagem de fundo carregada dinamicamente
           width: pageWidth,
           height: pageHeight,
         },
@@ -71,17 +72,18 @@ const CertificateGenerator = () => {
       },
     };
 
+    // Cria e faz o download do PDF usando pdfmake
     pdfMake.createPdf(docDefinition).download('certificado.pdf');
   };
 
   return (
     <div className="text-center">
       <h1 className="text-2xl font-bold mb-4">Gerar Certificado</h1>
-      {isLoading ? (
+      {isLoading ? ( // Exibe um botão desativado se ainda estiver carregando a imagem
         <Button onClick={generatePDF} disabled>
           Carregando...
         </Button>
-      ) : (
+      ) : ( // Exibe o botão normal para gerar o certificado quando a imagem estiver carregada
         <Button onClick={generatePDF}>Gerar certificado</Button>
       )}
     </div>
@@ -89,4 +91,3 @@ const CertificateGenerator = () => {
 };
 
 export default CertificateGenerator;
-
