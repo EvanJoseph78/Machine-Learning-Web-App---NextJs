@@ -36,7 +36,8 @@ const CertificateGenerator = () => {
     const imageUrl = '/c.png'; // Caminho para sua imagem
     loadImageAsDataUrl(imageUrl)
       .then((dataUrl) => {
-        setImageDataUrl(dataUrl);
+        const imageUrlString = dataUrl as string; // Ou use String(dataUrl) se necessário
+        setImageDataUrl(imageUrlString);
         setIsLoading(false);
       })
       .catch((error) => {
