@@ -1,3 +1,4 @@
+
 'use client';
 
 import pdfMake from 'pdfmake/build/pdfmake';
@@ -9,7 +10,7 @@ import { TDocumentDefinitions } from 'pdfmake/interfaces';
 // Configuração necessária para pdfmake
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const CertificateGenerator = () => {
+export const CertificateBtn = () => {
   const [imageDataUrl, setImageDataUrl] = useState(''); // Estado para armazenar o data URL da imagem
   const [isLoading, setIsLoading] = useState(true); // Estado para controlar o estado de carregamento
 
@@ -150,4 +151,3 @@ const CertificateGenerator = () => {
 
 };
 
-export default CertificateGenerator;

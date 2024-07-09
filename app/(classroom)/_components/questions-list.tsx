@@ -21,6 +21,7 @@ import { QuestionCard } from "./question-card"
 import { Buda } from "next/font/google"
 import toast from "react-hot-toast"
 import CircularProgressBar from "@/components/circular-progress-bar"
+import { CertificateBtn } from "./certificate-btn"
 
 interface QuestionsListProps {
   courseId: string
@@ -150,7 +151,8 @@ export function QuestionsList({ courseId }: QuestionsListProps) {
               {percentageCorrect >= 70 ? (
                 <div className="space-x-2">
                   <Button onClick={() => handleRedoQuestions()} disabled={!isDisabled}>Reiniciar Questionário</Button>
-                  <Button onClick={() => handleGetCertificate()} disabled={!isDisabled}>Obter certificado</Button>
+                  {/* <Button onClick={() => handleGetCertificate()} disabled={!isDisabled}>Obter certificado</Button> */}
+                  <CertificateBtn></CertificateBtn>
                 </div>
               ) : (
                 <div>
