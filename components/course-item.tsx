@@ -40,8 +40,8 @@ export const CourseItem = ({
   const router = useRouter();
 
   // Função que redireciona para a página do curso
-  const onRedirect = (courseId: string) => {
-    router.push(`/course/${courseId}`);
+  const onRedirect = (uri: string) => {
+    router.push(uri);
   };
 
   return (
@@ -52,7 +52,7 @@ export const CourseItem = ({
       <div className="px-2 py-4 flex flex-col w-full gap-1">
         <h3
           className="font-bold text-md hover:text-vermelho-vinho transition duration-300 ease-in-out cursor-pointer"
-          onClick={() => onRedirect(courseId)}
+          onClick={() => onRedirect(`/course/${courseId}`)}
         >
           {courseName}
         </h3>
@@ -105,13 +105,15 @@ export const CourseItem = ({
  * @param {string} props.courseId O ID do curso.
  */
 const CourseImage = ({ linkCover, courseId }: { linkCover: string | null; courseId: string }) => {
+
+  const router = useRouter();
   const defaultImage =
     "https://utfs.io/f/3815478c-2365-4578-871d-291daa3c5563-pzmzsy.jpg";
 
   return (
     <div
       className="bg-dark-color dark:bg-dark-color border min-h-[160px] flex justify-center items-center cursor-pointer rounded-xl overflow-hidden"
-      onClick={() => router.push(`/course/${courseId}`)}
+      onClick={() => { router.push(`/course/${courseId}`) }}
     >
       <Image
         height={300}
