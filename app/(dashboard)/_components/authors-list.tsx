@@ -13,24 +13,18 @@ const authorsList = [
   {
     name: "Evandro Mariano",
     formation: "Bacharelando em Sistemas de Informação",
-    urlImg: "https://via.placeholder.com/150", // Substitua pelo URL da imagem real
+    urlImg: "https://machine-learning3.vercel.app/assets/img/Evandro.png",
   },
   {
-    name: "Joseph Evans",
+    name: "Antônio Lucas",
     formation: "Bacharelando em Ciência da Computação",
-    urlImg: "https://via.placeholder.com/150", // Substitua pelo URL da imagem real
-  },
-  {
-    name: "Outro Autor",
-    formation: "Bacharelando em Ciência da Computação",
-    urlImg: "https://via.placeholder.com/150", // Substitua pelo URL da imagem real
+    urlImg: "https://machine-learning3.vercel.app/assets/img/Lucas.png",
   },
   {
     name: "Outro Autor",
     formation: "Bacharelando em Ciência da Computação",
-    urlImg: "https://via.placeholder.com/150", // Substitua pelo URL da imagem real
+    urlImg: "https://machine-learning3.vercel.app/assets/img/Iago.jpg",
   },
-  // Adicione mais autores conforme necessário
 ];
 
 export function AuthorsList() {
