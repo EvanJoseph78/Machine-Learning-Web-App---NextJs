@@ -34,9 +34,32 @@ export async function POST(
 
 export async function GET() {
   try {
-    const course = await db.courses.findMany();
+    const course = await db.courses.findMany(
+      {
+        include: {
+          modules: {
+            include: {
+              classes: true
+            }
+          }
+        }
+      }
+    );
 
-    return NextResponse.json(course);
+    // Mapear os cursos e adicionar a quantidade de aulas
+    const coursesWithLessonCount = course.map(course => {
+      const totalLessons = course.modules.reduce((acc, module) => acc + module.classes.length, 0);
+
+
+      return {
+        ...course,
+        totalLessons, // Contagem total de aulas no curso
+      };
+    });
+
+    console.log((coursesWithLessonCount))
+
+    return NextResponse.json(coursesWithLessonCount);
   } catch (error) {
     console.error("[COURSES]", error);
     return new NextResponse("Internal Error", { status: 500 });

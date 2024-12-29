@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 
 import { fetchCourses } from "@/services/api";
+import { CourseItemData } from "@/lib/types";
 
 interface CourseListProps {
   editPage: boolean
@@ -15,7 +16,8 @@ interface CourseListProps {
 
 export const CoursesList = ({ editPage = false }: CourseListProps) => {
 
-  const [coursesList, setCoursesList] = useState<Courses[]>([]);
+  // const [coursesList, setCoursesList] = useState<Courses[]>([]);
+  const [coursesList, setCoursesList] = useState<CourseItemData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -75,6 +77,7 @@ export const CoursesList = ({ editPage = false }: CourseListProps) => {
                       courseLevel={course.level}
                       editPage={editPage}
                       category={course.subject}
+                      totalAulas={course.totalLessons}
                     ></CourseItem>
                   ))}
                 </div>

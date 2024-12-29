@@ -178,7 +178,7 @@ export const NavbarRoutes = ({ isclassroom = false, courseId, courseName = "carr
             <PopoverTrigger>
               <UserRound size={30} />
             </PopoverTrigger>
-            <PopoverContent className="w-40 bg-white border p-2 rounded-md">
+            <PopoverContent className="w-40 bg-white border p-2 rounded-md dark:text-black">
               <p
                 className="hover:text-vermelho-vinho transition duration-300 ease-in-out cursor-pointer "
                 onClick={() => { router.push("/sign-in") }}
