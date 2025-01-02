@@ -41,15 +41,13 @@ export const userPaths: OpenAPIV3.PathsObject = {
             schema: {
               type: "object",
               properties: {
-                id: { type: "string" },
-                name: { type: "string" },
-                email: { type: "string", format: "email" },
+                clerkId: { type: "string" },
+                fullName: { type: "string" },
               },
-              required: ["name", "email"],
+              required: ["clerkId", "fullName"],
               example: {
-                id: "12345",
-                name: "João Silva",
-                email: "joao.silva@exemplo.com",
+                clerkId: "iwjdijwdkau12",
+                fullName: "Ednaldo Pereira",
               },
             },
           },
