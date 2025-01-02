@@ -39,3 +39,52 @@ export const createUser = async (user: Omit<User, "id">): Promise<User> => {
     );
   }
 };
+
+/**
+ * Atualiza os dados de um usuário com base no `clerkId`.
+ *
+ * @param clerkId - Identificador único do usuário.
+ * @param updates - Objeto contendo os campos a serem atualizados.
+ * @returns O usuário atualizado.
+ * @throws Erro caso a atualização falhe.
+ */
+export const updateUser = async (
+  clerkId: string,
+  updates: Partial<{ fullName: string }>
+) => {
+  try {
+    // Verifica se o usuário existe antes de tentar atualizá-lo
+    const existingUser = await db.user.findUnique({
+      where: { clerkId },
+    });
+
+    if (!existingUser) {
+      throw new Error(`User with clerkId ${clerkId} not found.`);
+    }
+
+    // Atualiza os campos fornecidos no objeto `updates`
+    const updatedUser = await db.user.update({
+      where: { clerkId },
+      data: updates,
+    });
+
+    console.log("Usuário atualizado com sucesso:", updatedUser);
+    return updatedUser;
+  } catch (error) {
+    // console.error("Error updating user:", error);
+
+    // Loga o erro no console e no banco de dados
+    await logError(
+      "Erro ao atualizar usuário",
+      "services/userService.ts",
+      error instanceof Error ? error.message : "Unknown error"
+    );
+
+    // Lança uma exceção para que o erro possa ser tratado no nível do controlador
+    throw new Error(
+      `Failed to update user. Error: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
+  }
+};

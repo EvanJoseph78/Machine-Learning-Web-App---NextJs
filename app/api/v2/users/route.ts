@@ -1,6 +1,7 @@
 import {
   createUserController,
   getAllUsersController,
+  updateUserController,
 } from "@/controllers/userController";
 import { logError } from "@/services/logError";
 import { User } from "@prisma/client";

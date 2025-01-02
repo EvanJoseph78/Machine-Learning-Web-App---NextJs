@@ -1,7 +1,7 @@
 // src/api-docs/users.ts
 import { OpenAPIV3 } from "openapi-types";
 
-// Definindo os endpoints de Usuários
+// Definindo a documentação dos endpoints de Usuários
 export const userPaths: OpenAPIV3.PathsObject = {
   "/api/v2/users": {
     get: {
@@ -63,7 +63,7 @@ export const userPaths: OpenAPIV3.PathsObject = {
                 properties: {
                   id: { type: "string" },
                   clerkId: { type: "string" },
-                  fullName: { type: "string", format: "email" },
+                  fullName: { type: "string" },
                 },
                 example: {
                   id: "677688027d02698dd6e3815e",
@@ -90,6 +90,108 @@ export const userPaths: OpenAPIV3.PathsObject = {
         },
         409: {
           description: "Usuário já existente no banco de dados",
+        },
+      },
+    },
+  },
+  "/api/v2/users/{clerkId}": {
+    patch: {
+      summary: "Atualizar dados do usuário",
+      tags: ["Users"],
+      description:
+        "Este endpoint permite a atualização de dados de um usuário com base no seu clerkId.",
+      parameters: [
+        {
+          name: "clerkId",
+          in: "path",
+          required: true,
+          description: "O ID único do usuário (clerkId) a ser atualizado.",
+          schema: {
+            type: "string",
+          },
+        },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                fullName: {
+                  type: "string",
+                  description: "Nome completo do usuário.",
+                },
+              },
+              required: ["fullName"],
+            },
+          },
+        },
+      },
+      responses: {
+        "200": {
+          description: "Usuário atualizado com sucesso.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  message: {
+                    type: "string",
+                    example: "User updated successfully",
+                  },
+                },
+              },
+            },
+          },
+        },
+        "400": {
+          description: "Dados inválidos ou incompletos fornecidos.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  message: {
+                    type: "string",
+                    example: "Invalid data",
+                  },
+                },
+              },
+            },
+          },
+        },
+        "404": {
+          description: "Usuário não encontrado com o clerkId fornecido.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  message: {
+                    type: "string",
+                    example: "User not found",
+                  },
+                },
+              },
+            },
+          },
+        },
+        "500": {
+          description: "Erro interno no servidor.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  message: {
+                    type: "string",
+                    example: "Internal server error",
+                  },
+                },
+              },
+            },
+          },
         },
       },
     },

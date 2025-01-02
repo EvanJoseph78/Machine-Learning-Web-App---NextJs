@@ -1,7 +1,7 @@
-import { createUser, getAllUsers } from "@/services/userService";
+import { createUser, getAllUsers, updateUser } from "@/services/userService";
 import { logError } from "@/services/logError";
 import { User } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * Controlador para obter todos os usuários.
@@ -56,5 +56,70 @@ export const createUserController = async (
     }
 
     return NextResponse.json({ message: "Erro no servidor." }, { status: 500 });
+  }
+};
+
+/**
+ * Controlador responsável por atualizar um usuário.
+ *
+ * @param req - A requisição HTTP, que deve conter o body com os dados do usuário.
+ * @param clerkId - O ID único do usuário (clerkId) que será atualizado.
+ * @returns {NextResponse} - Retorna a resposta HTTP com o status da operação.
+ */
+export const updateUserController = async (
+  req: NextRequest,
+  clerkId: string
+): Promise<NextResponse> => {
+  try {
+    // Obtém os dados de atualização do corpo da requisição
+    const { fullName } = await req.json(); // Supondo que o corpo contenha um campo `fullName` para atualização
+
+    // Verifica se o campo `fullName` foi fornecido
+    if (!fullName) {
+      return new NextResponse(
+        JSON.stringify({
+          message: "Missing fullName in request body.",
+        }),
+        { status: 400 } // 400 Bad Request
+      );
+    }
+
+    // Tenta atualizar o usuário com os novos dados
+    const updatedUser = await updateUser(clerkId, { fullName });
+
+    // Retorna a resposta de sucesso com o status 200 (OK)
+    return new NextResponse(
+      JSON.stringify({
+        message: "User updated successfully.",
+        user: updatedUser,
+      }),
+      { status: 200 }
+    );
+  } catch (error) {
+    // Caso ocorra um erro, loga o erro no banco de dados e retorna uma resposta de erro
+    await logError(
+      "Erro ao atualizar usuário",
+      "controllers/userController.ts",
+      error instanceof Error ? error.message : "Unknown error"
+    );
+
+    console.error("Error updating user:", error);
+
+    // Verifica se o erro é relacionado à inexistência do usuário
+    if (error instanceof Error && error.message.includes("not found")) {
+      return new NextResponse(
+        JSON.stringify({ message: "User not found." }),
+        { status: 404 } // 404 Not Found
+      );
+    }
+
+    // Para outros erros, retorna um status 500 (Internal Server Error)
+    return new NextResponse(
+      JSON.stringify({
+        message: "Failed to update user. Please try again later.",
+        error: error instanceof Error ? error.message : "Unknown error",
+      }),
+      { status: 500 }
+    );
   }
 };
