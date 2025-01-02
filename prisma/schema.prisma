@@ -13,151 +13,97 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Courses {
-  id              String        @id @default(auto()) @map("_id") @db.ObjectId
-  userId          String?
-  courseTitle     String
-  introduction    String?
-  duration        Int?
-  subject         String?
-  level           String?       @default("Básico")
-  certificate     Boolean?      @default(false)
-  description     String?
-  imageUrl        String?
-  categoryId      String?       @db.ObjectId
-  tags            String[]
-  subscribedUsers String[]
-  instructors     Instructors[]
-  modules         Modules[]
-
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  Category  Category?   @relation(fields: [categoryId], references: [id])
-  Tags      Tags?       @relation(fields: [tagsId], references: [id])
-  tagsId    String?     @db.ObjectId
-  Questions Questions[]
-
-  @@index([categoryId])
-}
-
-model Tags {
-  id      String    @id @default(auto()) @map("_id") @db.ObjectId
-  name    String
-  courses Courses[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 model Category {
-  id      String    @id @default(auto()) @map("_id") @db.ObjectId
-  name    String
-  courses Courses[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  name   String   @unique
+  Course Course[]
 }
 
-model Instructors {
+model Course {
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  description    String?
+  introduction   String?
+  duration       Int              @default(0)
+  level          String           @default("basic")
+  hasCertificate Boolean          @default(false)
+  coverImageUrl  String           @default("https://i.imgur.com/bYHLC9J.png")
+  subject        String?
+  categoryId     String           @db.ObjectId
+  Category       Category         @relation(fields: [categoryId], references: [id])
+  Instructor     Instructor[]
+  Tag            Tag[]
+  Module         Module[]
+  Question       Question[]
+  SubscribedUser SubscribedUser[]
+}
+
+model Instructor {
   id         String  @id @default(auto()) @map("_id") @db.ObjectId
   name       String
-  formation1 String?
+  formation1 String
   formation2 String?
   profileUrl String?
-
-  Course   Courses? @relation(fields: [courseId], references: [id])
-  courseId String?  @db.ObjectId
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  Course     Course? @relation(fields: [courseId], references: [id])
+  courseId   String? @db.ObjectId
 }
 
-model Modules {
-  id           String    @id @default(auto()) @map("_id") @db.ObjectId
-  moduleTitle  String?
-  moduleNumber Int?
-  classes      Classes[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  Courses   Courses? @relation(fields: [coursesId], references: [id])
-  coursesId String?  @db.ObjectId
+model Tag {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  Course   Course? @relation(fields: [courseId], references: [id])
+  courseId String? @db.ObjectId
 }
 
-model Classes {
-  id           String  @id @default(auto()) @map("_id") @db.ObjectId
-  classTitle   String?
-  classNumber  Int?
-  moduleTitle  String?
-  moduleNumber Int?
-  attachment   String?
-  videoUrl     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  Modules   Modules? @relation(fields: [modulesId], references: [id])
-  modulesId String?  @db.ObjectId
+model Module {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  number   Int
+  title    String?
+  courseId String   @db.ObjectId
+  course   Course   @relation(fields: [courseId], references: [id])
+  Lesson   Lesson[]
 }
 
-model Questions {
-  id      String    @id @default(auto()) @map("_id") @db.ObjectId
-  text    String?
-  options Options[]
-
-  Course   Courses? @relation(fields: [courseId], references: [id])
-  courseId String?  @db.ObjectId
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Lesson {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  title      String?
+  number     Int
+  attachment String?
+  videoUrl   String?
+  moduleId   String  @db.ObjectId
+  Module     Module  @relation(fields: [moduleId], references: [id])
 }
 
-model Options {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  text      String
-  isCorrect Boolean
-
-  Questions   Questions? @relation(fields: [questionsId], references: [id])
-  questionsId String?    @db.ObjectId
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Question {
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  text           String
+  courseId       String           @db.ObjectId
+  QuestionOption QuestionOption[]
+  Course         Course           @relation(fields: [courseId], references: [id])
 }
 
-model Users {
-  id                String              @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String              @unique
-  fullname          String
-  subscribedCourses SubscribedCourses[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model QuestionOption {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  isCorrect  Boolean  @default(false)
+  text       String
+  questionId String   @db.ObjectId
+  Question   Question @relation(fields: [questionId], references: [id])
 }
 
-model SubscribedCourses {
-  id               String             @id @default(auto()) @map("_id") @db.ObjectId
-  courseId         String
-  finishedAt       String             @default("")
-  completedClasses CompletedClasses[]
-  currentIdClass   String             @default("")
-  currentModuleId  String             @default("")
-
-  Users   Users?  @relation(fields: [usersId], references: [id])
-  usersId String? @db.ObjectId
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model User {
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId        String?          @unique
+  fullName       String
+  SubscribedUser SubscribedUser[]
 }
 
-model CompletedClasses {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  classId     String
-  isCompleted Boolean @default(false)
-
-  subscribedCourses   SubscribedCourses? @relation(fields: [subscribedCoursesId], references: [id])
-  subscribedCoursesId String?            @db.ObjectId
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model SubscribedUser {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  courseId        String    @db.ObjectId
+  userId          String    @db.ObjectId
+  finishedAt      DateTime?
+  startedAt       DateTime?
+  currentLessonId String    @db.ObjectId
+  course          Course    @relation(fields: [courseId], references: [id])
+  user            User      @relation(fields: [userId], references: [id])
 }
