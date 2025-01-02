@@ -20,22 +20,22 @@ model Category {
 }
 
 model Course {
-  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  id             String             @id @default(auto()) @map("_id") @db.ObjectId
   title          String
   description    String?
   introduction   String?
-  duration       Int              @default(0)
-  level          String           @default("basic")
-  hasCertificate Boolean          @default(false)
-  coverImageUrl  String           @default("https://i.imgur.com/bYHLC9J.png")
+  duration       Int                @default(0)
+  level          String             @default("basic")
+  hasCertificate Boolean            @default(false)
+  coverImageUrl  String             @default("https://i.imgur.com/bYHLC9J.png")
   subject        String?
-  categoryId     String           @db.ObjectId
-  Category       Category         @relation(fields: [categoryId], references: [id])
+  categoryId     String             @db.ObjectId
+  Category       Category           @relation(fields: [categoryId], references: [id])
   Instructor     Instructor[]
   Tag            Tag[]
   Module         Module[]
   Question       Question[]
-  SubscribedUser SubscribedUser[]
+  SubscribedUser SubscribedCourse[]
 }
 
 model Instructor {
@@ -91,19 +91,28 @@ model QuestionOption {
 }
 
 model User {
-  id             String           @id @default(auto()) @map("_id") @db.ObjectId
-  clerkId        String?          @unique
+  id             String             @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId        String?            @unique
   fullName       String
-  SubscribedUser SubscribedUser[]
+  SubscribedUser SubscribedCourse[]
 }
 
-model SubscribedUser {
+model SubscribedCourse {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  courseId        String    @db.ObjectId
   userId          String    @db.ObjectId
+  courseId        String    @db.ObjectId
   finishedAt      DateTime?
   startedAt       DateTime?
   currentLessonId String    @db.ObjectId
   course          Course    @relation(fields: [courseId], references: [id])
   user            User      @relation(fields: [userId], references: [id])
+}
+
+model ErrorLog {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  message    String
+  stackTrace String?
+  timestamp  DateTime @default(now())
+  endpoint   String?
+  userId     String?  @db.ObjectId
 }
