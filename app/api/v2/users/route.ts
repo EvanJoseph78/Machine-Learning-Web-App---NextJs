@@ -2,73 +2,54 @@ import {
   createUserController,
   getAllUsersController,
 } from "@/controllers/userController";
-import { NextRequest, NextResponse } from "next/server";
 import { logError } from "@/services/logError";
 import { User } from "@prisma/client";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
- * Handler para a rota GET que retorna todos os usuários.
- * Caso haja erro, ele é registrado no banco de dados.
+ * Handler para requisições GET (retorna todos os usuários).
  *
- * @returns {NextResponse} - Retorna uma resposta com a lista de usuários ou um erro 500.
+ * @returns Resposta HTTP com a lista de usuários ou erro.
  */
 export async function GET(): Promise<NextResponse> {
   try {
-    // Chama o controller que busca todos os usuários
     return await getAllUsersController();
   } catch (error) {
-    // Log de erro para diagnóstico
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
-    const errorStack = error instanceof Error ? error.stack : undefined;
-    const endpoint = "/api/users";
-    const userId = undefined;
-
-    // Registrar o erro no banco de dados
-    await logError(errorMessage, errorStack, endpoint, userId);
-
     console.error("Error in GET users endpoint:", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    await logError(
+      "Erro na rota GET de usuários",
+      "/api/users",
+      error instanceof Error ? error.message : "Unknown error"
+    );
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
+
 /**
- * Função para lidar com requisições POST.
- * Processa a requisição, cria um novo usuário e retorna uma resposta adequada.
+ * Handler para requisições POST (criação de usuário).
  *
- * @returns {NextResponse}
+ * @param req Requisição HTTP com os dados do usuário.
+ * @returns Resposta HTTP indicando sucesso ou erro.
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
-    // Supondo que o corpo da requisição contenha os dados do usuário
     const { clerkId, fullName } = await req.json();
 
-    // Monta o objeto user com os dados recebidos
-    const user: User = {
-      clerkId,
-      fullName,
-      id: "677602e404e4b3ad0a29cf35",
-    };
-
-    // Chama o controlador para criar o usuário
-    await createUserController(user);
-
-    // Responde com sucesso após a criação do usuário
-    return new NextResponse("User created successfully", { status: 201 });
+    const user: Omit<User, "id"> = { clerkId, fullName };
+    return await createUserController(user);
   } catch (error) {
-    // Log de erro para diagnóstico
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
-    const errorStack = error instanceof Error ? error.stack : undefined;
-    const endpoint = "/api/users";
-    const userId = undefined;
-
-    // Registrar o erro no banco de dados
-    await logError(errorMessage, errorStack, endpoint, userId);
-
-    // Em caso de erro, loga o erro para depuração
-    console.error("Error processing the POST request:", error);
-
-    // Retorna uma resposta de erro 500 (Internal Server Error)
-    return new NextResponse("Internal Server Error", { status: 500 });
+    console.error("Error processing POST request:", error);
+    await logError(
+      "Erro na rota POST de criação de usuário",
+      "/api/users",
+      error instanceof Error ? error.message : "Unknown error"
+    );
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

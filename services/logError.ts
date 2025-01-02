@@ -10,9 +10,10 @@ import { db } from "@/lib/db"; // Importar a conexão com o banco de dados
  */
 export const logError = async (
   message: string,
-  stackTrace: string | undefined,
-  endpoint: string | undefined,
-  userId: string | undefined
+  path?: string | undefined, // salva o caminho do arquivo onde ocorreu o erro
+  stackTrace?: string | undefined,
+  endpoint?: string | undefined,
+  userId?: string | undefined
 ) => {
   try {
     await db.errorLog.create({
@@ -21,6 +22,7 @@ export const logError = async (
         stackTrace,
         endpoint,
         userId,
+        path,
       },
     });
     console.log("Error logged successfully.");
