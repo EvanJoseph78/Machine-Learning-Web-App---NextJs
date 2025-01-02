@@ -41,12 +41,12 @@ export const userPaths: OpenAPIV3.PathsObject = {
             schema: {
               type: "object",
               properties: {
-                clerkId: { type: "string" },
+                userId: { type: "string" },
                 fullName: { type: "string" },
               },
               required: ["name", "email"],
               example: {
-                clerkId: "12456jikadw2",
+                userId: "12456jikadw2",
                 fullName: "Ednaldo Pereira",
               },
             },
@@ -62,12 +62,12 @@ export const userPaths: OpenAPIV3.PathsObject = {
                 type: "object",
                 properties: {
                   id: { type: "string" },
-                  clerkId: { type: "string" },
+                  userId: { type: "string" },
                   fullName: { type: "string" },
                 },
                 example: {
                   id: "677688027d02698dd6e3815e",
-                  clerkId: "12456jikadw2",
+                  userId: "12456jikadw2",
                   fullName: "Ednaldo Pereira",
                 },
               },
@@ -83,7 +83,7 @@ export const userPaths: OpenAPIV3.PathsObject = {
                 properties: {
                   error: { type: "string" },
                 },
-                example: { error: "Campo 'clerkId' ou 'fullName' ausente" },
+                example: { error: "Campo 'userId' ou 'fullName' ausente" },
               },
             },
           },
@@ -94,18 +94,18 @@ export const userPaths: OpenAPIV3.PathsObject = {
       },
     },
   },
-  "/api/v2/users/{clerkId}": {
+  "/api/v2/users/{userId}": {
     patch: {
       summary: "Atualizar dados do usuário",
       tags: ["Users"],
       description:
-        "Este endpoint permite a atualização de dados de um usuário com base no seu clerkId.",
+        "Este endpoint permite a atualização de dados de um usuário com base no seu userId.",
       parameters: [
         {
-          name: "clerkId",
+          name: "userId",
           in: "path",
           required: true,
-          description: "O ID único do usuário (clerkId) a ser atualizado.",
+          description: "O ID único do usuário (userId) a ser atualizado.",
           schema: {
             type: "string",
           },
@@ -162,7 +162,7 @@ export const userPaths: OpenAPIV3.PathsObject = {
           },
         },
         "404": {
-          description: "Usuário não encontrado com o clerkId fornecido.",
+          description: "Usuário não encontrado com o userId fornecido.",
           content: {
             "application/json": {
               schema: {
@@ -196,4 +196,8 @@ export const userPaths: OpenAPIV3.PathsObject = {
       },
     },
   },
+  "/api/v2/users/{userId}/subscribeCourse/{courseId}": {},
+  "/api/v2/users/{userId}/get-userInfo": {},
+  "/api/v2/users/{userId}/course/{courseId}/finish-course": {},
+  "/api/v2/users/{userId}/course/{courseId}/get-certificate-info": {},
 };

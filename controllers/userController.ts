@@ -1,4 +1,9 @@
-import { createUser, getAllUsers, updateUser } from "@/services/userService";
+import {
+  createUser,
+  getAllUsers,
+  subscribeCourse,
+  updateUser,
+} from "@/services/userService";
 import { logError } from "@/services/logError";
 import { User } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
@@ -117,6 +122,32 @@ export const updateUserController = async (
     return new NextResponse(
       JSON.stringify({
         message: "Failed to update user. Please try again later.",
+        error: error instanceof Error ? error.message : "Unknown error",
+      }),
+      { status: 500 }
+    );
+  }
+};
+
+export const subscribeCourseController = async (
+  userId: string,
+  courseId: string
+) => {
+  if (!userId || !courseId) {
+    return new NextResponse(
+      JSON.stringify({
+        message: "User ID and Course ID are required.",
+      }),
+      { status: 400 } // 400 Bad Request
+    );
+  }
+
+  try {
+    return subscribeCourse(userId, courseId);
+  } catch (error) {
+    throw new NextResponse(
+      JSON.stringify({
+        message: "Error in subscribeCourseController",
         error: error instanceof Error ? error.message : "Unknown error",
       }),
       { status: 500 }
