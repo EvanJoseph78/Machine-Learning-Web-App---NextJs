@@ -67,6 +67,11 @@ export const updateUser = async (
     return updatedUser;
   } catch (error) {
     // console.error("Error updating user:", error);
+    if (error instanceof Error) {
+      if (error.message.includes("User with clerkId")) {
+        throw new Error(errorMessages.USER_NOT_FOUND);
+      }
+    }
 
     // Lança uma exceção para que o erro possa ser tratado no nível do controlador
     throw new Error(
