@@ -20,22 +20,22 @@ model Category {
 }
 
 model Course {
-  id             String             @id @default(auto()) @map("_id") @db.ObjectId
-  title          String
-  description    String?
-  introduction   String?
-  duration       Int                @default(0)
-  level          String             @default("basic")
-  hasCertificate Boolean            @default(false)
-  coverImageUrl  String             @default("https://i.imgur.com/bYHLC9J.png")
-  subject        String?
-  categoryId     String             @db.ObjectId
-  Category       Category           @relation(fields: [categoryId], references: [id])
-  Instructor     Instructor[]
-  Tag            Tag[]
-  Module         Module[]
-  Question       Question[]
-  SubscribedUser SubscribedCourse[]
+  id               String        @id @default(auto()) @map("_id") @db.ObjectId
+  title            String
+  description      String?
+  introduction     String?
+  duration         Int           @default(0)
+  level            String        @default("basic")
+  hasCertificate   Boolean       @default(false)
+  coverImageUrl    String        @default("https://i.imgur.com/bYHLC9J.png")
+  subject          String?
+  categoryId       String        @db.ObjectId
+  Category         Category      @relation(fields: [categoryId], references: [id])
+  Instructor       Instructor[]
+  Tag              Tag[]
+  Module           Module[]
+  Question         Question[]
+  SubscribedCourse Subscripion[]
 }
 
 model Instructor {
@@ -91,21 +91,23 @@ model QuestionOption {
 }
 
 model User {
-  id             String             @id @default(auto()) @map("_id") @db.ObjectId
-  clerkId        String?            @unique
-  fullName       String
-  SubscribedUser SubscribedCourse[]
+  id               String        @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId          String?       @unique
+  fullName         String
+  SubscribedCourse Subscripion[]
 }
 
-model SubscribedCourse {
+model Subscripion {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
   userId          String    @db.ObjectId
   courseId        String    @db.ObjectId
   finishedAt      DateTime?
   startedAt       DateTime?
-  currentLessonId String    @db.ObjectId
-  course          Course    @relation(fields: [courseId], references: [id])
-  user            User      @relation(fields: [userId], references: [id])
+  currentLessonId String?   @default("0")
+  // finisedLessons  String[] talvez tentar implementar depois
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
 }
 
 model ErrorLog {
@@ -116,4 +118,5 @@ model ErrorLog {
   endpoint   String?
   userId     String?  @db.ObjectId
   path       String?
+  statusCode Int?
 }

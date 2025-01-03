@@ -196,7 +196,46 @@ export const userPaths: OpenAPIV3.PathsObject = {
       },
     },
   },
-  "/api/v2/users/{userId}/subscribeCourse/{courseId}": {},
+  // TODO: Parei aqui - Arrumar a rota de inscrição do usuário no curso
+  "/api/v2/users/{userId}/subscribe-course/{courseId}": {
+    post: {
+      tags: ["Course Subscription"],
+      summary: "Inscrever um usuário em um curso",
+      description:
+        "Gerencia a inscrição de um usuário em um curso com base no ID do usuário e no ID do curso.",
+      parameters: [
+        {
+          name: "userId",
+          in: "path",
+          required: true,
+          description: "ID do usuário que deseja se inscrever no curso.",
+          schema: {
+            type: "string",
+          },
+        },
+        {
+          name: "courseId",
+          in: "path",
+          required: true,
+          description: "ID do curso ao qual o usuário deseja se inscrever.",
+          schema: {
+            type: "string",
+          },
+        },
+      ],
+      responses: {
+        "200": {
+          description: "Usuário inscrito com sucesso no curso.",
+        },
+        "409": {
+          description: "Usuário já inscrito no curso.",
+        },
+        "500": {
+          description: "Erro interno.",
+        },
+      },
+    },
+  },
   "/api/v2/users/{userId}/get-userInfo": {},
   "/api/v2/users/{userId}/course/{courseId}/finish-course": {},
   "/api/v2/users/{userId}/course/{courseId}/get-certificate-info": {},

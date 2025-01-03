@@ -129,10 +129,17 @@ export const updateUserController = async (
   }
 };
 
+/**
+ * Controlador para gerenciar a inscrição de um usuário em um curso.
+ *
+ * @param {string} userId - O ID do usuário.
+ * @param {string} courseId - O ID do curso.
+ * @returns {Promise<NextResponse>} Resposta HTTP com o status e dados da inscrição ou erro.
+ */
 export const subscribeCourseController = async (
   userId: string,
   courseId: string
-) => {
+): Promise<NextResponse> => {
   if (!userId || !courseId) {
     return new NextResponse(
       JSON.stringify({
@@ -143,14 +150,28 @@ export const subscribeCourseController = async (
   }
 
   try {
-    return subscribeCourse(userId, courseId);
-  } catch (error) {
-    throw new NextResponse(
+    // Chama o serviço para inscrever o usuário no curso
+    const subscription = await subscribeCourse(userId, courseId);
+    // Retorna a resposta de sucesso
+    return new NextResponse(
       JSON.stringify({
-        message: "Error in subscribeCourseController",
-        error: error instanceof Error ? error.message : "Unknown error",
+        message: "User successfully subscribed to the course.",
+        subscription,
       }),
-      { status: 500 }
+      { status: 200 } // 200 OK
     );
+  } catch (error) {
+    // console.error("Error in subscribeCourseController:", error);
+    throw new Error(
+      `${error instanceof Error ? error.message : "Unknown error"}`
+    );
+    // Retorna uma resposta de erro
+    // return new NextResponse(
+    //   JSON.stringify({
+    //     message: "An error occurred while subscribing the user to the course.",
+    //     error: error instanceof Error ? error.message : "Unknown error",
+    //   }),
+    //   { status: 500 } // 500 Internal Server Error
+    // );
   }
 };
