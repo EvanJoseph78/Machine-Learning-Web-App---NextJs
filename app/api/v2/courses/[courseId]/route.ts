@@ -1,5 +1,5 @@
-import { getCourseController } from "@/controllers/courseController";
 import { responseError } from "@/controllers/errorController";
+import { getCourse } from "@/services/courseService";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -31,7 +31,9 @@ export async function GET(
 ): Promise<NextResponse> {
   try {
     // Chama o controlador para buscar o curso pelo ID
-    return await getCourseController(params.courseId);
+    const course = await getCourse(params.courseId);
+
+    return NextResponse.json({ course }, { status: 200 });
   } catch (error) {
     // Verifica se o erro é uma instância da classe Error (erro tradicional do JavaScript)
     if (error instanceof Error) {

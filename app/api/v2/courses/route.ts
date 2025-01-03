@@ -1,5 +1,5 @@
-import { getAllCoursesController } from "@/controllers/courseController";
 import { responseError } from "@/controllers/errorController";
+import { getAllCourses } from "@/services/courseService";
 import { NextResponse } from "next/server";
 
 /**
@@ -25,7 +25,9 @@ import { NextResponse } from "next/server";
 export async function GET(): Promise<NextResponse> {
   try {
     // Tenta buscar os cursos usando o controlador centralizado
-    return await getAllCoursesController();
+    const courses = await getAllCourses();
+
+    return NextResponse.json({ courses }, { status: 200 });
   } catch (error) {
     // Tratamento de erro específico para instâncias da classe Error
     if (error instanceof Error) {

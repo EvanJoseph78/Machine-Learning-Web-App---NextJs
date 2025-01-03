@@ -42,7 +42,7 @@ export const responseError = async (
     // erros em cursos
     case `${errorMessages.COURSE_NOT_FOUND}`:
       message = errorMessages.COURSE_NOT_FOUND;
-      statusCode = 409; // Conflito (já está inscrito)
+      statusCode = 404; // Conflito (já está inscrito)
       break;
 
     // erros genéricos
