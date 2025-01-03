@@ -22,8 +22,15 @@ export const responseError = async (
   // Verifica o tipo de erro e ajusta a resposta
   switch (errorType) {
     case `${errorMessages.USER_NOT_FOUND}`:
-      console.log("evan");
       message = errorMessages.USER_NOT_FOUND;
+      statusCode = 404;
+      break;
+    case `${errorMessages.USER_ALREADY_EXISTS}`:
+      message = errorMessages.USER_ALREADY_EXISTS;
+      statusCode = 409;
+      break;
+    case `${errorMessages.USERS_NOT_FOUND}`:
+      message = errorMessages.USERS_NOT_FOUND;
       statusCode = 404;
       break;
     case `${errorMessages.SUBSCRIPTION_ERROR}`:

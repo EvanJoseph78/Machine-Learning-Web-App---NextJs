@@ -18,10 +18,8 @@ export const getAllUsersController = async (): Promise<NextResponse> => {
     const users = await getAllUsers();
     return NextResponse.json({ users }, { status: 200 });
   } catch (error) {
-    console.error("Error fetching users:", error);
-    return NextResponse.json(
-      { message: "Internal Server Error" },
-      { status: 500 }
+    throw new Error(
+      `${error instanceof Error ? error.message : "Unknown error"}`
     );
   }
 };
@@ -42,25 +40,9 @@ export const createUserController = async (
       { status: 201 }
     );
   } catch (error) {
-    await logError(
-      "Erro na criação de usuário",
-      "/controllers/userController.ts",
-      error instanceof Error ? error.message : "Unknown error"
+    throw new Error(
+      `${error instanceof Error ? error.message : "Unknown error"}`
     );
-
-    if (
-      error instanceof Error &&
-      error.message.includes(
-        "Unique constraint failed on the constraint: `User_clerkId_key`"
-      )
-    ) {
-      return NextResponse.json(
-        { message: "Usuário já cadastrado." },
-        { status: 409 }
-      );
-    }
-
-    return NextResponse.json({ message: "Erro no servidor." }, { status: 500 });
   }
 };
 
@@ -102,29 +84,9 @@ export const updateUserController = async (
     );
   } catch (error) {
     // Caso ocorra um erro, loga o erro no banco de dados e retorna uma resposta de erro
-    await logError(
-      "Erro ao atualizar usuário",
-      "controllers/userController.ts",
-      error instanceof Error ? error.message : "Unknown error"
-    );
-
-    console.error("Error updating user:", error);
-
-    // Verifica se o erro é relacionado à inexistência do usuário
-    if (error instanceof Error && error.message.includes("not found")) {
-      return new NextResponse(
-        JSON.stringify({ message: "User not found." }),
-        { status: 404 } // 404 Not Found
-      );
-    }
-
-    // Para outros erros, retorna um status 500 (Internal Server Error)
-    return new NextResponse(
-      JSON.stringify({
-        message: "Failed to update user. Please try again later.",
-        error: error instanceof Error ? error.message : "Unknown error",
-      }),
-      { status: 500 }
+    // console.error("Error in subscribeCourseController:", error);
+    throw new Error(
+      `${error instanceof Error ? error.message : "Unknown error"}`
     );
   }
 };
@@ -165,13 +127,5 @@ export const subscribeCourseController = async (
     throw new Error(
       `${error instanceof Error ? error.message : "Unknown error"}`
     );
-    // Retorna uma resposta de erro
-    // return new NextResponse(
-    //   JSON.stringify({
-    //     message: "An error occurred while subscribing the user to the course.",
-    //     error: error instanceof Error ? error.message : "Unknown error",
-    //   }),
-    //   { status: 500 } // 500 Internal Server Error
-    // );
   }
 };

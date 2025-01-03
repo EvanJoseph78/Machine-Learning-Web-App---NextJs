@@ -1,6 +1,5 @@
 import { db } from "@/lib/db"; // Instância de conexão do banco de dados
 import { User } from "@prisma/client"; // Modelo de User do Prisma
-import { logError } from "./logError";
 import { errorMessages } from "@/utils/errorMessages";
 
 /**
@@ -13,7 +12,7 @@ export const getAllUsers = async (): Promise<User[]> => {
     return await db.user.findMany();
   } catch (error) {
     console.error("Error fetching users:", error);
-    throw new Error("Failed to fetch users from the database.");
+    throw new Error(errorMessages.USERS_NOT_FOUND);
   }
 };
 
@@ -27,17 +26,12 @@ export const createUser = async (user: Omit<User, "id">): Promise<User> => {
   try {
     return await db.user.create({ data: user });
   } catch (error) {
-    console.error("Error creating user:", error);
-    await logError(
-      "Erro na criação de usuário",
-      "/services/userService.ts",
-      error instanceof Error ? error.message : "Unknown error"
-    );
-    throw new Error(
-      `Failed to create user. Error: ${
-        error instanceof Error ? error.message : "Unknown error"
-      }`
-    );
+    if (error instanceof Error) {
+      if ((error.message = "Unique constraint failed on the constraint")) {
+        throw new Error(errorMessages.USER_ALREADY_EXISTS);
+      }
+    }
+    throw new Error(errorMessages.USER_CREATION_ERROR);
   }
 };
 
@@ -73,13 +67,6 @@ export const updateUser = async (
     return updatedUser;
   } catch (error) {
     // console.error("Error updating user:", error);
-
-    // Loga o erro no console e no banco de dados
-    await logError(
-      "Erro ao atualizar usuário",
-      "services/userService.ts",
-      error instanceof Error ? error.message : "Unknown error"
-    );
 
     // Lança uma exceção para que o erro possa ser tratado no nível do controlador
     throw new Error(
