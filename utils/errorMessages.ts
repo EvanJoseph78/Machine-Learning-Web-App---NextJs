@@ -15,6 +15,8 @@ export const errorMessages = {
   USERS_NOT_FOUND: "Error fetching users",
   USER_CREATION_ERROR: "User creation error",
   USER_UPDATE_ERROR: "Failed to update user.",
-  USER_ALREADY_EXISTS: "User already exists in database",
+  USER_ALREADY_EXISTS: "User already exists in database.",
   // course errors
+  COURSE_ALREADY_EXISTS: "Course already exists.",
+  COURSE_NOT_FOUND: "Course not found.",
 };

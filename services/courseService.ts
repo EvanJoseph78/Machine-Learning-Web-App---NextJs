@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { errorMessages } from "@/utils/errorMessages";
+import { Course } from "@prisma/client";
 
 // create
 export const createCourse = async () => {};
@@ -44,7 +45,54 @@ export const getAllCourses = async (): Promise<Array<object>> => {
   }
 };
 
-export const getCourse = async () => {};
+/**
+ * Recupera um curso pelo ID.
+ *
+ * Esta função verifica se o curso com o ID fornecido existe no banco de dados
+ * e o retorna. Caso o curso não seja encontrado, uma mensagem de erro apropriada
+ * é lançada.
+ *
+ * @param {string} courseId - O identificador único do curso.
+ * @returns {Promise<Course | null>} - Retorna o curso encontrado ou `null` caso não exista.
+ *
+ * @throws {Error} - Lança um erro com mensagens apropriadas para:
+ *   - Curso já existente.
+ *   - Curso não encontrado.
+ *   - Erros inesperados do banco de dados.
+ *
+ * @example
+ * try {
+ *   const course = await getCourse("123");
+ *   console.log(course);
+ * } catch (error) {
+ *   console.error(error.message);
+ * }
+ */
+export const getCourse = async (courseId: string): Promise<Course | null> => {
+  try {
+    // Verifica se o curso já existe no banco de dados
+    const courseExists = await checkExistentCourse(courseId);
+    if (!courseExists) {
+      throw new Error(errorMessages.COURSE_NOT_FOUND); // Retorna erro caso o curso não exista
+    }
+
+    // Recupera o curso do banco de dados
+    const course = await db.course.findUnique({ where: { id: courseId } });
+
+    // Verifica se o curso foi recuperado corretamente
+    if (!course) {
+      throw new Error(errorMessages.NOT_FOUND);
+    }
+
+    return course;
+  } catch (error) {
+    // Lança erro específico ou genérico
+    throw new Error(
+      error instanceof Error ? error.message : errorMessages.UNKNOWN_ERROR
+    );
+  }
+};
+
 export const getCourseSubscribedUsers = async () => {};
 
 // read

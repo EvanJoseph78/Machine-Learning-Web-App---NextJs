@@ -39,6 +39,12 @@ export const responseError = async (
       statusCode = 409; // Conflito (já está inscrito)
       break;
 
+    // erros em cursos
+    case `${errorMessages.COURSE_NOT_FOUND}`:
+      message = errorMessages.COURSE_NOT_FOUND;
+      statusCode = 409; // Conflito (já está inscrito)
+      break;
+
     // erros genéricos
     case `${errorMessages.DATABASE_ERROR}`:
       message = errorMessages.DATABASE_ERROR;

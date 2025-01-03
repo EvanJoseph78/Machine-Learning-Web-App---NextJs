@@ -308,4 +308,87 @@ export const userPaths: OpenAPIV3.PathsObject = {
       },
     },
   },
+  "/api/v2/courses/{courseId}": {
+    get: {
+      tags: ["Courses"],
+      summary: "Recupera um curso específico pelo ID",
+      description:
+        "Essa operação recupera as informações de um curso específico a partir do seu ID, retornando os dados do curso ou uma mensagem de erro em caso de falha.",
+      operationId: "getCourse",
+      parameters: [
+        {
+          name: "courseId",
+          in: "path",
+          required: true,
+          description: "O ID único do curso a ser recuperado.",
+          schema: {
+            type: "string",
+          },
+        },
+      ],
+      responses: {
+        "200": {
+          description: "Curso recuperado com sucesso.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  course: {
+                    type: "object",
+                    properties: {
+                      id: {
+                        type: "string",
+                        description: "O ID do curso.",
+                      },
+                      name: {
+                        type: "string",
+                        description: "O nome do curso.",
+                      },
+                      description: {
+                        type: "string",
+                        description: "Descrição do curso.",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        "404": {
+          description: "Curso não encontrado.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  message: {
+                    type: "string",
+                    example: "Curso não encontrado.",
+                  },
+                },
+              },
+            },
+          },
+        },
+        "500": {
+          description: "Erro interno do servidor.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  message: {
+                    type: "string",
+                    example: "Erro interno",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 };
