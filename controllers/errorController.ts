@@ -21,6 +21,7 @@ export const responseError = async (
 
   // Verifica o tipo de erro e ajusta a resposta
   switch (errorType) {
+    // erros de user
     case `${errorMessages.USER_NOT_FOUND}`:
       message = errorMessages.USER_NOT_FOUND;
       statusCode = 404;
@@ -37,6 +38,8 @@ export const responseError = async (
       message = errorMessages.SUBSCRIPTION_ERROR;
       statusCode = 409; // Conflito (já está inscrito)
       break;
+
+    // erros genéricos
     case `${errorMessages.DATABASE_ERROR}`:
       message = errorMessages.DATABASE_ERROR;
       statusCode = 500; // Erro interno de banco de dados

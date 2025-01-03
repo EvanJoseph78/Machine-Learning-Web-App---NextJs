@@ -8,7 +8,7 @@ export const errorMessages = {
     "An error occurred while subscribing the user to the course.",
   ERROR_SUBSCRIBING_USER: "Error subscribing user to course.",
   UNKNOWN_ERROR: "Unkonwn error.",
-  DATABASE_ERROR: "Unkonwn error.",
+  DATABASE_ERROR: "Database error.",
   NOT_FOUND: "Resource not found.",
   GENERIC_ERROR: "An generic error ocurred",
   INTERNAL_SERVER_ERROR: "Internal server error",
@@ -16,4 +16,5 @@ export const errorMessages = {
   USER_CREATION_ERROR: "User creation error",
   USER_UPDATE_ERROR: "Failed to update user.",
   USER_ALREADY_EXISTS: "User already exists in database",
+  // course errors
 };

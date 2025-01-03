@@ -3,6 +3,7 @@ import { OpenAPIV3 } from "openapi-types";
 
 // Definindo a documentação dos endpoints de Usuários
 export const userPaths: OpenAPIV3.PathsObject = {
+  // rotas de usuários
   "/api/v2/users": {
     get: {
       summary: "Retrieve all users",
@@ -196,7 +197,6 @@ export const userPaths: OpenAPIV3.PathsObject = {
       },
     },
   },
-  // TODO: Parei aqui - Arrumar a rota de inscrição do usuário no curso
   "/api/v2/users/{userId}/subscribe-course/{courseId}": {
     post: {
       tags: ["Course Subscription"],
@@ -239,4 +239,73 @@ export const userPaths: OpenAPIV3.PathsObject = {
   "/api/v2/users/{userId}/get-userInfo": {},
   "/api/v2/users/{userId}/course/{courseId}/finish-course": {},
   "/api/v2/users/{userId}/course/{courseId}/get-certificate-info": {},
+  // rotas de cursos
+  "/api/v2/courses": {
+    get: {
+      summary: "Obter todos os cursos",
+      description: "Retorna uma lista de todos os cursos disponíveis.",
+      tags: ["Courses"],
+      responses: {
+        "200": {
+          description: "Lista de cursos obtida com sucesso.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  courses: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        id: {
+                          type: "string",
+                          example: "12345",
+                        },
+                        name: {
+                          type: "string",
+                          example: "Introdução à Programação",
+                        },
+                        description: {
+                          type: "string",
+                          example:
+                            "Curso básico de programação para iniciantes.",
+                        },
+                        createdAt: {
+                          type: "string",
+                          format: "date-time",
+                          example: "2023-12-01T12:00:00Z",
+                        },
+                        updatedAt: {
+                          type: "string",
+                          format: "date-time",
+                          example: "2023-12-15T12:00:00Z",
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        "500": {
+          description: "Erro interno no servidor.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  message: {
+                    type: "string",
+                    example: "Erro interno no servidor.",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 };
