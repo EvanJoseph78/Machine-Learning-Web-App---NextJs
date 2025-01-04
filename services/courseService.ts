@@ -177,10 +177,45 @@ export const getCourseSubscribedUsers = async (
   }
 };
 
-// read
-
 // update
-export const updateCourse = async () => {};
+
+/**
+ * Atualiza os detalhes de um curso existente no banco de dados.
+ *
+ * @param {string} courseId - ID único do curso que será atualizado.
+ * @param {object} values - Objeto contendo as propriedades a serem atualizadas no curso.
+ * @returns {Promise<Course>} - O curso atualizado.
+ * @throws {Error} - Lança erro caso o curso não seja encontrado ou ocorra algum problema na atualização.
+ */
+export const updateCourse = async (
+  courseId: string,
+  values: Record<string, any>
+): Promise<Course> => {
+  try {
+    // Verifica se o curso existe no banco de dados
+    const courseExists = await checkExistentCourse(courseId);
+    if (!courseExists) {
+      throw new Error(errorMessages.COURSE_NOT_FOUND); // Lança erro caso o curso não exista
+    }
+
+    // Atualiza o curso com os valores fornecidos
+    const updatedCourse = await db.course.update({
+      where: { id: courseId },
+      data: {
+        ...values, // Atualiza com os valores fornecidos dinamicamente
+      },
+    });
+
+    return updatedCourse;
+  } catch (error) {
+    console.error(`Erro ao atualizar o curso: ${error}`);
+    // Lança erro específico ou genérico
+    throw new Error(
+      error instanceof Error ? error.message : errorMessages.UNKNOWN_ERROR
+    );
+  }
+};
+
 export const updateModule = async () => {};
 export const updateLesson = async () => {};
 

@@ -71,6 +71,7 @@ export const coursePaths: OpenAPIV3.PathsObject = {
       },
     },
     post: {
+      tags: ["Courses"],
       summary: "Cria um novo curso",
       description: "Endpoint para criar um curso com base no título fornecido.",
       operationId: "createCourse",
@@ -213,6 +214,92 @@ export const coursePaths: OpenAPIV3.PathsObject = {
         },
       },
     },
+    patch: {
+      summary: "Atualizar Curso",
+      description:
+        "Atualiza um curso com base no ID fornecido e nos valores enviados no corpo da requisição.",
+      tags: ["Courses"],
+      parameters: [
+        {
+          name: "courseId",
+          in: "path",
+          description: "ID do curso a ser atualizado",
+          required: true,
+          schema: {
+            type: "string",
+          },
+        },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                title: {
+                  type: "string",
+                  description: "Novo título do curso",
+                  example: "Introdução ao JavaScript",
+                },
+                description: {
+                  type: "string",
+                  description: "Nova descrição do curso",
+                  example:
+                    "Um curso introdutório para aprender os fundamentos do JavaScript.",
+                },
+                categoryId: {
+                  type: "string",
+                  description: "Nova categoria",
+                  example: "677954b8cfffa6bf50c3bb23",
+                },
+              },
+            },
+          },
+        },
+      },
+      responses: {
+        "200": {
+          description: "Curso atualizado com sucesso",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                example: {
+                  id: "123",
+                  title: "Novo título",
+                  categoryId: "456",
+                },
+              },
+            },
+          },
+        },
+        "400": {
+          description: "Erro de validação nos dados enviados",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                example: {
+                  message: "Os valores para atualização são obrigatórios.",
+                },
+              },
+            },
+          },
+        },
+        "500": {
+          description: "Erro interno no servidor",
+          content: {
+            "application/json": {
+              schema: {
+                type: "string",
+                example: "Erro interno no servidor",
+              },
+            },
+          },
+        },
+      },
+    },
   },
   "/api/v2/courses/{courseId}/subscribed-users": {
     get: {
@@ -276,3 +363,11 @@ export const coursePaths: OpenAPIV3.PathsObject = {
     },
   },
 };
+
+// values: {
+//   type: "object",
+//   description: "Valores a serem atualizados no curso",
+//   example: {
+//     title: "Novo Título",
+//   },
+// },

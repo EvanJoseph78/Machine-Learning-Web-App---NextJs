@@ -1,5 +1,9 @@
 import { responseError } from "@/controllers/errorController";
-import { createCourse, getAllCourses } from "@/services/courseService";
+import {
+  createCourse,
+  getAllCourses,
+  updateCourse,
+} from "@/services/courseService";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -55,12 +59,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const body = await req.json();
 
     // Valida os dados obrigatórios
-    // if (!body.categoryId || !body.courseTitle) {
-    //   return NextResponse.json(
-    //     { message: "categoryId e courseTitle são obrigatórios." },
-    //     { status: 400 }
-    //   );
-    // }
+    if (!body.categoryId || !body.courseTitle) {
+      return NextResponse.json(
+        { message: "categoryId e courseTitle são obrigatórios." },
+        { status: 400 }
+      );
+    }
 
     // Cria o curso utilizando os dados fornecidos
     const course = await createCourse(body.courseTitle);
@@ -68,9 +72,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     // Retorna o curso criado com status 201
     return NextResponse.json(course, { status: 201 });
   } catch (error) {
-    if (error instanceof Error) {
-      console.log(error.message);
-    }
     // Tratamento de erro específico para instâncias de Error
     if (error instanceof Error) {
       return responseError(

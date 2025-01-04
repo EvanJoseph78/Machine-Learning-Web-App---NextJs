@@ -1,5 +1,5 @@
 import { responseError } from "@/controllers/errorController";
-import { getCourse } from "@/services/courseService";
+import { getCourse, updateCourse } from "@/services/courseService";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -47,5 +47,55 @@ export async function GET(
 
     // Caso o erro não seja uma instância de Error, retorna uma resposta de erro genérico
     return new NextResponse("Erro interno", { status: 500 });
+  }
+}
+
+/**
+ * Função para atualizar um curso com base no ID fornecido.
+ *
+ * @param req - Objeto da requisição do Next.js contendo os dados para atualização.
+ * @param params - Parâmetro contendo o ID do curso a ser atualizado.
+ * @returns Retorna a resposta JSON com o curso atualizado ou o erro correspondente.
+ */
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: { courseId: string } }
+): Promise<NextResponse> {
+  try {
+    // Processa o corpo da requisição
+    const values = await req.json();
+
+    // Valida os dados obrigatórios
+    if (
+      !values ||
+      typeof values !== "object" ||
+      Object.keys(values).length === 0
+    ) {
+      return NextResponse.json(
+        { message: "Os valores para atualização são obrigatórios." },
+        { status: 400 }
+      );
+    }
+    // Atualiza o curso no banco de dados
+    const updatedCourse = await updateCourse(params.courseId, values);
+
+    // Retorna o curso atualizado com status 200
+    return NextResponse.json(updatedCourse, { status: 200 });
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log("Erro: " + error.message);
+    }
+
+    // Tratamento de erro específico para instâncias de Error
+    if (error instanceof Error) {
+      return responseError(
+        error.message, // Mensagem do erro
+        "app/api/v2/users/route.ts", // Caminho do arquivo onde ocorreu o erro
+        `${error.stack}` // Stack trace para depuração
+      );
+    }
+
+    // Tratamento genérico para erros inesperados
+    return new NextResponse("Erro interno no servidor", { status: 500 });
   }
 }
