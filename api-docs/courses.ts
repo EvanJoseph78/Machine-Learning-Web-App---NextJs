@@ -70,6 +70,66 @@ export const coursePaths: OpenAPIV3.PathsObject = {
         },
       },
     },
+    post: {
+      summary: "Cria um novo curso",
+      description: "Endpoint para criar um curso com base no título fornecido.",
+      operationId: "createCourse",
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                courseTitle: {
+                  type: "string",
+                  description: "Título do curso a ser criado.",
+                },
+              },
+              required: ["courseTitle"],
+            },
+            example: {
+              courseTitle: "Introdução à Programação",
+            },
+          },
+        },
+      },
+      responses: {
+        "201": {
+          description: "Curso criado com sucesso.",
+          content: {
+            "application/json": {
+              example: {
+                id: "67890",
+                title: "Introdução à Programação",
+                createdAt: "2025-01-04T12:00:00Z",
+                updatedAt: "2025-01-04T12:00:00Z",
+              },
+            },
+          },
+        },
+        "400": {
+          description: "Erro de validação dos parâmetros.",
+          content: {
+            "application/json": {
+              example: {
+                message: "courseTitle é obrigatório.",
+              },
+            },
+          },
+        },
+        "500": {
+          description: "Erro interno no servidor.",
+          content: {
+            "application/json": {
+              example: {
+                message: "Erro interno no servidor.",
+              },
+            },
+          },
+        },
+      },
+    },
   },
   "/api/v2/courses/{courseId}": {
     get: {

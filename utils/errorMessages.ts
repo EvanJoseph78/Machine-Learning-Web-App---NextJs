@@ -19,4 +19,6 @@ export const errorMessages = {
   // course errors
   COURSE_ALREADY_EXISTS: "Course already exists.",
   COURSE_NOT_FOUND: "Course not found.",
+  // category errors
+  CATEGORY_NOT_FOUND: "Category not found.",
 };

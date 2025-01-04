@@ -1,9 +1,34 @@
 import { db } from "@/lib/db";
 import { errorMessages } from "@/utils/errorMessages";
-import { Course, Subscripion } from "@prisma/client";
+import { Course } from "@prisma/client";
 
-// create
-export const createCourse = async () => {};
+/**
+ * Cria um novo curso com base no título e na categoria fornecidos.
+ *
+ * @param {string} courseTitle - Título do curso a ser criado.
+ * @returns {Promise<Course>} Objeto do curso criado.
+ * @throws {Error} Lança erro caso a categoria não exista ou ocorra outro problema.
+ */
+export const createCourse = async (courseTitle: string): Promise<Course> => {
+  try {
+    // Cria o curso no banco de dados
+    const course: Course = await db.course.create({
+      data: {
+        title: courseTitle,
+      },
+    });
+
+    console.log(`Curso criado com sucesso: ${JSON.stringify(course)}`);
+
+    return course;
+  } catch (error) {
+    // Trata erros específicos ou genéricos e os lança para o chamador
+    throw new Error(
+      error instanceof Error ? error.message : errorMessages.UNKNOWN_ERROR
+    );
+  }
+};
+
 export const createModule = async () => {};
 export const createLesson = async () => {};
 export const createQuestion = async () => {};

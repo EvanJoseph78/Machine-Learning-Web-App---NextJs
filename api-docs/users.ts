@@ -239,6 +239,4 @@ export const userPaths: OpenAPIV3.PathsObject = {
   "/api/v2/users/{userId}/get-userInfo": {},
   "/api/v2/users/{userId}/course/{courseId}/finish-course": {},
   "/api/v2/users/{userId}/course/{courseId}/get-certificate-info": {},
-  // rotas de cursos
-
 };

@@ -24,13 +24,13 @@ model Course {
   title            String
   description      String?
   introduction     String?
-  duration         Int           @default(0)
-  level            String        @default("basic")
-  hasCertificate   Boolean       @default(false)
-  coverImageUrl    String        @default("https://i.imgur.com/bYHLC9J.png")
+  duration         Int?          @default(0)
+  level            String?       @default("basic")
+  hasCertificate   Boolean?      @default(false)
+  coverImageUrl    String?       @default("https://i.imgur.com/bYHLC9J.png")
   subject          String?
-  categoryId       String        @db.ObjectId
-  Category         Category      @relation(fields: [categoryId], references: [id])
+  categoryId       String?       @db.ObjectId
+  Category         Category?     @relation(fields: [categoryId], references: [id])
   Instructor       Instructor[]
   Tag              Tag[]
   Module           Module[]
