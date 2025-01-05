@@ -1,5 +1,9 @@
 import { throwErrorMessage } from "@/controllers/errorController";
-import { createLesson, getAllLessons } from "@/services/courseService";
+import {
+  createLesson,
+  getAllLessons,
+  updateLesson,
+} from "@/services/courseService";
 import { Lesson } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -27,7 +31,6 @@ export async function POST(
 
     return NextResponse.json(lesson, { status: 201 });
   } catch (error) {
-
     return throwErrorMessage(
       error,
       "app/api/v2/courses/[courseId]/lessons/route.ts"
@@ -61,6 +64,42 @@ export async function GET(
     return NextResponse.json(lessons, { status: 200 });
   } catch (error) {
     // Lida com erros e retorna a mensagem apropriada
+    return throwErrorMessage(
+      error,
+      "app/api/v2/courses/[courseId]/lessons/route.ts"
+    );
+  }
+}
+
+/**
+ * Handler para o endpoint PATCH que atualiza os dados de uma lição existente.
+ *
+ * @param req - Objeto da requisição que contém o corpo da atualização (JSON) com os campos para atualizar.
+ * @returns
+ * - Um JSON com a lição atualizada e o status 200 se bem-sucedido.
+ * - Um JSON com uma mensagem de erro e o status apropriado em caso de falha.
+ *
+ * @throws Lança um erro detalhado com contexto se ocorrer falha na atualização.
+ */
+export async function PATCH(req: NextRequest) {
+  try {
+    // Extrai o lessonId e outros valores do corpo da requisição
+    const { lessonId, ...values } = await req.json();
+
+    // Valida se o campo 'lessonId' foi fornecido
+    if (!lessonId) {
+      return NextResponse.json("Campo 'lessonId' é necessário.", {
+        status: 400, // Bad Request
+      });
+    }
+
+    // Atualiza a lição utilizando a função apropriada
+    const updatedLesson = await updateLesson(lessonId, values);
+
+    // Retorna a lição atualizada com sucesso
+    return NextResponse.json(updatedLesson, { status: 200 }); // OK
+  } catch (error) {
+    // Trata o erro de forma centralizada
     return throwErrorMessage(
       error,
       "app/api/v2/courses/[courseId]/lessons/route.ts"

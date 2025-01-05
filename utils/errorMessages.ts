@@ -23,7 +23,16 @@ export const errorMessages = {
   COURSE_ALREADY_EXISTS: "Course already exists.",
   COURSE_NOT_FOUND: "Course not found.",
   COURSE_TITLE_REQUIRED: "CourseTitle are needed.",
+
+  // modules
+
   MODULE_NUMBER_CONFLICT: "A module with this number already exists.",
+  MODULE_NOT_FOUND: "Module not found.",
+
+  // Lessons errors
+
+  LESSON_NOT_FOUND: "This lesson does not exists in this course.",
+
   // category errors
   CATEGORY_NOT_FOUND: "Category not found.",
   // general errors

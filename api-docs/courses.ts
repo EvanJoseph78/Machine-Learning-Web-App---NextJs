@@ -587,5 +587,60 @@ export const coursePaths: OpenAPIV3.PathsObject = {
         },
       },
     },
+
+    patch: {
+      tags: ["Lessons"],
+      summary: "Atualiza uma aula",
+      description: "Usa o id de uma aula para atualizar a aula.",
+      requestBody: {
+        description: "Dados da nova lição a ser atualizada.",
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                lessonId: {
+                  type: "string",
+                  description: "O id da lição a ser atualizada.",
+                  example: "677ab532e989ec1e19acc478",
+                },
+                title: {
+                  type: "string",
+                  example: "novo título da aula",
+                },
+                number: {
+                  type: "number",
+                  example: 1,
+                },
+                attachment: {
+                  type: "string",
+                  example: "link",
+                },
+                videoUrl: {
+                  type: "string",
+                  description: "Url do vídeo da aula",
+                  example: "https://www.youtube.com/watch?v=LI4ipd6mwcc&t=1s",
+                },
+                moduleId: {
+                  type: "string",
+                  description: "id do módulo para mudar o módulo da aula",
+                  example: "6779ba29005ed8f2c04a339b",
+                },
+              },
+              required: ["lessonId"],
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: "Atualizado com sucesso",
+        },
+        500: {
+          description: "Erro interno.",
+        },
+      },
+    },
   },
 };

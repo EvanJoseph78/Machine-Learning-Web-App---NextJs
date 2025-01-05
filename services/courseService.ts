@@ -1,7 +1,6 @@
 import { db } from "@/lib/db";
 import { errorMessages } from "@/utils/errorMessages";
-import { Course, Lesson, Module } from "@prisma/client";
-import { number } from "zod";
+import { Course, Module } from "@prisma/client";
 
 /**
  * Cria um novo curso com base no título e na categoria fornecidos.
@@ -78,8 +77,6 @@ export const createLesson = async (courseId: string, values: any) => {
 
     const lastLessonNumber: number = await getLastLessonNumber(courseId);
 
-    console.log("número da ultima lição: " + lastLessonNumber);
-
     const newLesson = await db.lesson.create({
       data: { courseId, number: lastLessonNumber, ...values },
     });
@@ -92,6 +89,7 @@ export const createLesson = async (courseId: string, values: any) => {
     throw new Error(errorMessage);
   }
 };
+
 export const createQuestion = async () => {};
 export const createOption = async () => {};
 
@@ -313,7 +311,49 @@ export const updateCourse = async (
 };
 
 export const updateModule = async () => {};
-export const updateLesson = async () => {};
+
+/**
+ * Atualiza os dados de uma lição existente no banco de dados.
+ *
+ * @param lessonId - O ID da lição a ser atualizada.
+ * @param values - Um objeto contendo os campos a serem atualizados. Exemplo:
+ * `{ title: string, number: number, moduleId: string, ... }`.
+ *
+ * @returns
+ * - O objeto da lição atualizado, caso a operação seja bem-sucedida.
+ *
+ * @throws
+ * - Lança um erro com a mensagem apropriada nos seguintes casos:
+ *   - A lição não existe no banco de dados (`LESSON_NOT_FOUND`).
+ *   - O módulo associado não existe no banco de dados (`MODULE_NOT_FOUND`).
+ *   - Um erro desconhecido ocorreu durante a operação (`UNKNOWN_ERROR`).
+ */
+export const updateLesson = async (lessonId: string, values: any) => {
+  try {
+    // Verifica se a lição existe
+    if (!(await checkExistentlesson(lessonId))) {
+      throw new Error(errorMessages.LESSON_NOT_FOUND);
+    }
+
+    // Verifica se o módulo associado existe, se `moduleId` estiver presente nos valores
+    if (values.moduleId && !(await checkExistentModule(values.moduleId))) {
+      throw new Error(errorMessages.MODULE_NOT_FOUND);
+    }
+
+    // Atualiza a lição no banco de dados
+    const updatedLesson = db.lesson.update({
+      where: { id: lessonId },
+      data: { ...values }, // Aplica as atualizações passadas no objeto `values`
+    });
+
+    return updatedLesson; // Retorna a lição atualizada
+  } catch (error) {
+    // Lança o erro apropriado
+    throw new Error(
+      `${error instanceof Error ? error.message : errorMessages.UNKNOWN_ERROR}`
+    );
+  }
+};
 
 // delete
 export const deleteCourse = async () => {};
@@ -334,6 +374,28 @@ export const checkExistentCourse = async (
 ): Promise<boolean> => {
   const course = await db.course.findUnique({ where: { id: courseId } });
   return course !== null;
+};
+
+export const checkExistentModule = async (moduleId: string) => {
+  try {
+    const module = await db.module.findUnique({ where: { id: moduleId } });
+    return module !== null;
+  } catch (error) {
+    throw new Error(
+      `${error instanceof Error ? error.message : errorMessages.UNKNOWN_ERROR}`
+    );
+  }
+};
+
+export const checkExistentlesson = async (lessonId: string) => {
+  try {
+    const lesson = await db.lesson.findUnique({ where: { id: lessonId } });
+    return lesson !== null;
+  } catch (error) {
+    throw new Error(
+      `${error instanceof Error ? error.message : errorMessages.UNKNOWN_ERROR}`
+    );
+  }
 };
 
 /**

@@ -117,6 +117,18 @@ const getStatusDetails = (
         messageError: errorMessages.USERS_NOT_FOUND,
       };
 
+    case messageError.includes(errorMessages.MODULE_NOT_FOUND):
+      return {
+        statusCode: 404,
+        messageError: errorMessages.MODULE_NOT_FOUND,
+      };
+
+    case messageError.includes(errorMessages.LESSON_NOT_FOUND):
+      return {
+        statusCode: 404,
+        messageError: errorMessages.LESSON_NOT_FOUND,
+      };
+
     case messageError.includes(errorMessages.COURSE_NOT_FOUND):
       return {
         statusCode: 404,
