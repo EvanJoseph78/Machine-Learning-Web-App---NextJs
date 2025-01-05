@@ -1,30 +1,37 @@
 import { throwErrorMessage } from "@/controllers/errorController";
 import { createLesson, getAllLessons } from "@/services/courseService";
+import { Lesson } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * Endpoint para criar uma nova lição em um curso específico.
+ *
+ * Este endpoint aceita uma solicitação POST com os detalhes da lição a ser criada,
+ * vinculada a um curso identificado por `courseId`.
+ *
+ * @param req - Objeto de requisição que contém os dados da nova lição no corpo (JSON).
+ * @param params - Parâmetros da rota contendo o ID do curso (`courseId`).
+ * @returns Retorna a nova lição criada em formato JSON (status 201) ou uma mensagem de erro detalhada.
+ *
+ * @throws {Error} Caso `courseId` não seja fornecido.
+ * @throws {Error} Caso os dados para a criação da lição estejam ausentes ou inválidos.
+ * @throws {Error} Caso o curso associado não exista.
+ */
 export async function POST(
   req: NextRequest,
   { params }: { params: { courseId: string } }
 ) {
   try {
     const values = await req.json();
+    const lesson = await createLesson(params.courseId, values);
 
-    if (
-      !values ||
-      typeof values !== "object" ||
-      Object.keys(values).length === 0
-    ) {
-      throw new Error("Os valores para atualização são obrigatórios.");
-    }
-
-    if (!values.number || !values.title) {
-      throw new Error("Os valores number e title são obrigatórios");
-    }
-
-    const newLesson = await createLesson(params.courseId, values);
-    return NextResponse.json(newLesson, { status: 200 });
+    return NextResponse.json(lesson, { status: 201 });
   } catch (error) {
-    throwErrorMessage(error, "app/api/v2/courses/[courseId]/lessons/route.ts");
+
+    return throwErrorMessage(
+      error,
+      "app/api/v2/courses/[courseId]/lessons/route.ts"
+    );
   }
 }
 

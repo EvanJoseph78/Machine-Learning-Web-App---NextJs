@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { errorMessages } from "@/utils/errorMessages";
-import { Course, Module } from "@prisma/client";
+import { Course, Lesson, Module } from "@prisma/client";
+import { number } from "zod";
 
 /**
  * Cria um novo curso com base no título e na categoria fornecidos.
@@ -60,17 +61,35 @@ export const createModule = async (
   }
 };
 
+/**
+ * Cria uma nova lição associada a um curso específico.
+ *
+ * @param courseId - O ID do curso ao qual a lição será associada.
+ * @param values - Um objeto contendo os valores necessários para criar a lição, exceto o ID.
+ * @returns A lição recém-criada como um objeto.
+ * @throws Lança um erro se o curso não for encontrado ou se houver falhas durante a criação da lição.
+ */
 export const createLesson = async (courseId: string, values: any) => {
   try {
-    console.log(courseId, values.title);
+    if (!(await checkExistentCourse(courseId))) {
+      console.log("não encontrado");
+      throw new Error(errorMessages.COURSE_NOT_FOUND);
+    }
+
+    const lastLessonNumber: number = await getLastLessonNumber(courseId);
+
+    console.log("número da ultima lição: " + lastLessonNumber);
+
+    const newLesson = await db.lesson.create({
+      data: { courseId, number: lastLessonNumber, ...values },
+    });
+
+    return newLesson;
   } catch (error) {
-    throw new Error(
-      `${
-        error instanceof Error
-          ? error.message
-          : `${errorMessages.UNKNOWN_ERROR}`
-      }`
-    );
+    // Trata o erro e lança a mensagem apropriada
+    const errorMessage =
+      error instanceof Error ? error.message : errorMessages.UNKNOWN_ERROR;
+    throw new Error(errorMessage);
   }
 };
 export const createQuestion = async () => {};
@@ -315,4 +334,40 @@ export const checkExistentCourse = async (
 ): Promise<boolean> => {
   const course = await db.course.findUnique({ where: { id: courseId } });
   return course !== null;
+};
+
+/**
+ * Obtém o próximo número disponível para uma lição em um curso específico.
+ * Responsável por deixar automático o número da aula
+ *
+ * @param courseId - O ID do curso para o qual o número da próxima lição será calculado.
+ * @returns O próximo número disponível para uma lição no curso (incrementa o maior número existente).
+ * @throws Lança um erro caso ocorra uma falha durante a execução da operação.
+ */
+export const getLastLessonNumber = async (
+  courseId: string
+): Promise<number> => {
+  try {
+    // Obtém todas as lições do curso
+    const lessons = await db.lesson.findMany({ where: { courseId } });
+
+    // Caso não existam lições, retorna 1 como o próximo número
+    if (!lessons || lessons.length === 0) {
+      return 1;
+    }
+
+    // Calcula o maior número de lição existente
+    const lastLessonNumber = lessons.reduce(
+      (max, lesson) => (lesson.number > max ? lesson.number : max),
+      1
+    );
+
+    // Retorna o próximo número incrementado
+    return lastLessonNumber + 1;
+  } catch (error) {
+    // Trata e lança um erro apropriado
+    const errorMessage =
+      error instanceof Error ? error.message : errorMessages.UNKNOWN_ERROR;
+    throw new Error(errorMessage);
+  }
 };

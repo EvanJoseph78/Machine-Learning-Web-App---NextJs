@@ -472,5 +472,120 @@ export const coursePaths: OpenAPIV3.PathsObject = {
         },
       },
     },
+
+    post: {
+      summary: "Cria uma nova lição",
+      description: "Cria uma nova lição vinculada a um curso específico.",
+      tags: ["Lessons"],
+      parameters: [
+        {
+          name: "courseId",
+          in: "path",
+          description: "O ID do curso ao qual a nova lição será vinculada.",
+          required: true,
+          schema: {
+            type: "string",
+            example: "64d1f5d8aabc123456789012",
+          },
+        },
+      ],
+      requestBody: {
+        description: "Dados da nova lição a ser criada.",
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                title: {
+                  type: "string",
+                  description: "O título da lição.",
+                  example: "Introdução ao curso",
+                },
+                videoUrl: {
+                  type: "string",
+                  description: "Url do vídeo da aula",
+                  example: "https://www.youtube.com/watch?v=LI4ipd6mwcc&t=1s",
+                },
+              },
+              required: ["title"],
+            },
+          },
+        },
+      },
+      responses: {
+        "201": {
+          description: "Lição criada com sucesso.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  id: {
+                    type: "string",
+                    description: "O ID da lição recém-criada.",
+                    example: "64d2f6e3aabc654321098765",
+                  },
+                  courseId: {
+                    type: "string",
+                    description: "O ID do curso associado.",
+                    example: "64d1f5d8aabc123456789012",
+                  },
+                  title: {
+                    type: "string",
+                    description: "O título da lição.",
+                    example: "Introdução ao curso",
+                  },
+                  number: {
+                    type: "integer",
+                    description: "A ordem ou número da lição.",
+                    example: 1,
+                  },
+                  description: {
+                    type: "string",
+                    description: "Descrição opcional da lição.",
+                    example: "Esta lição aborda os fundamentos do curso.",
+                  },
+                },
+              },
+            },
+          },
+        },
+        "400": {
+          description: "Erro de validação dos dados fornecidos.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  message: {
+                    type: "string",
+                    example:
+                      "O campo 'title' é obrigatório e deve ser uma string.",
+                  },
+                },
+              },
+            },
+          },
+        },
+        "500": {
+          description: "Erro interno no servidor.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  message: {
+                    type: "string",
+                    example:
+                      "Erro desconhecido ao tentar criar uma nova lição.",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   },
 };
