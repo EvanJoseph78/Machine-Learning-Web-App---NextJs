@@ -20,22 +20,22 @@ model Category {
 }
 
 model Course {
-  id               String        @id @default(auto()) @map("_id") @db.ObjectId
+  id               String         @id @default(auto()) @map("_id") @db.ObjectId
   title            String
   description      String?
   introduction     String?
-  duration         Int?          @default(0)
-  level            String?       @default("basic")
-  hasCertificate   Boolean?      @default(false)
-  coverImageUrl    String?       @default("https://i.imgur.com/bYHLC9J.png")
+  duration         Int?           @default(0)
+  level            String?        @default("basic")
+  hasCertificate   Boolean?       @default(false)
+  coverImageUrl    String?        @default("https://i.imgur.com/bYHLC9J.png")
   subject          String?
-  categoryId       String?       @db.ObjectId
-  Category         Category?     @relation(fields: [categoryId], references: [id])
+  categoryId       String?        @db.ObjectId
+  Category         Category?      @relation(fields: [categoryId], references: [id])
   Instructor       Instructor[]
   Tag              Tag[]
   Module           Module[]
   Question         Question[]
-  SubscribedCourse Subscripion[]
+  SubscribedCourse Subscription[]
 }
 
 model Instructor {
@@ -57,7 +57,7 @@ model Tag {
 
 model Module {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  number   Int
+  number   Int      @unique
   title    String?
   courseId String   @db.ObjectId
   course   Course   @relation(fields: [courseId], references: [id])
@@ -91,13 +91,13 @@ model QuestionOption {
 }
 
 model User {
-  id               String        @id @default(auto()) @map("_id") @db.ObjectId
-  clerkId          String?       @unique
+  id               String         @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId          String?        @unique
   fullName         String
-  SubscribedCourse Subscripion[]
+  SubscribedCourse Subscription[]
 }
 
-model Subscripion {
+model Subscription {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
   userId          String    @db.ObjectId
   courseId        String    @db.ObjectId
@@ -108,6 +108,8 @@ model Subscripion {
 
   user   User   @relation(fields: [userId], references: [id])
   course Course @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId]) // Define um índice único composto entre userId e courseId
 }
 
 model ErrorLog {

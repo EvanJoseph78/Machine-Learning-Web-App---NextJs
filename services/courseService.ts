@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { errorMessages } from "@/utils/errorMessages";
-import { Course } from "@prisma/client";
+import { Course, Module } from "@prisma/client";
 
 /**
  * Cria um novo curso com base no título e na categoria fornecidos.
@@ -29,7 +29,37 @@ export const createCourse = async (courseTitle: string): Promise<Course> => {
   }
 };
 
-export const createModule = async () => {};
+export const createModule = async (
+  courseId: string,
+  values: any
+): Promise<Module> => {
+  try {
+    const module: Module = await db.module.create({
+      data: {
+        courseId,
+        ...values,
+      },
+    });
+    return module;
+  } catch (error) {
+    if (error instanceof Error) {
+      if (
+        error.message.includes("Unique constraint failed on the constraint")
+      ) {
+        throw new Error(errorMessages.MODULE_NUMBER_CONFLICT);
+      }
+    }
+
+    throw new Error(
+      `${
+        error instanceof Error
+          ? error.message
+          : `${errorMessages.UNKNOWN_ERROR}`
+      }`
+    );
+  }
+};
+
 export const createLesson = async () => {};
 export const createQuestion = async () => {};
 export const createOption = async () => {};
@@ -125,7 +155,7 @@ export const getCourse = async (courseId: string): Promise<Course | null> => {
  * Caso contrário, retorna um erro indicando que o curso não foi encontrado.
  *
  * @param {string} courseId - O ID do curso para o qual os usuários inscritos devem ser recuperados.
- * @returns {Promise<Subscripion>} - Retorna os dados dos usuários inscritos no curso, se encontrados.
+ * @returns {Promise<Subscription>} - Retorna os dados dos usuários inscritos no curso, se encontrados.
  * @throws {Error} - Lança um erro se o curso não existir ou se ocorrer um erro na consulta.
  */
 export const getCourseSubscribedUsers = async (
@@ -139,7 +169,7 @@ export const getCourseSubscribedUsers = async (
     }
 
     // Consulta os usuários inscritos no curso
-    const subscribedUsers = await db.subscripion.findMany({
+    const subscribedUsers = await db.subscription.findMany({
       where: { courseId: courseId },
       include: { user: true, course: true },
     });

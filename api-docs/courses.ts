@@ -301,6 +301,94 @@ export const coursePaths: OpenAPIV3.PathsObject = {
       },
     },
   },
+  "/api/v2/courses/{courseId}/course-modules": {
+    post: {
+      tags: ["Module"],
+      summary: "Cria um novo módulo associado a um curso",
+      description:
+        "Endpoint para criar um módulo associado a um curso existente no sistema.",
+      parameters: [
+        {
+          name: "courseId",
+          in: "path",
+          required: true,
+          description: "O ID do curso ao qual o módulo será associado.",
+          schema: {
+            type: "string",
+          },
+        },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                title: {
+                  type: "string",
+                  description: "O título do módulo.",
+                  example: "Introdução ao JavaScript",
+                },
+                number: {
+                  type: "integer",
+                  description: "O número sequencial do módulo dentro do curso.",
+                  example: 1,
+                },
+              },
+              required: ["title", "number"],
+            },
+          },
+        },
+      },
+      responses: {
+        "201": {
+          description: "Módulo criado com sucesso.",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Module",
+              },
+            },
+          },
+        },
+        "400": {
+          description: "Erro de validação nos dados enviados.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  message: {
+                    type: "string",
+                    description: "Descrição do erro.",
+                    example: "O ID do curso é obrigatório.",
+                  },
+                },
+              },
+            },
+          },
+        },
+        "500": {
+          description: "Erro interno no servidor.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  message: {
+                    type: "string",
+                    description: "Mensagem detalhada do erro.",
+                    example: "Erro interno no servidor.",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
   "/api/v2/courses/{courseId}/subscribed-users": {
     get: {
       tags: ["Course Subscription"],
@@ -363,11 +451,3 @@ export const coursePaths: OpenAPIV3.PathsObject = {
     },
   },
 };
-
-// values: {
-//   type: "object",
-//   description: "Valores a serem atualizados no curso",
-//   example: {
-//     title: "Novo Título",
-//   },
-// },

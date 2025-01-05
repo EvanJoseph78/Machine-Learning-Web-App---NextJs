@@ -1,4 +1,4 @@
-import { responseError } from "@/controllers/errorController";
+import { throwErrorMessage } from "@/controllers/errorController";
 import { getCourse, updateCourse } from "@/services/courseService";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -35,18 +35,7 @@ export async function GET(
 
     return NextResponse.json({ course }, { status: 200 });
   } catch (error) {
-    // Verifica se o erro é uma instância da classe Error (erro tradicional do JavaScript)
-    if (error instanceof Error) {
-      // Caso seja, chama a função de tratamento de erro passando detalhes relevantes
-      return responseError(
-        error.message, // Mensagem de erro gerada
-        "app/api/v2/users/[userId]/subscribe-course/[courseId]/route.ts", // Caminho do arquivo onde ocorreu o erro
-        `${error.stack}` // Stack trace do erro, útil para depuração
-      );
-    }
-
-    // Caso o erro não seja uma instância de Error, retorna uma resposta de erro genérico
-    return new NextResponse("Erro interno", { status: 500 });
+    return throwErrorMessage(error, "app/api/v2/users/route.ts");
   }
 }
 
@@ -82,20 +71,6 @@ export async function PATCH(
     // Retorna o curso atualizado com status 200
     return NextResponse.json(updatedCourse, { status: 200 });
   } catch (error) {
-    if (error instanceof Error) {
-      console.log("Erro: " + error.message);
-    }
-
-    // Tratamento de erro específico para instâncias de Error
-    if (error instanceof Error) {
-      return responseError(
-        error.message, // Mensagem do erro
-        "app/api/v2/users/route.ts", // Caminho do arquivo onde ocorreu o erro
-        `${error.stack}` // Stack trace para depuração
-      );
-    }
-
-    // Tratamento genérico para erros inesperados
-    return new NextResponse("Erro interno no servidor", { status: 500 });
+    return throwErrorMessage(error, "app/api/v2/users/route.ts");
   }
 }

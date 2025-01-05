@@ -1,6 +1,8 @@
 import { db } from "@/lib/db"; // Instância de conexão do banco de dados
-import { User } from "@prisma/client"; // Modelo de User do Prisma
+import { Subscription, User } from "@prisma/client"; // Modelo de User do Prisma
 import { errorMessages } from "@/utils/errorMessages";
+import { checkExistentCourse } from "./courseService";
+import { checkExistentSubscription } from "./subscriptionService";
 
 /**
  * Obtém todos os usuários do banco de dados.
@@ -97,51 +99,33 @@ export const updateUser = async (
  *
  */
 
-export const subscribeCourse = async (
-  userId: string,
-  courseId: string
-): Promise<object | string> => {
+export const subscribeCourse = async (userId: string, courseId: string) => {
   try {
     if (!(await checkExistentUser(userId))) {
-      // Lança uma exceção para que o erro possa ser tratado no nível do controlador
       throw new Error(errorMessages.USER_NOT_FOUND);
     }
 
-    // Verifica se o usuário já está inscrito no curso
-    const subscription = await db.subscripion.findFirst({
-      where: {
-        courseId: courseId, // Adiciona a verificação para o curso específico
-        userId: userId,
-      },
-    });
-
-    // Se o usuário já estiver inscrito, lança um erro
-    if (subscription) {
-      // Lança uma exceção para que o erro possa ser tratado no nível do controlador
-      throw new Error(errorMessages.ALREADY_SUBSCRIBED);
+    if (!(await checkExistentCourse(courseId))) {
+      throw new Error(errorMessages.COURSE_NOT_FOUND);
     }
 
-    // Caso ousuário não esteja inscrito, cria uma nova inscrição
-    const newSubscription = await db.subscripion.create({
-      data: {
-        userId: userId,
-        courseId: courseId,
-        startedAt: new Date(),
-      },
+    if (await checkExistentSubscription(courseId, userId)) {
+      throw new Error(errorMessages.USER_ALREADY_SUBSCRIBED);
+    }
+
+    const subscription = await db.subscription.create({
+      data: { userId, courseId, startedAt: new Date() },
     });
 
-    return newSubscription; // Retorna a inscrição criada
+    return subscription;
   } catch (error) {
-    // Lança uma exceção para que o erro possa ser tratado no nível do controlador
+    // Trata os erros e lança com uma mensagem específica
     throw new Error(
-      `${
-        error instanceof Error
-          ? error.message
-          : `${errorMessages.UNKNOWN_ERROR}`
-      }`
+      error instanceof Error ? error.message : errorMessages.UNKNOWN_ERROR
     );
   }
 };
+
 
 export const checkExistentUser = async (userId: string) => {
   const user = await db.user.findUnique({ where: { id: userId } });

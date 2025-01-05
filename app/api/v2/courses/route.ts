@@ -1,9 +1,5 @@
-import { responseError } from "@/controllers/errorController";
-import {
-  createCourse,
-  getAllCourses,
-  updateCourse,
-} from "@/services/courseService";
+import { throwErrorMessage } from "@/controllers/errorController";
+import { createCourse, getAllCourses } from "@/services/courseService";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -33,17 +29,7 @@ export async function GET(): Promise<NextResponse> {
 
     return NextResponse.json({ courses }, { status: 200 });
   } catch (error) {
-    // Tratamento de erro específico para instâncias da classe Error
-    if (error instanceof Error) {
-      return responseError(
-        error.message, // Mensagem do erro
-        "app/api/v2/users/route.ts", // Caminho do arquivo onde ocorreu o erro
-        `${error.stack}` // Stack trace para depuração
-      );
-    }
-
-    // Tratamento genérico para erros desconhecidos
-    return new NextResponse("Erro interno", { status: 500 });
+    return throwErrorMessage(error, "app/api/v2/users/route.ts");
   }
 }
 
@@ -59,11 +45,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const body = await req.json();
 
     // Valida os dados obrigatórios
-    if (!body.categoryId || !body.courseTitle) {
-      return NextResponse.json(
-        { message: "categoryId e courseTitle são obrigatórios." },
-        { status: 400 }
-      );
+    if (!body.courseTitle) {
+      throw new Error("CourseTitle are needed.");
     }
 
     // Cria o curso utilizando os dados fornecidos
@@ -72,16 +55,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     // Retorna o curso criado com status 201
     return NextResponse.json(course, { status: 201 });
   } catch (error) {
-    // Tratamento de erro específico para instâncias de Error
-    if (error instanceof Error) {
-      return responseError(
-        error.message, // Mensagem do erro
-        "app/api/v2/users/route.ts", // Caminho do arquivo onde ocorreu o erro
-        `${error.stack}` // Stack trace para depuração
-      );
-    }
-
-    // Tratamento genérico para erros inesperados
-    return new NextResponse("Erro interno no servidor", { status: 500 });
+    return throwErrorMessage(error, "app/api/v2/users/route.ts");
   }
 }

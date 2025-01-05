@@ -16,9 +16,16 @@ export const errorMessages = {
   USER_CREATION_ERROR: "User creation error",
   USER_UPDATE_ERROR: "Failed to update user.",
   USER_ALREADY_EXISTS: "User already exists in database.",
+  USER_ALREADY_SUBSCRIBED: "User is already subscribed to this course.",
+
   // course errors
+
   COURSE_ALREADY_EXISTS: "Course already exists.",
   COURSE_NOT_FOUND: "Course not found.",
+  COURSE_TITLE_REQUIRED: "CourseTitle are needed.",
+  MODULE_NUMBER_CONFLICT: "A module with this number already exists.",
   // category errors
   CATEGORY_NOT_FOUND: "Category not found.",
+  // general errors
+  MALFORMED_OBJECT_ID_ERROR: "O id fornecido está mal formado.",
 };
