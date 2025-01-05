@@ -1,8 +1,5 @@
 import { throwErrorMessage } from "@/controllers/errorController";
-import {
-  createUserController,
-  getAllUsersController,
-} from "@/controllers/userController";
+import { createUser, getAllUsers } from "@/services/userService";
 import { User } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -13,7 +10,8 @@ import { NextRequest, NextResponse } from "next/server";
  */
 export async function GET(): Promise<NextResponse> {
   try {
-    return await getAllUsersController();
+    const users = await getAllUsers();
+    return NextResponse.json(users, { status: 200 });
   } catch (error) {
     // Se o erro capturado for uma instância da classe Error, ou seja, um erro tradicional do JavaScript
     return throwErrorMessage(error, "app/api/v2/users/route.ts");
@@ -31,7 +29,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const { clerkId, fullName } = await req.json();
 
     const user: Omit<User, "id"> = { clerkId, fullName };
-    return await createUserController(user);
+    const userResponse = await createUser(user);
+
+    return NextResponse.json(userResponse, { status: 200 });
   } catch (error) {
     // Se o erro capturado for uma instância da classe Error, ou seja, um erro tradicional do JavaScript
     return throwErrorMessage(error, "app/api/v2/users/route.ts");
