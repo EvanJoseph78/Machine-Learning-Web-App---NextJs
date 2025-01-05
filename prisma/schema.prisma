@@ -34,6 +34,7 @@ model Course {
   Instructor       Instructor[]
   Tag              Tag[]
   Module           Module[]
+  Lesson           Lesson[]
   Question         Question[]
   SubscribedCourse Subscription[]
 }
@@ -57,7 +58,7 @@ model Tag {
 
 model Module {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  number   Int      @unique
+  number   Int      @default(1)
   title    String?
   courseId String   @db.ObjectId
   course   Course   @relation(fields: [courseId], references: [id])
@@ -67,11 +68,13 @@ model Module {
 model Lesson {
   id         String  @id @default(auto()) @map("_id") @db.ObjectId
   title      String?
-  number     Int
+  number     Int     @default(1)
   attachment String?
   videoUrl   String?
-  moduleId   String  @db.ObjectId
-  Module     Module  @relation(fields: [moduleId], references: [id])
+  moduleId   String? @db.ObjectId
+  courseId   String? @db.ObjectId
+  Module     Module? @relation(fields: [moduleId], references: [id])
+  Course     Course? @relation(fields: [courseId], references: [id])
 }
 
 model Question {

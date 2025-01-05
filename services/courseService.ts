@@ -60,7 +60,19 @@ export const createModule = async (
   }
 };
 
-export const createLesson = async () => {};
+export const createLesson = async (courseId: string, values: any) => {
+  try {
+    console.log(courseId, values.title);
+  } catch (error) {
+    throw new Error(
+      `${
+        error instanceof Error
+          ? error.message
+          : `${errorMessages.UNKNOWN_ERROR}`
+      }`
+    );
+  }
+};
 export const createQuestion = async () => {};
 export const createOption = async () => {};
 
@@ -207,6 +219,41 @@ export const getCourseSubscribedUsers = async (
   }
 };
 
+/**
+ * Busca todas as lições de um curso específico.
+ *
+ * @param courseId - O ID do curso cujas lições devem ser recuperadas.
+ * @returns Uma lista de lições relacionadas ao curso fornecido.
+ * @throws Lança um erro se o curso não for encontrado ou ocorrer uma falha no processo.
+ */
+export const getAllLessons = async (courseId: string) => {
+  try {
+    // Verifica se o ID do curso é válido e se o curso existe
+    if (!courseId || typeof courseId !== "string") {
+      throw new Error(
+        "O parâmetro 'courseId' é obrigatório e deve ser uma string válida."
+      );
+    }
+
+    // Checa a existência do curso
+    const courseExists = await checkExistentCourse(courseId);
+    if (!courseExists) {
+      throw new Error(errorMessages.COURSE_NOT_FOUND);
+    }
+
+    // Busca todas as lições relacionadas ao curso
+    const lessons = await db.lesson.findMany({
+      where: { courseId: courseId },
+    });
+
+    return lessons;
+  } catch (error) {
+    // Lança o erro com a mensagem apropriada
+    const errorMessage =
+      error instanceof Error ? error.message : errorMessages.UNKNOWN_ERROR;
+    throw new Error(errorMessage);
+  }
+};
 // update
 
 /**

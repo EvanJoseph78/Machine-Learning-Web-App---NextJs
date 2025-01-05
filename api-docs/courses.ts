@@ -450,4 +450,27 @@ export const coursePaths: OpenAPIV3.PathsObject = {
       },
     },
   },
+  "/api/v2/courses/{courseId}/lessons": {
+    get: {
+      tags: ["Lessons"],
+      summary: "Obté todas as aulas de um curso",
+      operationId: "getCourseLessons",
+      parameters: [
+        {
+          name: "courseId",
+          in: "path",
+          required: true,
+          description: "ID do curso para o retornar as aulas do curso.",
+          schema: {
+            type: "string",
+          },
+        },
+      ],
+      responses: {
+        200: {
+          description: "Aulas do curso retornadas com sucesso.",
+        },
+      },
+    },
+  },
 };
