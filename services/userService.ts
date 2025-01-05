@@ -47,7 +47,8 @@ export const createUser = async (user: Omit<User, "id">): Promise<User> => {
  */
 export const updateUser = async (
   userId: string,
-  updates: Partial<{ fullName: string }>
+  // updates: Partial<{ fullName: string }>
+  values: any
 ) => {
   try {
     // Verifica se o usuário existe antes de tentar atualizá-lo
@@ -62,7 +63,9 @@ export const updateUser = async (
     // Atualiza os campos fornecidos no objeto `updates`
     const updatedUser = await db.user.update({
       where: { id: userId },
-      data: updates,
+      data: {
+        ...values,
+      },
     });
 
     console.log("Usuário atualizado com sucesso:", updatedUser);
@@ -125,7 +128,6 @@ export const subscribeCourse = async (userId: string, courseId: string) => {
     );
   }
 };
-
 
 export const checkExistentUser = async (userId: string) => {
   const user = await db.user.findUnique({ where: { id: userId } });
