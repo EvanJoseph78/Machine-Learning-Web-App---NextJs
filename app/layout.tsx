@@ -8,6 +8,8 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 
 import { cn } from "@/lib/utils"
 import { ToastProvider } from "@/components/providers/toaster-provider";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -58,7 +60,12 @@ export default function RootLayout({
             >
               <main className="h-full">
                 <ToastProvider />
-                {children}
+
+                <SidebarProvider>
+                  {/* <AppSidebar /> */}
+                  {/* <SidebarTrigger /> */}
+                  {children}
+                </SidebarProvider>
               </main>
             </ThemeProvider>
           </body>

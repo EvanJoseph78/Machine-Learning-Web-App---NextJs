@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 import { HomeIcon, Search, UserRound } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@radix-ui/react-popover";
 import { ModeToggle } from "./mode-toggle";
+import { SidebarTrigger } from "./ui/sidebar";
 
 interface NavbarRoutesProps {
   isclassroom?: boolean,
@@ -57,6 +58,9 @@ export const NavbarRoutes = ({ isclassroom = false, courseId, courseName = "carr
   return (
     <div className="w-full flex justify-between gap-2 sm:items-center flex-col sm:flex-row">
       <div className="flex gap-2 items-center justify-between">
+
+        <SidebarTrigger size={"sm"} />
+
         <Link href={"/courses"}>
           <Button size={"sm"}>
             Cursos
