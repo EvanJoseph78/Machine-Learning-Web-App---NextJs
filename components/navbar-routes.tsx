@@ -59,8 +59,8 @@ export const NavbarRoutes = ({ isclassroom = false, courseId, courseName = "carr
     <div className="w-full flex justify-center sm:justify-between gap-2 sm:items-center flex-col sm:flex-row">
       <div className="flex gap-2 items-center justify-between">
 
-        <div>
-          <SidebarTrigger size={"sm"} />
+        <div className="flex items-center gap-2">
+          <SidebarTrigger size={"icon"} />
 
           <Link href={"/courses"}>
             <Button size={"sm"}>
