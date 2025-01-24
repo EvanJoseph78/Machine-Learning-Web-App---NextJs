@@ -58,15 +58,13 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <main className="h-full">
-                <ToastProvider />
-
-                <SidebarProvider>
-                  {/* <AppSidebar /> */}
-                  {/* <SidebarTrigger /> */}
+              <SidebarProvider>
+                {/* <AppSidebar /> */}
+                <main className="w-full">
+                  <ToastProvider />
                   {children}
-                </SidebarProvider>
-              </main>
+                </main>
+              </SidebarProvider>
             </ThemeProvider>
           </body>
         </html>

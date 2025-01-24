@@ -32,7 +32,7 @@ const Home = () => {
   ];
 
   return (
-    <div className="flex justify-center items-center flex-col gap-8 w-screen">
+    <div className="flex justify-center items-center flex-col gap-8">
       <header className="flex flex-col justify-center items-center py-16 px-2 gap-4">
         <h1 className="text-4xl font-semibold text-center">
           Sejam muito bem-vindos
@@ -67,7 +67,7 @@ const Home = () => {
         </p>
       </div>
 
-      <div className="flex justify-center items-center w-screen px-16 flex-col border-t py-8">
+      <div className="flex justify-center items-center w-full px-16 flex-col border-t py-8">
         <h1 className="text-3xl font-bold mb-4">Autores do projeto</h1>
         <ProjectAuthors authorsList={authors}></ProjectAuthors>
       </div>

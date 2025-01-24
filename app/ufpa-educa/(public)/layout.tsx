@@ -1,6 +1,5 @@
+import { NavbarRoutes } from "@/components/navbar-routes";
 import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Navbar } from "./_components/navbar";
 
 export default function PublicLayout({
   children,
@@ -8,12 +7,16 @@ export default function PublicLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
-      <AppSidebar />
-      <div>
-        <Navbar></Navbar>
+    <div className="w-full h-full">
+      <div className="w-full h-16">
+        <div className="fixed flex justify-center z-50 w-full h-16 border px-2 bg-white dark:bg-dark-color">
+          <NavbarRoutes></NavbarRoutes>
+        </div>
       </div>
-      <div className="h-full py-12">{children}</div>
-    </>
+      <div className="flex flex-row w-full">
+        <AppSidebar></AppSidebar>
+        <div className="w-full">{children}</div>
+      </div>
+    </div>
   );
 }

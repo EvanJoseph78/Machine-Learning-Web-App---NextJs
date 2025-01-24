@@ -56,16 +56,19 @@ export const NavbarRoutes = ({ isclassroom = false, courseId, courseName = "carr
   }, [userInfo])
 
   return (
-    <div className="w-full flex justify-between gap-2 sm:items-center flex-col sm:flex-row">
+    <div className="w-full flex justify-center sm:justify-between gap-2 sm:items-center flex-col sm:flex-row">
       <div className="flex gap-2 items-center justify-between">
 
-        <SidebarTrigger size={"sm"} />
+        <div>
+          <SidebarTrigger size={"sm"} />
 
-        <Link href={"/courses"}>
-          <Button size={"sm"}>
-            Cursos
-          </Button>
-        </Link>
+          <Link href={"/courses"}>
+            <Button size={"sm"}>
+              Cursos
+            </Button>
+          </Link>
+        </div>
+
 
         {isclassroom && (
           <div className="sm:flex flex-col content-center hidden">
