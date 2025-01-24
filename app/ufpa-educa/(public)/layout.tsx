@@ -1,5 +1,7 @@
 import { NavbarRoutes } from "@/components/navbar-routes";
 import { AppSidebar } from "@/components/app-sidebar";
+import Footer from "./_components/footer";
+
 
 export default function PublicLayout({
   children,
@@ -15,7 +17,10 @@ export default function PublicLayout({
       </div>
       <div className="flex flex-row w-full">
         <AppSidebar></AppSidebar>
-        <div className="w-full">{children}</div>
+        <div className="w-full">
+          {children}
+          <Footer></Footer>
+        </div>
       </div>
     </div>
   );
