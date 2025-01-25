@@ -7,7 +7,7 @@ import { Course } from "@prisma/client";
 import router from "next/router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { CourseCardInfo } from "../_components/course-card-info";
+import { CourseCardInfo, CourseCardInfoSkeleton } from "../_components/course-card-info";
 import { CourseWithTags } from "@/lib/types";
 
 interface CourseProps {
@@ -98,6 +98,7 @@ function SkeletonCoursePage() {
           </div>
 
         </div>
+        <CourseCardInfoSkeleton />
         <div className="border-t border-gray-200 my-4"></div>
       </main >
     </div>

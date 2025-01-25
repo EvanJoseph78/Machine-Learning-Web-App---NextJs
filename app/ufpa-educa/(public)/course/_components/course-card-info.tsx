@@ -1,4 +1,5 @@
 
+import { Skeleton } from "@/components/ui/skeleton";
 import { CourseWithTags } from "@/lib/types";
 import { Calendar, BookOpen, BarChart, Award, List } from "lucide-react";
 import Image from "next/image";
@@ -46,6 +47,57 @@ export const CourseCardInfo = ({ course }: CourseCardProps) => {
                 {tag.name}
               </p>
             ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col items-center content-center justify-center mt-32">
+          <Image
+            src={"/icons/logo-facomp-preta.png"}
+            alt={"Logo Facomp"}
+            width={80}
+            height={80}
+          />
+          <p>FACOMP</p>
+        </div>
+
+      </div>
+
+    </div>
+  );
+}
+
+export function CourseCardInfoSkeleton() {
+  return (
+    <div className="rounded-xl overflow-hidden border md:w-[500px] w-full">
+      <Skeleton className="h-72 w-full"></Skeleton>
+
+      <div className="px-4 py-8">
+
+        <div className="flex  justify-between border-b border-b-grey-800 py-4">
+          <span className="flex items-center content-center gap-2"><Calendar />Carga horária</span>
+          <Skeleton> <span className="invisible">4 horas</span> </Skeleton>
+        </div>
+
+        <div className="flex  justify-between border-b border-b-grey-800 py-4">
+          <span className="flex items-center content-center gap-2"><BookOpen />Disciplina</span>
+          <Skeleton> <span className="invisible">Machine Learning</span> </Skeleton>
+        </div>
+
+        <div className="flex  justify-between border-b border-b-grey-800 py-4">
+          <span className="flex items-center content-center gap-2"><BarChart />Dificuldade</span>
+          <Skeleton> <span className="invisible">Iniciante</span> </Skeleton>
+        </div>
+
+        <div className="flex  justify-between border-b border-b-grey-800 py-4">
+          <span className="flex items-center content-center gap-2"><Award />Certificado</span>
+          <Skeleton> <span className="invisible">Sim</span> </Skeleton>
+        </div>
+
+        <div className="flex justify-between border-b border-b-grey-800 py-4">
+          <span className="flex items-center content-center gap-2"><List />Tópicos abordados</span>
+          <div className="flex flex-wrap w-1/2 justify-end gap-1">
+            <p className="bg-vermelho-vinho text-white rounded-xl text-xs min-w-12 px-2 py-1 content-center items-center justify-center">carregando...</p>
+            <p className="bg-vermelho-vinho text-white rounded-xl text-xs min-w-12 px-2 py-1 content-center items-center justify-center">carregando...</p>
           </div>
         </div>
 
