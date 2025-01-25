@@ -1,4 +1,4 @@
-import { Classes, Courses, Modules, Options, Questions } from "@prisma/client";
+import { Classes, Course, Courses, Modules, Options, Questions, Tag } from "@prisma/client";
 
 // types.ts
 export interface Teacher {
@@ -32,25 +32,25 @@ export interface Option {
   _id: string;
 }
 
-export interface Course {
-  id: string;
-  userId?: string
-  courseTitle?: string;
-  introduction?: string
-  duration?: number
-  subject?: string
-  level?: string;
-  certificate?: boolean;
-  description?: string;
-  imageUrl?: string
-  categoryId?: string
-  tags?: string
-  subscribedUsers?: string[];
-  createdAt: string;
-  updatedAt: string;
-  tagsId: string
-}
-
+// export interface Course {
+//   id: string;
+//   userId?: string
+//   courseTitle?: string;
+//   introduction?: string
+//   duration?: number
+//   subject?: string
+//   level?: string;
+//   certificate?: boolean;
+//   description?: string;
+//   imageUrl?: string
+//   categoryId?: string
+//   tags?: string
+//   subscribedUsers?: string[];
+//   createdAt: string;
+//   updatedAt: string;
+//   tagsId: string
+// }
+//
 export interface Category {
   id: string;
   name: string;
@@ -74,3 +74,7 @@ export type ListQuestions = Questions & {
 export type CourseItemData = Courses & {
   totalLessons: number
 }
+
+// ===========================================================
+
+export type CourseWithTags = Course & { Tag: Tag[] };

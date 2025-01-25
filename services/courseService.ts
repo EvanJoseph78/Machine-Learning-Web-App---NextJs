@@ -51,10 +51,9 @@ export const createModule = async (
     }
 
     throw new Error(
-      `${
-        error instanceof Error
-          ? error.message
-          : `${errorMessages.UNKNOWN_ERROR}`
+      `${error instanceof Error
+        ? error.message
+        : `${errorMessages.UNKNOWN_ERROR}`
       }`
     );
   }
@@ -90,8 +89,8 @@ export const createLesson = async (courseId: string, values: any) => {
   }
 };
 
-export const createQuestion = async () => {};
-export const createOption = async () => {};
+export const createQuestion = async () => { };
+export const createOption = async () => { };
 
 // read
 
@@ -117,13 +116,12 @@ export const createOption = async () => {};
  */
 export const getAllCourses = async (): Promise<Array<Course>> => {
   try {
-    return await db.course.findMany();
+    return await db.course.findMany({ include: { Tag: true } });
   } catch (error) {
     throw new Error(
-      `${
-        error instanceof Error
-          ? error.message
-          : `${errorMessages.UNKNOWN_ERROR}`
+      `${error instanceof Error
+        ? error.message
+        : `${errorMessages.UNKNOWN_ERROR}`
       }`
     );
   }
@@ -310,7 +308,7 @@ export const updateCourse = async (
   }
 };
 
-export const updateModule = async () => {};
+export const updateModule = async () => { };
 
 /**
  * Atualiza os dados de uma lição existente no banco de dados.
@@ -356,10 +354,10 @@ export const updateLesson = async (lessonId: string, values: any) => {
 };
 
 // delete
-export const deleteCourse = async () => {};
-export const deleteModuele = async () => {};
-export const deleteLesson = async () => {};
-export const deleteQuestion = async () => {};
+export const deleteCourse = async () => { };
+export const deleteModuele = async () => { };
+export const deleteLesson = async () => { };
+export const deleteQuestion = async () => { };
 
 // utility functions
 /**

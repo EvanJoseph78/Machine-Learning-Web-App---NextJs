@@ -62,7 +62,7 @@ export const NavbarRoutes = ({ isclassroom = false, courseId, courseName = "carr
         <div className="flex items-center gap-2">
           <SidebarTrigger size={"icon"} />
 
-          <Link href={"/courses"}>
+          <Link href={"/ufpa-educa/courses"}>
             <Button size={"sm"}>
               Cursos
             </Button>

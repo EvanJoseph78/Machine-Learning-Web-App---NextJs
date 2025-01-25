@@ -1,9 +1,12 @@
+import { Course } from "@prisma/client";
 import axios from "axios";
 
 // Cria uma instância do Axios com a URL base definida nas variáveis de ambiente
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL, // Defina a URL base da API
 });
+
+const API_VERSION = "/api/v2";
 
 /**
  * Fetches the list of available courses.
@@ -99,4 +102,28 @@ export const fetchSaveLastClass = async (
 export const fetchGetLastClass = async (courseId: string): Promise<any> => {
   const response = await axios.get(`/api/user/course/${courseId}`);
   return response.data;
+};
+
+// ========================================================================
+
+
+/**
+ * Função assíncrona que busca a lista de cursos da API.
+ * 
+ * @async
+ * @returns {Promise<Course[] | null>} Retorna um array de cursos se a requisição for bem-sucedida, ou null em caso de erro.
+ */
+export const fetchGetCourses = async (): Promise<any> => {
+  try {
+    // Faz a requisição para buscar os cursos e obtém a resposta
+    const response = await axios.get(`${API_VERSION}/courses`);
+
+    // Retorna os dados dos cursos
+    return response.data; // Assume que a API retorna um array de cursos diretamente
+  } catch (error) {
+    console.error("Erro ao buscar os cursos:", error);
+
+    // Retorna null em caso de erro
+    return null;
+  }
 };
