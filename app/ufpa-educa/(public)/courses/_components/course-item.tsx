@@ -25,7 +25,7 @@ export const CourseItem = ({ course }: CourseItemProps) => {
       .toLowerCase(); // Converte para letras minúsculas
 
     // Redireciona para a URL com o slug formatado e o ID do curso
-    router.push(`/course/${formattedSlug}-${courseId}`);
+    router.push(`course/${formattedSlug}-${courseId}`);
   };
 
   return (
@@ -106,7 +106,7 @@ const CourseImage = (
       .toLowerCase(); // Converte para letras minúsculas
 
     // Redireciona para a URL com o slug formatado e o ID do curso
-    router.push(`/course/${formattedSlug}-${courseId}`);
+    router.push(`course/${formattedSlug}-${courseId}`);
   };
 
   return (

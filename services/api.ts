@@ -113,7 +113,7 @@ export const fetchGetLastClass = async (courseId: string): Promise<any> => {
  * @async
  * @returns {Promise<Course[] | null>} Retorna um array de cursos se a requisição for bem-sucedida, ou null em caso de erro.
  */
-export const fetchGetCourses = async (): Promise<any> => {
+export const fetchGetCourses = async (): Promise<any | null> => {
   try {
     // Faz a requisição para buscar os cursos e obtém a resposta
     const response = await axios.get(`${API_VERSION}/courses`);
@@ -125,5 +125,30 @@ export const fetchGetCourses = async (): Promise<any> => {
 
     // Retorna null em caso de erro
     return null;
+  }
+};
+
+/**
+ * Função para buscar os detalhes de um curso específico.
+ * 
+ * @param courseId - ID único do curso a ser buscado.
+ * @returns Os dados do curso em formato de objeto (ou null em caso de erro).
+ * 
+ * @example
+ * ```typescript
+ * const course = await fetchGetCourse("677955300ec743ea99d572e1");
+ * if (course) {
+ *   console.log(course.title); // Exemplo de acesso a um campo do curso
+ * }
+ * ```
+ */
+export const fetchGetCourse = async (courseId: string): Promise<any | null> => {
+  try {
+    // Faz a requisição para obter os dados do curso
+    const response = await axios.get(`${API_VERSION}/courses/${courseId}`);
+    return response.data.course; // Retorna os dados do curso
+  } catch (error) {
+    console.error("Erro ao buscar curso:", error);
+    return null; // Retorna null em caso de erro
   }
 };

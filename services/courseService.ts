@@ -159,7 +159,7 @@ export const getCourse = async (courseId: string): Promise<Course | null> => {
     }
 
     // Recupera o curso do banco de dados
-    const course = await db.course.findUnique({ where: { id: courseId } });
+    const course = await db.course.findUnique({ where: { id: courseId }, include: { Tag: true } });
 
     // Verifica se o curso foi recuperado corretamente
     if (!course) {
