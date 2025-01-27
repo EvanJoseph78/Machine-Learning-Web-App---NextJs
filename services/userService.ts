@@ -80,8 +80,7 @@ export const updateUser = async (
 
     // Lança uma exceção para que o erro possa ser tratado no nível do controlador
     throw new Error(
-      `Failed to update user. Error: ${
-        error instanceof Error ? error.message : "Unknown error"
+      `Failed to update user. Error: ${error instanceof Error ? error.message : "Unknown error"
       }`
     );
   }

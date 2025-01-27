@@ -10,7 +10,7 @@ const AuthLayout = ({
       <Navbar></Navbar>
 
       <div
-        className="h-full flex items-center justify-center flex flex-col justify-start mt-36"
+        className="h-full items-center justify-center flex flex-col mt-36"
       >
         {children}</div >
     </div>

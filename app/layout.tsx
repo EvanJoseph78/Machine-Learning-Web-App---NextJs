@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils"
 import { ToastProvider } from "@/components/providers/toaster-provider";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import AppWrapper from "@/components/providers/app-wrapper";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -62,7 +63,9 @@ export default function RootLayout({
                 {/* <AppSidebar /> */}
                 <main className="w-full">
                   <ToastProvider />
-                  {children}
+                  <AppWrapper>
+                    {children}
+                  </AppWrapper>
                 </main>
               </SidebarProvider>
             </ThemeProvider>

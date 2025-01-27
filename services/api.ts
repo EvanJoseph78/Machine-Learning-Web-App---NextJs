@@ -1,5 +1,6 @@
 import { Course } from "@prisma/client";
 import axios from "axios";
+import { errorMessages } from "@/utils/errorMessages"; // Mensagens de erro centralizadas
 
 // Cria uma instância do Axios com a URL base definida nas variáveis de ambiente
 const api = axios.create({
@@ -152,3 +153,27 @@ export const fetchGetCourse = async (courseId: string): Promise<any | null> => {
     return null; // Retorna null em caso de erro
   }
 };
+
+/**
+ * Realiza a inscrição de um usuário em um curso específico.
+ *
+ * @param {string} userClerkId - O identificador único do usuário do clerkId.
+ * @returns {Promise<void | null>} - Retorna void em caso de sucesso, ou null em caso de erro.
+ * @throws {Error} - Caso ocorra algum erro crítico durante a requisição.
+ */
+export const fetchUserSignUp = async (clerkId: string, fullName: string): Promise<any | null> => {
+  try {
+
+    const url = `${API_VERSION}/users`;
+    const response = await axios.post(url, { clerkId, fullName });
+
+    if (response.status === 200 || response.status === 201) {
+      return "Usuário cadastrado na plataforma";
+    } else if (response.status === 409) {
+      return errorMessages.USER_ALREADY_SUBSCRIBED; // Retorna null em caso de erro
+    }
+  } catch (error) {
+    return errorMessages.USER_ALREADY_SUBSCRIBED; // Retorna null em caso de erro
+  }
+};
+

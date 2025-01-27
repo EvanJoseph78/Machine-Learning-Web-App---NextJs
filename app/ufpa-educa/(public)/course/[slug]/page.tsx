@@ -3,12 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fetchGetCourse } from "@/services/api";
-import { Course } from "@prisma/client";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { CourseCardInfo, CourseCardInfoSkeleton } from "../_components/course-card-info";
 import { CourseWithTags } from "@/lib/types";
+import { useUser } from "@clerk/nextjs";
 
 interface CourseProps {
   params: {
@@ -16,27 +16,23 @@ interface CourseProps {
   };
 }
 
+// Redireciona o usuário para a página do curso
+const handleRedirect = () => {
+  toast.success("Iniciando o curso...");
+  // router.push(`/student/course/${params.}`);
+};
+
 const CoursePage = ({ params }: CourseProps) => {
 
   const [course, setCourse] = useState<CourseWithTags>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Redireciona o usuário para a página do curso
-  const handleRedirect = () => {
-    toast.success("Iniciando o curso...");
-    console.log(course)
-    // router.push(`/student/course/${params.}`);
-  };
-
-
   // Busca o curso com base no ID
   const getCourse = async () => {
-    console.log(isLoading)
     try {
       const courseId = extractId(params.slug); // Extrai o ID do slug
       const response: CourseWithTags = await fetchGetCourse(courseId); // Faz a requisição
       setCourse(response); // Atualiza o estado com os dados do curso
-      console.log(course);
     } catch (error) {
       console.error("Erro ao buscar o curso:", error);
       toast.error("Não foi possível carregar o curso.");
@@ -66,7 +62,8 @@ const CoursePage = ({ params }: CourseProps) => {
             <h1 className="text-5xl font-bold mt-4">{course?.title}</h1>
             <div className="border-t border-gray-200 my-4"></div>
             <p>{course?.description}</p>
-            <Button className="w-32 mt-4" onClick={handleRedirect}>Iniciar</Button>
+            {/* <Button className="w-32 mt-4" onClick={handleRedirect}>Iniciar</Button> */}
+            <StartButton></StartButton>
             <div className="border-t border-gray-200 my-4"></div>
             <div className="pt-8">{course?.introduction}</div>
           </div>
@@ -74,7 +71,7 @@ const CoursePage = ({ params }: CourseProps) => {
         {course ? (
           <CourseCardInfo course={course} />
         ) : (
-          <p>Carregando...</p>
+          <CourseCardInfoSkeleton />
         )}
         <div className="border-t border-gray-200 my-4"></div>
       </main >
@@ -83,6 +80,23 @@ const CoursePage = ({ params }: CourseProps) => {
 }
 
 export default CoursePage;
+
+const StartButton = () => {
+
+  const { user } = useUser();
+  const router = useRouter();
+
+  if (!user) {
+    return (
+      <Button className="w-32 mt-4" onClick={() => { router.push("/sign-in") }}>Login</Button>
+    );
+  }
+
+  return (
+    <Button className="w-32 mt-4" onClick={handleRedirect}>Iniciar</Button>
+  );
+}
+
 
 function SkeletonCoursePage() {
   return (

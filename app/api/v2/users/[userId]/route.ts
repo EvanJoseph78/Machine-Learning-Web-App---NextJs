@@ -1,5 +1,4 @@
 import { throwErrorMessage } from "@/controllers/errorController";
-import { updateUserController } from "@/controllers/userController";
 import { updateUser } from "@/services/userService";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -21,6 +20,21 @@ export async function PATCH(
 
     const updatedUser = await updateUser(userId, values);
     return NextResponse.json(updatedUser, { status: 200 });
+  } catch (error) {
+    return throwErrorMessage(error, "app/api/v2/users/[userId]/route.ts");
+  }
+}
+
+// TODO: documetation of this route on swagger
+export async function POST(
+  _: NextRequest,
+  { params }: { params: { userId: string } }
+) {
+  try {
+    const { userId } = params; // Extrai o userId dos parâmetros da URL.
+    // const values = await req.json();
+
+    return NextResponse.json(userId, { status: 200 });
   } catch (error) {
     return throwErrorMessage(error, "app/api/v2/users/[userId]/route.ts");
   }
