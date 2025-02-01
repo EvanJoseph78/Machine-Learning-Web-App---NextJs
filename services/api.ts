@@ -173,7 +173,31 @@ export const fetchUserSignUp = async (clerkId: string, fullName: string): Promis
       return errorMessages.USER_ALREADY_SUBSCRIBED; // Retorna null em caso de erro
     }
   } catch (error) {
-    return errorMessages.USER_ALREADY_SUBSCRIBED; // Retorna null em caso de erro
+    return errorMessages.USER_ALREADY_SUBSCRIBED;
   }
 };
 
+/**
+ * Inscreve um usuário em um curso específico.
+ *
+ * @param {string} userId - O identificador único do usuário.
+ * @param {string} courseId - O identificador único do curso.
+ * @returns {Promise<any>} - Retorna a resposta da API em caso de sucesso ou uma mensagem de erro em caso de falha.
+ * @throws {Error} - Caso ocorra um erro crítico durante a requisição.
+ */
+export const fetchSubscribeUserToCourse = async (userId: string, courseId: string): Promise<any> => {
+  try {
+    // Constroi a URL para a requisição
+    const url = `${API_VERSION}/users/${userId}/subscribe-course/${courseId}`;
+    const response = await axios.post(url);
+    return response.data;
+  } catch (error: any) {
+    // Verifica se o erro é relacionado à inscrição já existente
+    if (error.response && error.response.status === 409) {
+      return errorMessages.USER_ALREADY_SUBSCRIBED; // Retorna mensagem específica
+    }
+    // Retorna mensagem genérica para outros erros
+    console.error("Erro ao inscrever o usuário no curso:", error);
+    return errorMessages.GENERIC_ERROR;
+  }
+};

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { fetchGetCourse } from "@/services/api";
+import { fetchGetCourse, fetchSubscribeUserToCourse } from "@/services/api";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -63,7 +63,7 @@ const CoursePage = ({ params }: CourseProps) => {
             <div className="border-t border-gray-200 my-4"></div>
             <p>{course?.description}</p>
             {/* <Button className="w-32 mt-4" onClick={handleRedirect}>Iniciar</Button> */}
-            <StartButton></StartButton>
+            <StartButton courseId={extractId(params.slug)}></StartButton>
             <div className="border-t border-gray-200 my-4"></div>
             <div className="pt-8">{course?.introduction}</div>
           </div>
@@ -81,10 +81,20 @@ const CoursePage = ({ params }: CourseProps) => {
 
 export default CoursePage;
 
-const StartButton = () => {
+const StartButton = ({ courseId }: { courseId: string }) => {
 
   const { user } = useUser();
   const router = useRouter();
+
+  const subscribeCourse = async () => {
+    try {
+      if (user) {
+        const response = await fetchSubscribeUserToCourse(user.id, courseId);
+      }
+    } catch (error) {
+
+    }
+  }
 
   if (!user) {
     return (

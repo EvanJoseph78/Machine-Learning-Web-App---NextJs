@@ -128,6 +128,23 @@ export const subscribeCourse = async (userId: string, courseId: string) => {
   }
 };
 
+export const subscribeUserToCourse = async (userClerkId: string, courseId: string) => {
+  const user = await db.user.findFirst({ where: { clerkId: userClerkId } })
+
+  if (!user) {
+    throw new Error(errorMessages.USER_NOT_FOUND);
+  }
+
+  const courseSubscription = db.subscription.findFirst({ where: { userId: user.id, courseId } })
+
+  if (!courseSubscription) {
+    return subscribeCourse(user.id, courseId);
+  }
+
+  return courseSubscription;
+
+}
+
 export const checkExistentUser = async (userId: string) => {
   const user = await db.user.findUnique({ where: { id: userId } });
   return user !== null; // Retorna true se o usuário for encontrado, false caso contrário.

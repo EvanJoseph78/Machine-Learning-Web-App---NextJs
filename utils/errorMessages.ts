@@ -17,6 +17,7 @@ export const errorMessages = {
   USER_UPDATE_ERROR: "Failed to update user.",
   USER_ALREADY_EXISTS: "User already exists in database.",
   USER_ALREADY_SUBSCRIBED: "User is already subscribed to this course.",
+  USER_NOT_SUBSCRIBED: "User is not subscribed to this course.",
 
   // course errors
 
