@@ -21,10 +21,11 @@ const authorsList = [
     urlImg: "https://machine-learning3.vercel.app/assets/img/Lucas.png",
   },
   {
-    name: "Outro Autor",
+    name: "Iago Oliveira",
     formation: "Bacharelando em Ciência da Computação",
     urlImg: "https://machine-learning3.vercel.app/assets/img/Iago.jpg",
   },
+
 ];
 
 export function AuthorsList() {
